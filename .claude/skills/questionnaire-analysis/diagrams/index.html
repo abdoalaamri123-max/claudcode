@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>问卷数据分析流程图</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+:root{--bg:#f5f7fb;--panel:#fff;--ink:#18212f;--muted:#647084;--line:#dfe5f0;--blue:#2563eb;
+font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",Arial,sans-serif;}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:32px 20px;text-align:center}
+header h1{margin:0 0 6px;font-size:23px}header p{margin:0;opacity:.9;font-size:13px}
+.wrap{max-width:1080px;margin:0 auto;padding:24px 16px 80px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;margin:18px 0;box-shadow:0 10px 30px rgba(34,45,70,.06)}
+.card h2{margin:0 0 4px;font-size:18px}.card .desc{margin:0 0 14px;color:var(--muted);font-size:13px;line-height:1.6}
+.mermaid{display:flex;justify-content:center;overflow:auto}
+.hint{text-align:center;color:var(--muted);font-size:13px;margin-top:6px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+</style>
+</head>
+<body>
+<header>
+  <h1>问卷数据分析流程图集</h1>
+  <p>总流程 · 方法决策 · EFA/CFA · 中介调节 — 可截图用于论文 / 小红书科普</p>
+</header>
+<div class="wrap">
+  <p class="hint">截图建议：浏览器缩放到合适大小，用系统截图工具框选单张卡片。</p>
+
+  <div class="card">
+    <h2>图1 · 问卷数据分析总流程</h2>
+    <p class="desc">清洗 → 描述 → 共同方法偏差 → 信效度（不达标回修测量模型）→ 假设检验 → APA 报告。</p>
+    <div class="mermaid">
+flowchart TD
+    A[原始问卷数据] --> B[数据清洗<br/>剔无效·反向计分·缺失值·异常值]
+    B --> C[描述统计<br/>M/SD·偏度峰度·正态性]
+    C --> D[共同方法偏差检验<br/>Harman / CLF]
+    D --> E{信度与效度}
+    E --> E1[信度 α/CR]
+    E --> E2[效度 EFA/CFA·AVE]
+    E1 --> F{达标?}
+    E2 --> F
+    F -- 否 --> G[删题/修订量表]
+    G --> E
+    F -- 是 --> H[假设检验<br/>差异/相关/回归/SEM/中介调节]
+    H --> I[APA 报告<br/>表格+效应量+CI]
+    style D fill:#fff3cd,stroke:#b7791f
+    style F fill:#fff3cd,stroke:#b7791f
+    style I fill:#d1f0e0,stroke:#138a5b
+    style E fill:#e7efff,stroke:#2563eb
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>图2 · 分析方法决策树</h2>
+    <p class="desc">按研究问题类型与变量类型，快速定位该用哪种检验。</p>
+    <div class="mermaid">
+flowchart TD
+    Q{研究问题类型?}
+    Q -- 比较组间差异 --> D1{几组? 因变量?}
+    D1 -- 2组·连续 --> t[t检验<br/>违反前提→Mann-Whitney]
+    D1 -- ≥3组·连续 --> anova[ANOVA<br/>违反→Kruskal-Wallis]
+    D1 -- 分类×分类 --> chi[卡方检验]
+    Q -- 变量间关系 --> D2{要预测吗?}
+    D2 -- 仅关联 --> corr[相关分析]
+    D2 -- 预测 --> reg[回归<br/>多元/层次/逻辑]
+    Q -- 复杂因果结构 --> sem[结构方程 SEM]
+    Q -- 含中介/调节 --> med[中介/调节<br/>Bootstrap/PROCESS]
+    style t fill:#e7f7ef,stroke:#138a5b
+    style anova fill:#e7f7ef,stroke:#138a5b
+    style reg fill:#e7efff,stroke:#2563eb
+    style sem fill:#fff3cd,stroke:#b7791f
+    style med fill:#fff3cd,stroke:#b7791f
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>图3 · EFA / CFA 选择与信效度判定</h2>
+    <p class="desc">结构未知用 EFA、已知用 CFA；附两者的关键阈值。</p>
+    <div class="mermaid">
+flowchart TD
+    S{量表结构已知吗?}
+    S -- 未知·自编/改编 --> EFA[探索性因子分析 EFA]
+    S -- 已知·成熟量表 --> CFA[验证性因子分析 CFA]
+    EFA --> EFA1[KMO≥.70·Bartlett p<.05]
+    EFA1 --> EFA2[载荷≥.50·删双载荷]
+    EFA2 --> EFA3[累积方差≥50-60%]
+    EFA3 -. 交叉验证 .-> CFA
+    CFA --> C1[拟合 χ²/df<3·CFI≥.90·RMSEA≤.08]
+    C1 --> C2[收敛 载荷≥.5·AVE≥.5·CR≥.7]
+    C2 --> C3[区分 √AVE>相关·HTMT<.85]
+    C3 --> OK[测量模型成立]
+    style EFA fill:#e7efff,stroke:#2563eb
+    style CFA fill:#fff3cd,stroke:#b7791f
+    style OK fill:#d1f0e0,stroke:#138a5b
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>图4 · 中介 / 调节分析流程</h2>
+    <p class="desc">中介看 Bootstrap 95%CI 是否含 0；调节看交互项 + 简单斜率。</p>
+    <div class="mermaid">
+flowchart TD
+    M{效应类型?}
+    M -- 中介 X→M→Y --> MED[PROCESS Model 4 / lavaan]
+    MED --> MED1[Bootstrap 5000<br/>间接效应 a×b 95%CI]
+    MED1 --> MED2{CI 含 0?}
+    MED2 -- 否 --> MEDok[中介显著<br/>报间接效应大小]
+    MED2 -- 是 --> MEDno[中介不成立]
+    M -- 调节 X×W→Y --> MOD[中心化·建交互项]
+    MOD --> MOD1{交互项显著?}
+    MOD1 -- 是 --> MODok[调节存在<br/>简单斜率图±1SD]
+    MOD1 -- 否 --> MODno[无调节]
+    M -- 有调节的中介 --> MM[Model 7/8/14<br/>调节中介指数+Bootstrap CI]
+    style MEDok fill:#d1f0e0,stroke:#138a5b
+    style MODok fill:#d1f0e0,stroke:#138a5b
+    style MED1 fill:#fff3cd,stroke:#b7791f
+    style MM fill:#e7efff,stroke:#2563eb
+    </div>
+  </div>
+</div>
+<footer>问卷数据分析 Skill · diagrams · 由 Mermaid 渲染 · 双击离线查看</footer>
+<script>
+mermaid.initialize({startOnLoad:true,theme:'base',flowchart:{useMaxWidth:true,htmlLabels:true},
+  themeVariables:{fontFamily:'"Microsoft YaHei","PingFang SC",sans-serif',fontSize:'14px',
+    primaryColor:'#eef4ff',primaryBorderColor:'#c7d7f5',primaryTextColor:'#18212f',lineColor:'#647084'}});
+</script>
+</body>
+</html>

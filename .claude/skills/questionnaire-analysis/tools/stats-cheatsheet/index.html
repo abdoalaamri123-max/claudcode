@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>问卷统计阈值与拟合指数速查表</title>
+<style>
+:root{--bg:#f5f7fb;--panel:#fff;--ink:#18212f;--muted:#647084;--line:#dfe5f0;
+--blue:#2563eb;--green:#138a5b;--amber:#b7791f;--red:#c24138;
+font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",Arial,sans-serif;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:30px 20px;text-align:center}
+header h1{margin:0 0 6px;font-size:23px}
+header p{margin:0;opacity:.9;font-size:13px}
+.wrap{max-width:1000px;margin:0 auto;padding:22px 14px 70px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:18px 0}
+.tab{padding:7px 16px;border:1px solid var(--line);background:#fff;border-radius:999px;cursor:pointer;font-size:13px;color:var(--muted)}
+.tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:14px 0;box-shadow:0 8px 24px rgba(34,45,70,.05)}
+.card h2{margin:0 0 12px;font-size:17px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#eef4ff;color:#1d4ed8;font-weight:600}
+tr:nth-child(even) td{background:#fafbff}
+.good{color:var(--green);font-weight:600}
+.warn{color:var(--amber);font-weight:600}
+.group{display:none}.group.show{display:block}
+code{background:#f0f3f9;padding:1px 6px;border-radius:5px;font-size:12.5px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
+.note{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.6}
+</style>
+</head>
+<body>
+<header>
+  <h1>问卷统计阈值与拟合指数速查表</h1>
+  <p>信度 · 效度 · EFA/CFA · SEM 拟合 · 效应量 — 离线可用，双击即开</p>
+</header>
+<div class="wrap">
+  <div class="tabs">
+    <div class="tab active" data-g="rel">信度·效度</div>
+    <div class="tab" data-g="efa">EFA·因子</div>
+    <div class="tab" data-g="fit">SEM 拟合</div>
+    <div class="tab" data-g="es">效应量·前提</div>
+  </div>
+
+  <!-- 信度效度 -->
+  <div class="group show" id="rel">
+    <div class="card">
+      <h2>信度 Reliability</h2>
+      <table>
+        <tr><th>指标</th><th>可接受</th><th>良好</th><th>备注</th></tr>
+        <tr><td>Cronbach's α</td><td class="warn">≥ .70</td><td class="good">≥ .80</td><td>探索性研究 ≥ .60 可接受；CITC ≥ .30–.40</td></tr>
+        <tr><td>组合信度 CR</td><td class="warn">≥ .70</td><td class="good">≥ .80</td><td>优于 α，不假设载荷相等</td></tr>
+        <tr><td>McDonald's ω</td><td>≥ .70</td><td>≥ .80</td><td>α 的稳健替代</td></tr>
+        <tr><td>重测信度</td><td>r ≥ .70</td><td>—</td><td>跨时间稳定性</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h2>效度 Validity（收敛 / 区分）</h2>
+      <table>
+        <tr><th>指标</th><th>标准</th><th>用途</th></tr>
+        <tr><td>标准化因子载荷</td><td class="good">≥ .50（.70 佳）且显著</td><td>收敛效度</td></tr>
+        <tr><td>AVE 平均方差抽取</td><td class="good">≥ .50</td><td>收敛效度</td></tr>
+        <tr><td>Fornell-Larcker</td><td>√AVE &gt; 构念间相关</td><td>区分效度</td></tr>
+        <tr><td>HTMT</td><td>&lt; .85（严）/ .90（宽）</td><td>区分效度</td></tr>
+      </table>
+      <div class="note">AVE = Σ(载荷²)/题数；CR = (Σ载荷)² / [(Σ载荷)² + Σ(1−载荷²)]</div>
+    </div>
+  </div>
+
+  <!-- EFA -->
+  <div class="group" id="efa">
+    <div class="card">
+      <h2>EFA 探索性因子分析</h2>
+      <table>
+        <tr><th>项目</th><th>标准</th></tr>
+        <tr><td>KMO</td><td class="good">≥ .70 适合（≥.80 良好，&lt;.60 不宜）</td></tr>
+        <tr><td>Bartlett 球形检验</td><td>p &lt; .05</td></tr>
+        <tr><td>因子数确定</td><td>特征值&gt;1 / 碎石图 / <b>平行分析(最准)</b></td></tr>
+        <tr><td>累积解释方差</td><td>≥ 50%（社科常 ≥ 60%）</td></tr>
+        <tr><td>因子载荷保留</td><td class="good">≥ .50（≥.40 勉强）</td></tr>
+        <tr><td>删题情形</td><td>双重载荷(两因子&gt;.40且差&lt;.20)、共同度&lt;.40</td></tr>
+        <tr><td>旋转方法</td><td>构念相关→斜交(Promax)；独立→正交(Varimax)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- SEM 拟合 -->
+  <div class="group" id="fit">
+    <div class="card">
+      <h2>SEM / CFA 拟合指数</h2>
+      <table>
+        <tr><th>指数</th><th>可接受</th><th>良好</th><th>说明</th></tr>
+        <tr><td>χ²/df (CMIN/DF)</td><td class="warn">&lt; 3</td><td class="good">&lt; 2</td><td>受样本量影响大</td></tr>
+        <tr><td>CFI</td><td class="warn">≥ .90</td><td class="good">≥ .95</td><td>比较拟合</td></tr>
+        <tr><td>TLI (NNFI)</td><td class="warn">≥ .90</td><td class="good">≥ .95</td><td></td></tr>
+        <tr><td>RMSEA</td><td class="warn">≤ .08</td><td class="good">≤ .06</td><td>报 90%CI</td></tr>
+        <tr><td>SRMR</td><td class="warn">≤ .08</td><td class="good">≤ .05</td><td>标准化残差</td></tr>
+        <tr><td>GFI/AGFI</td><td>≥ .90</td><td>—</td><td>受样本量影响，渐少用</td></tr>
+      </table>
+      <div class="note">常报组合：χ²/df、CFI、TLI、RMSEA(含CI)、SRMR。修正只在理论可解释时做。</div>
+    </div>
+    <div class="card">
+      <h2>中介 / 调节判定</h2>
+      <table>
+        <tr><th>分析</th><th>判定标准</th></tr>
+        <tr><td>中介效应</td><td class="good">Bootstrap(5000) 间接效应 95%CI 不含 0</td></tr>
+        <tr><td>调节效应</td><td>交互项显著 + 简单斜率图(±1SD)</td></tr>
+        <tr><td>有调节的中介</td><td>调节中介指数 Bootstrap CI 不含 0</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 效应量与前提 -->
+  <div class="group" id="es">
+    <div class="card">
+      <h2>效应量 Effect Size（小 / 中 / 大）</h2>
+      <table>
+        <tr><th>检验</th><th>效应量</th><th>小</th><th>中</th><th>大</th></tr>
+        <tr><td>t 检验</td><td>Cohen's d</td><td>.20</td><td>.50</td><td>.80</td></tr>
+        <tr><td>ANOVA</td><td>η² / partial η²</td><td>.01</td><td>.06</td><td>.14</td></tr>
+        <tr><td>相关</td><td>r</td><td>.10</td><td>.30</td><td>.50</td></tr>
+        <tr><td>回归</td><td>f²</td><td>.02</td><td>.15</td><td>.35</td></tr>
+        <tr><td>卡方</td><td>Cramér's V</td><td>.10</td><td>.30</td><td>.50</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h2>前提假设 Assumptions</h2>
+      <table>
+        <tr><th>分析</th><th>前提</th><th>检验/标准</th></tr>
+        <tr><td>正态性</td><td>近似正态</td><td>|偏度|&lt;2、|峰度|&lt;7、Q-Q 图</td></tr>
+        <tr><td>方差齐性</td><td>组间方差相等</td><td>Levene p &gt; .05</td></tr>
+        <tr><td>回归共线性</td><td>无多重共线</td><td class="good">VIF &lt; 10（严&lt;5）、Tol &gt; .10</td></tr>
+        <tr><td>残差独立</td><td>无自相关</td><td>Durbin-Watson ≈ 1.5–2.5</td></tr>
+        <tr><td>共同方法偏差</td><td>不严重</td><td>Harman 第一因子 &lt; 40%</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>样本量经验法则 Sample Size</h2>
+    <table>
+      <tr><th>方法</th><th>经验法则</th></tr>
+      <tr><td>EFA/CFA</td><td>每题 5–10 人；≥200 中等，≥300 较稳</td></tr>
+      <tr><td>多元回归</td><td>N ≥ 50 + 8×自变量数（Green 1991）</td></tr>
+      <tr><td>SEM</td><td>≥200，或每参数 5–10 样本</td></tr>
+      <tr><td>中介(Bootstrap)</td><td>通常 ≥200，弱效应需更大</td></tr>
+      <tr><td>t/ANOVA</td><td>G*Power 按效应量、α=.05、power=.80 反算</td></tr>
+    </table>
+  </div>
+</div>
+<footer>问卷数据分析 Skill · stats-cheatsheet · 阈值依据 Hair / Kline / Hu&Bentler / Cohen 等通行标准，仅供参考，以目标期刊为准</footer>
+<script>
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.group').forEach(x=>x.classList.remove('show'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.g).classList.add('show');
+  });
+});
+</script>
+</body>
+</html>
