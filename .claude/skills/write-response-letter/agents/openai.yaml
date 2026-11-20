@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Response Letter"
+  short_description: "Draft scoped reviewer responses from full project context"
+  default_prompt: "Use $write-response-letter to read my full revision project and draft evidence-grounded responses only to the comment or closely related comments I specify."

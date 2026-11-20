@@ -101,3 +101,51 @@ claude mcp add scopus -e SCOPUS_API_KEY=مفتاحك -- uvx scopus-mcp
 - [cookjohn/wos-skills](https://github.com/cookjohn/wos-skills) — Web of Science عبر المتصفح: **بدون رخصة** فلا يجوز نسخها؛ يمكنك تثبيتها بنفسك.
 - [saidsurucu/literature-review-skills](https://github.com/saidsurucu/literature-review-skills) — 21 مصدراً عبر Chrome: **بدون رخصة**.
 - استُبعدت المهارات المعتمدة على Sci-Hub لأنها تنتهك حقوق النشر.
+
+---
+
+# خريطة الطريق: من الفكرة إلى النشر في مجلة Scopus Q1
+
+كل مرحلة مع المهارات المتاحة في هذا المستودع. الأسماء بين `` هي أسماء المهارات في `.claude/skills/`.
+
+| # | المرحلة | المهارات |
+|---|---|---|
+| 1 | **اختيار الموضوع والفجوة البحثية** | `research-gap-finder`، `idea-novelty-auditor`، `hypothesis-generation`، `scientific-critical-thinking` |
+| 2 | **البحث في قواعد البيانات** (Scopus، WoS، Scholar، arXiv) | `thesis-retrieval`، `paper-search-pro`، `paper-search`، `paper-lookup`، `gs-search`، `gs-advanced-search`، `gs-cited-by`، `s2-trace-citations`، `arxiv-mcp-server` |
+| 3 | **مراجعة الأدبيات** | `literature-review`، `problem-driven-literature-review`، `read-paper-to-notes`، `systematic-review` (PRISMA 2020)، `meta-analysis-systematic-review` |
+| 4 | **تصميم الدراسة والمنهجية** | `experimental-design`، `statistical-power` (حجم العينة)، `paper-strategist` |
+| 5 | **جمع البيانات وتحليلها** | `questionnaire-analysis`، `statistical-consultant`، `statistical-analysis`، `statsmodels`، `pymc`، `exploratory-data-analysis`، `statistical-rigor-helper` |
+| 6 | **الجداول والأشكال** | `scientific-visualization`، `seaborn`، `table-checker`، `figure-checker`، `graphical-abstract` |
+| 7 | **كتابة المخطوطة** (IMRaD) | `paper-writing`، `paper-composer`، `scientific-writing`، `paper-argument-reconstructor`، `experiment-section-auditor` |
+| 8 | **التدقيق اللغوي والمراجع** | `paper-polisher`، `manuscript-copyeditor`، `citation-auditor`، `citation-management`، `pyzotero`، `gs-export` |
+| 9 | **إرشادات التقارير** | `guideline-select` (يختار الإرشاد المناسب)، `consort-check`، `prisma-check`، `strobe-check`، `stard-check`، `tripod-check`، `spirit-check`، `care-check`، `arrive-check`، `qualitative-check`، `checklist-check`، `flow-diagram` |
+| 10 | **اختيار المجلة** (Q1، النطاق، الفهرسة) | `journal-finder`، `journal-selector`، `journal-scope-review`، `presubmission-inquiry` |
+| 11 | **التحكيم الذاتي قبل الإرسال** | `paper-redteam` (يحاكي "المحكّم رقم 2")، `review-simulator`، `peer-review-check`، `peer-review`، `submission-screener` |
+| 12 | **تجهيز الإرسال** | `journal-reformatter`، `venue-templates`، `journal-submission-checklist`، `cover-letter`، `cover-letter-writer`، `authorship-credit` (CRediT)، `reviewer-recommender` |
+| 13 | **الرد على المحكّمين** | `reviewer-response-rebuttal`، `write-response-letter`، `revision-responder` |
+| 14 | **بعد القبول** | `proof-checker`، `post-publication-corrector`، `research-disseminator` |
+
+## مصادر المهارات الجديدة
+| المستودع | الرخصة | المهارات |
+|---|---|---|
+| [yaotingsun/academic-publishing-skills](https://github.com/yaotingsun/academic-publishing-skills) | Apache-2.0 | 18 مهارة لدورة النشر (اختيار المجلة، خطاب التغطية، الرد على المحكّمين، البروفات...) |
+| [JointTex/reporting-guidelines](https://github.com/JointTex/reporting-guidelines) | MIT | 12 مهارة لإرشادات CONSORT وPRISMA وSTROBE وغيرها |
+| [yujie-jason-zhang/polish_skill](https://github.com/yujie-jason-zhang/polish_skill) | MIT | الأصالة، المراجعة الموجّهة بالمشكلة، التدقيق، قراءة الأوراق |
+| [LengFeng00/research-gap-finder](https://github.com/LengFeng00/research-gap-finder) | MIT | الفجوة البحثية |
+| [AngelChen-HC/systematic-review-skill](https://github.com/AngelChen-HC/systematic-review-skill) | Apache-2.0 | المراجعة المنهجية PRISMA 2020 |
+| [maydengximin-sketch](https://github.com/maydengximin-sketch) | MIT | التحليل البعدي، الرد على المحكّمين |
+| [lishix520/academic-paper-skills](https://github.com/lishix520/academic-paper-skills) | MIT | تخطيط الورقة وكتابتها |
+| [SNL-UCSB/paper-writing-skill](https://github.com/SNL-UCSB/paper-writing-skill) | MIT | مبادئ تحرير كل قسم |
+| [xf686/Meet-Reviewer-2](https://github.com/xf686/Meet-Reviewer-2) | MIT | التحكيم الذاتي العدائي |
+| [narcoco/peer-review-check](https://github.com/narcoco/peer-review-check) | MIT | فحص ذاتي وفق معايير Elsevier |
+| [CaoYongshengcys/journal-scope-review](https://github.com/CaoYongshengcys/journal-scope-review) | MIT | توافق المخطوطة مع نطاق المجلة |
+| [jiahanwang0411/cover-letter-skill](https://github.com/jiahanwang0411/cover-letter-skill) | MIT | خطاب التغطية (وفق إرشادات Wiley) |
+| [meiling-huang/write-response-letter](https://github.com/meiling-huang/write-response-letter) | MIT | خطاب الرد على المحكّمين |
+| [LightFury333/graphical-abstract-skill](https://github.com/LightFury333/graphical-abstract-skill) | MIT | الملخص الرسومي |
+
+## أدوات مفيدة لم تُنسخ
+- [Imbad0202/academic-research-skills](https://github.com/Imbad0202/academic-research-skills) (57 ألف نجمة): مسار كامل بحث ← كتابة ← تحكيم ← مراجعة. رخصتها **CC BY-NC 4.0** (غير تجارية) وتعتمد على بنية مشتركة كبيرة، فالأفضل تثبيتها كإضافة من مستودعها مباشرة.
+- **كشف المجلات المفترسة (Predatory):** [sustainet-guardian/aletheia-probe](https://github.com/sustainet-guardian/aletheia-probe) و[stop-predatory-journals](https://github.com/stop-predatory-journals/stop-predatory-journals.github.io). وتحقّق دائماً من فهرسة المجلة وربعها مباشرة في Scopus Sources وSCImago (SJR).
+
+## تنبيه مهم
+هذه المهارات تساعد في التخطيط والتحليل والصياغة والتدقيق، لكنها لا تغني عن جهد الباحث وأمانته العلمية: تحقّق من كل مرجع ورقم، واتّبع سياسة المجلة في الإفصاح عن استخدام الذكاء الاصطناعي.
