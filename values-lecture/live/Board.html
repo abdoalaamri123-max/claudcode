@@ -2437,7 +2437,7 @@ var qrcode = function() {
     <h2>ترتيب قيم القاعة</h2>
     <div class="legend">
       <span>العمود: هذه القاعة</span>
-      <span><i style="width:4px;height:1.2em;background:var(--lapis);border-radius:2px"></i>طلبة فرع عبري في الدراسة (ن = 157)</span>
+      <span><i style="width:4px;height:1.2em;background:var(--lapis);border-radius:2px"></i>طلبة فرع إبراء في الدراسة (ن = 157)</span>
       <span><i style="width:4px;height:1.2em;background:var(--gold);border-radius:2px"></i>العينة الكلية (ن = 975)</span>
     </div>
     <div class="rows" id="rank"></div>
@@ -2667,7 +2667,7 @@ var qrcode = function() {
 
     var rho = spearman(A.means, VALUES.map(function (v) { return v.tu; }));
     var sim = rho >= 0.8 ? 'يشبه كثيرًا' : rho >= 0.4 ? 'يتشابه جزئيًا مع' : 'يختلف عن';
-    box.appendChild(insight(['ترتيب القاعة ', B(sim), ' ترتيب طلبة فرع عبري في الدراسة (معامل سبيرمان للرتب ' + rho.toFixed(2) + ').']));
+    box.appendChild(insight(['ترتيب القاعة ', B(sim), ' ترتيب طلبة فرع إبراء في الدراسة (معامل سبيرمان للرتب ' + rho.toFixed(2) + ').']));
 
     var ecoRank = ranks(A.means)[1];
     box.appendChild(insight(['مفارقة البداية: جاءت ', B('الاقتصادية'), ' في المرتبة ', B(ar(ecoRank)), ' في القاعة، وكانت السادسة والأخيرة في الدراسة.']));
