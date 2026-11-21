@@ -2593,8 +2593,15 @@ var qrcode = function() {
 <footer>
   <span id="upd">جارٍ الاتصال…</span>
   <span style="margin-right:auto"></span>
+  <button id="loadtest" title="يرسل 100 جوال افتراضي دفعة واحدة ليتأكد أن النظام يتحمّل القاعة">اختبار التحمّل</button>
   <button id="newsess">جلسة جديدة</button>
 </footer>
+<div class="help" id="lt"><div class="box" style="max-width:760px">
+  <h3 style="margin-bottom:.5em">اختبار التحمّل: <span id="ltN">100</span> جوال افتراضي دفعة واحدة</h3>
+  <div id="ltBody" style="line-height:1.9"></div>
+  <p class="note" id="ltNote" style="margin-top:.8em">يعمل الاختبار في جلسة خاصة به، ثم تبدأ اللوحة جلسة جديدة نظيفة للمحاضرة تلقائيًا. إجابات الاختبار تبقى في جدول Google بعلامة LT، ولا تظهر في المحاضرة.</p>
+  <p style="margin-top:.8em; text-align:left"><button id="ltClose" disabled>إغلاق</button></p>
+</div></div>
 
 <div class="toast" id="toast"></div>
 <div class="help" id="help"><div class="box">
@@ -2787,7 +2794,7 @@ var qrcode = function() {
   /* ---------- polling ---------- */
   var busy = false;
   function refresh() {
-    if (busy) return; busy = true;
+    if (busy || testing) return; busy = true;
     var act = visibleAct();
     google.script.run.withSuccessHandler(onState).getState();
     google.script.run
@@ -2808,6 +2815,116 @@ var qrcode = function() {
     if (!confirm('بدء جلسة جديدة يخفي إجابات الجلسة الحالية من اللوحة ويصفّر عدد المنضمين ويوقف النشاط المفعّل (تبقى الإجابات محفوظة في جدول Google). على الطلبة بعدها إعادة تحميل الصفحة أو الانتظار حتى تنضم جوالاتهم تلقائيًا. هل تريد المتابعة؟')) return;
     google.script.run.withSuccessHandler(function (s) { onState(s); lastN = {}; revealed = {}; applyVeils(); refresh(); toast('بدأت جلسة جديدة'); }).startNewSession(KEY);
   };
+
+  /* ---------- load test: N virtual phones at once ---------- */
+  var testing = false;
+  function gsr(fn, args) {
+    return new Promise(function (res) {
+      var t0 = performance.now();
+      var r = google.script.run
+        .withSuccessHandler(function (v) { res({ ok: true, ms: performance.now() - t0, v: v }); })
+        .withFailureHandler(function (e) { res({ ok: false, ms: performance.now() - t0, err: String(e && e.message || e) }); });
+      r[fn].apply(r, args);
+    });
+  }
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  // like the phone: on failure wait 4 s and try again, up to 3 tries
+  function withRetry(fn, args) {
+    var tries = 0, first = null;
+    function go() {
+      tries++;
+      return gsr(fn, args).then(function (r) {
+        if (!first) first = r;
+        if (r.ok || tries >= 3) return { ok: r.ok, firstOk: first.ok, tries: tries, ms: r.ms, firstMs: first.ms, err: r.err };
+        return wait(4000).then(go);
+      });
+    }
+    var t0 = performance.now();
+    return go().then(function (x) { x.total = performance.now() - t0; return x; });
+  }
+  function stats(list) {
+    var ms = list.map(function (x) { return x.total; }).sort(function (a, b) { return a - b; });
+    var q = function (p) { return ms.length ? ms[Math.min(ms.length - 1, Math.floor(p * ms.length))] : 0; };
+    return {
+      ok: list.filter(function (x) { return x.ok; }).length,
+      firstOk: list.filter(function (x) { return x.firstOk; }).length,
+      retried: list.filter(function (x) { return x.tries > 1; }).length,
+      med: q(0.5) / 1000, p90: q(0.9) / 1000, max: (ms[ms.length - 1] || 0) / 1000,
+      errs: list.filter(function (x) { return !x.ok; }).map(function (x) { return x.err; }).slice(0, 3)
+    };
+  }
+  function ltLine(title, st, n) {
+    var good = st.ok === n;
+    var p = el('p');
+    p.innerHTML = (good ? '✅ ' : '❌ ') + '<b>' + title + ':</b> وصل ' + st.ok + ' من ' + n +
+      (st.retried ? ' (' + st.retried + ' احتاجت إعادة محاولة تلقائية)' : ' من المحاولة الأولى') +
+      ' · الوسيط ' + st.med.toFixed(1) + ' ث · 90% خلال ' + st.p90.toFixed(1) + ' ث · الأبطأ ' + st.max.toFixed(1) + ' ث' +
+      (st.errs.length ? '<br><small>أخطاء: ' + st.errs.join(' | ') + '</small>' : '');
+    document.getElementById('ltBody').appendChild(p);
+    return good;
+  }
+  function ltSay(t) { var p = el('p', 'note', t); document.getElementById('ltBody').appendChild(p); return p; }
+  function runLoadTest(N) {
+    if (testing) return;
+    if (!confirm('سيُرسل ' + N + ' جوال افتراضي إلى الخادم في اللحظة نفسها (انضمام، ثم إجابة نشاط "اكتشف قيمك"، ثم تصويت)، ويستغرق دقيقة إلى ثلاث دقائق. يعمل الاختبار في جلسة خاصة، ثم تبدأ جلسة جديدة نظيفة. لا تشغّله أثناء المحاضرة. هل تريد المتابعة؟')) return;
+    testing = true;
+    document.getElementById('ltN').textContent = N;
+    document.getElementById('ltBody').innerHTML = '';
+    document.getElementById('ltClose').disabled = true;
+    document.getElementById('lt').classList.add('on');
+    var ids = [];
+    for (var i = 0; i < N; i++) ids.push('LT' + Date.now().toString(36) + '-' + i + '-' + Math.random().toString(36).slice(2, 8));
+    var L = ['a', 'b', 'c'], C = ['eng', 'it', 'bus'], G = ['m', 'f'];
+    function rnd(a) { return a[Math.floor(Math.random() * a.length)]; }
+    var allOk = true, tStart = performance.now(), sess = '';
+    var msg = ltSay('بدء جلسة الاختبار…');
+    gsr('startNewSession', [KEY]).then(function (r) {
+      if (!r.ok) throw new Error('تعذّر بدء جلسة الاختبار: ' + r.err);
+      sess = r.v && r.v.session;
+      msg.textContent = '1/4: ' + N + ' جوال تنضم معًا…';
+      return Promise.all(ids.map(function (c) { return withRetry('join', [c]); }));
+    }).then(function (res) {
+      allOk = ltLine('الانضمام', stats(res), N) && allOk;
+      msg.textContent = '2/4: ' + N + ' جوال تسأل عن النشاط معًا…';
+      return Promise.all(ids.map(function (c) { return withRetry('getState', [c]); }));
+    }).then(function (res) {
+      allOk = ltLine('متابعة النشاط', stats(res), N) && allOk;
+      msg.textContent = '3/4: ' + N + ' جوال ترسل إجابات "اكتشف قيمك" في اللحظة نفسها…';
+      return Promise.all(ids.map(function (c) {
+        var d = ''; for (var k = 0; k < 12; k++) d += rnd(L);
+        return withRetry('submit', [{ act: 'discover', client: c, data: d, college: rnd(C), gender: rnd(G) }]);
+      }));
+    }).then(function (res) {
+      allOk = ltLine('إرسال "اكتشف قيمك"', stats(res), N) && allOk;
+      msg.textContent = '4/4: ' + N + ' جوال تصوّت في اللحظة نفسها…';
+      return Promise.all(ids.map(function (c) { return withRetry('submit', [{ act: 'lead', client: c, data: rnd(L) }]); }));
+    }).then(function (res) {
+      allOk = ltLine('التصويت', stats(res), N) && allOk;
+      msg.textContent = 'التحقق من أن اللوحة تقرأ كل الإجابات…';
+      return gsr('getResults', [KEY, 'discover']);
+    }).then(function (r) {
+      var good = r.ok && r.v.rows.length === N && r.v.joined === N;
+      allOk = good && allOk;
+      var p = el('p'); p.innerHTML = (good ? '✅ ' : '❌ ') + '<b>قراءة اللوحة:</b> ' + (r.ok ? r.v.joined + ' منضمًا و' + r.v.rows.length + ' إجابة في جلسة الاختبار (المتوقع ' + N + ')' + ' · استغرقت ' + (r.ms / 1000).toFixed(1) + ' ث' : r.err);
+      document.getElementById('ltBody').appendChild(p);
+    }).catch(function (e) {
+      allOk = false; ltSay('توقف الاختبار: ' + (e && e.message || e));
+    }).then(function () {
+      msg.textContent = 'بدء جلسة جديدة نظيفة للمحاضرة…';
+      return gsr('startNewSession', [KEY]);
+    }).then(function (r) {
+      msg.remove();
+      var v = el('p');
+      v.style.fontSize = '1.2em'; v.style.marginTop = '.6em';
+      v.innerHTML = '<b>' + (allOk ? 'النتيجة: النظام تحمّل ' + N + ' جوال دفعة واحدة دون فقد أي إجابة.' : 'النتيجة: ظهرت مشكلة، انسخ هذه النافذة أو صوّرها وأرسلها.') + '</b> المدة الكلية ' + ((performance.now() - tStart) / 1000).toFixed(0) + ' ث.' +
+        (r.ok ? ' بدأت جلسة جديدة نظيفة.' : ' تعذّر بدء الجلسة الجديدة، اضغط "جلسة جديدة" يدويًا.');
+      document.getElementById('ltBody').appendChild(v);
+      if (r.ok) { onState(r.v); lastN = {}; revealed = {}; applyVeils(); }
+      testing = false; document.getElementById('ltClose').disabled = false; refresh();
+    });
+  }
+  document.getElementById('loadtest').onclick = function (e) { runLoadTest(e.shiftKey ? 200 : 100); };
+  document.getElementById('ltClose').onclick = function () { document.getElementById('lt').classList.remove('on'); };
 
   /* ---------- presentation & keyboard ---------- */
   function togglePresent() { document.body.classList.toggle('present'); toast(document.body.classList.contains('present') ? 'وضع العرض: اضغط P للخروج، وF11 لملء الشاشة' : 'خرجت من وضع العرض'); }
