@@ -163,3 +163,9 @@ p { font-size: 32px; line-height: 1.6; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 .in { animation: rise 600ms ease both; animation-delay: calc(var(--i, 0) * 120ms); }
+
+/* cover: the compass needle spins, overshoots, settles, then sways gently */
+#cover .needle { transform-box: view-box; transform-origin: 0 0; animation: needle-spin 3.2s cubic-bezier(.2,.7,.2,1) .4s both, needle-sway 4s ease-in-out 3.6s infinite alternate; }
+@keyframes needle-spin { 0% { transform: rotate(-200deg); } 70% { transform: rotate(58deg); } 85% { transform: rotate(14deg); } 100% { transform: rotate(32deg); } }
+@keyframes needle-sway { from { transform: rotate(32deg); } to { transform: rotate(22deg); } }
+@media (prefers-reduced-motion: reduce) { #cover .needle { animation: none; transform: rotate(30deg); } }
