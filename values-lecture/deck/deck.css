@@ -145,5 +145,21 @@ p { font-size: 32px; line-height: 1.6; }
 .trow p { font-size: 32px; padding: 14px 24px; }
 .trow.head p { color: var(--sand); font-weight: 700; }
 
+/* electronic activity: progress diamonds, read right to left */
+.prog { display: flex; flex-direction: row-reverse; gap: 14px; align-items: center; }
+.pd { width: 20px; height: 20px; background: var(--line); }
+.pd.done { background: #C9A77E; }
+.pd.on { width: 30px; height: 30px; background: var(--copper); }
+
+/* countdown bar: drains toward the right (the reading start) */
+.timer { width: 1616px; height: 24px; border-radius: 12px; background: rgba(214, 162, 78, .25); overflow: hidden; }
+.timer-bar { width: 1616px; height: 24px; border-radius: 12px; background: var(--gold); transform: translateX(1616px); animation: drain 420s linear both; }
+@keyframes drain { from { transform: translateX(0); } to { transform: translateX(1616px); } }
+.tlabel { font-size: 26px; font-weight: 700; color: var(--copper-d); }
+.dark .tlabel { color: var(--gold); }
+
+.qchip { font-size: 28px; font-weight: 700; background: var(--card); color: var(--ink); border-radius: 40px; padding: 10px 28px; text-align: center; }
+.dark .qchip { background: var(--lapis2); color: var(--sand); }
+
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 .in { animation: rise 600ms ease both; animation-delay: calc(var(--i, 0) * 120ms); }
