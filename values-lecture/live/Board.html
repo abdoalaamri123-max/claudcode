@@ -2470,7 +2470,6 @@ var qrcode = function() {
   <nav id="nav">
     <button data-v="join" class="on">انضم</button>
     <button data-v="jobs" data-act="jobs">الوظيفتان</button>
-    <button data-v="discover" data-act="discover">اكتشف قيمك</button>
     <button data-v="polls" data-act="lead help exam">التصويتات</button>
     <button data-v="conflict" data-act="c1 c2 c3 c4 c5 c6">صراع القيم</button>
     <button data-v="share" data-act="share">البيت</button>
@@ -2607,7 +2606,7 @@ var qrcode = function() {
 <div class="help" id="help"><div class="box">
   <h3 style="margin-bottom:.6em">اختصارات لوحة المفاتيح</h3>
   <table>
-    <tr><td><kbd>0</kbd> إلى <kbd>6</kbd></td><td>التبويبات بالترتيب: انضم، الوظيفتان، اكتشف قيمك، التصويتات، صراع القيم، البيت، بطاقة قيمي</td></tr>
+    <tr><td><kbd>0</kbd> إلى <kbd>5</kbd></td><td>التبويبات بالترتيب: انضم، الوظيفتان، التصويتات، صراع القيم، البيت، بطاقة قيمي</td></tr>
     <tr><td><kbd>مسافة</kbd></td><td>تفعيل النشاط الظاهر على الجوالات أو إيقافه</td></tr>
     <tr><td><kbd>R</kbd></td><td>كشف النتائج أو إخفاؤها</td></tr>
     <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>التصويت أو الحالة التالية والسابقة</td></tr>
@@ -2681,7 +2680,7 @@ var qrcode = function() {
   } catch (e) { document.getElementById('qr').textContent = 'تعذّر رسم الرمز. انسخ الرابط الظاهر بجانبه.'; }
 
   /* ---------- navigation ---------- */
-  var VIEWS = ['join', 'jobs', 'discover', 'polls', 'conflict', 'share', 'card'];
+  var VIEWS = ['join', 'jobs', 'polls', 'conflict', 'share', 'card'];
   var view = 'join', pollAct = 'lead', caseAct = 'c1';
   function showView(v) {
     view = v;
@@ -2866,7 +2865,7 @@ var qrcode = function() {
   function ltSay(t) { var p = el('p', 'note', t); document.getElementById('ltBody').appendChild(p); return p; }
   function runLoadTest(N) {
     if (testing) return;
-    if (!confirm('سيُرسل ' + N + ' جوال افتراضي إلى الخادم في اللحظة نفسها (انضمام، ثم إجابة نشاط "اكتشف قيمك"، ثم تصويت)، ويستغرق دقيقة إلى ثلاث دقائق. يعمل الاختبار في جلسة خاصة، ثم تبدأ جلسة جديدة نظيفة. لا تشغّله أثناء المحاضرة. هل تريد المتابعة؟')) return;
+    if (!confirm('سيُرسل ' + N + ' جوال افتراضي إلى الخادم في اللحظة نفسها (انضمام، ثم إجابة صراع القيم، ثم تصويت)، ويستغرق دقيقة إلى ثلاث دقائق. يعمل الاختبار في جلسة خاصة، ثم تبدأ جلسة جديدة نظيفة. لا تشغّله أثناء المحاضرة. هل تريد المتابعة؟')) return;
     testing = true;
     document.getElementById('ltN').textContent = N;
     document.getElementById('ltBody').innerHTML = '';
@@ -2874,7 +2873,7 @@ var qrcode = function() {
     document.getElementById('lt').classList.add('on');
     var ids = [];
     for (var i = 0; i < N; i++) ids.push('LT' + Date.now().toString(36) + '-' + i + '-' + Math.random().toString(36).slice(2, 8));
-    var L = ['a', 'b', 'c'], C = ['eng', 'it', 'bus'], G = ['m', 'f'];
+    var L = ['a', 'b', 'c'];
     function rnd(a) { return a[Math.floor(Math.random() * a.length)]; }
     var allOk = true, tStart = performance.now(), sess = '';
     var msg = ltSay('بدء جلسة الاختبار…');
@@ -2889,19 +2888,19 @@ var qrcode = function() {
       return Promise.all(ids.map(function (c) { return withRetry('getState', [c]); }));
     }).then(function (res) {
       allOk = ltLine('متابعة النشاط', stats(res), N) && allOk;
-      msg.textContent = '3/4: ' + N + ' جوال ترسل إجابات "اكتشف قيمك" في اللحظة نفسها…';
+      msg.textContent = '3/4: ' + N + ' جوال ترسل إجابات "صراع القيم" في اللحظة نفسها…';
       return Promise.all(ids.map(function (c) {
-        var d = ''; for (var k = 0; k < 12; k++) d += rnd(L);
-        return withRetry('submit', [{ act: 'discover', client: c, data: d, college: rnd(C), gender: rnd(G) }]);
+        var i = Math.floor(Math.random() * 6), j = (i + 1 + Math.floor(Math.random() * 5)) % 6;
+        return withRetry('submit', [{ act: 'c1', client: c, data: { v: [i, j] } }]);
       }));
     }).then(function (res) {
-      allOk = ltLine('إرسال "اكتشف قيمك"', stats(res), N) && allOk;
+      allOk = ltLine('إرسال "صراع القيم"', stats(res), N) && allOk;
       msg.textContent = '4/4: ' + N + ' جوال تصوّت في اللحظة نفسها…';
       return Promise.all(ids.map(function (c) { return withRetry('submit', [{ act: 'lead', client: c, data: rnd(L) }]); }));
     }).then(function (res) {
       allOk = ltLine('التصويت', stats(res), N) && allOk;
       msg.textContent = 'التحقق من أن اللوحة تقرأ كل الإجابات…';
-      return gsr('getResults', [KEY, 'discover']);
+      return gsr('getResults', [KEY, 'c1']);
     }).then(function (r) {
       var good = r.ok && r.v.rows.length === N && r.v.joined === N;
       allOk = good && allOk;
@@ -2934,8 +2933,8 @@ var qrcode = function() {
   document.addEventListener('keydown', function (e) {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     var k = e.key;
-    if (/^[0-6]$/.test(k)) { showView(VIEWS[Number(k)]); return; }
-    if (k === '٠' || k === '١' || k === '٢' || k === '٣' || k === '٤' || k === '٥' || k === '٦') { showView(VIEWS[AR.indexOf(k)]); return; }
+    if (/^[0-5]$/.test(k)) { showView(VIEWS[Number(k)]); return; }
+    if (k === '٠' || k === '١' || k === '٢' || k === '٣' || k === '٤' || k === '٥') { showView(VIEWS[AR.indexOf(k)]); return; }
     var act = visibleAct();
     if (k === ' ' && act) { e.preventDefault(); activate(act); return; }
     if ((k === 'r' || k === 'R' || k === 'ق') && act) { toggleReveal(act); return; }
