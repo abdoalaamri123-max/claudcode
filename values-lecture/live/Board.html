@@ -2309,8 +2309,8 @@ var qrcode = function() {
 </script>
 <style>
   :root {
-    --lapis:#1B2440; --lapis2:#273458; --sand:#F4ECDF; --sand2:#EADCC4; --card:#FBF7F0; --line:#E0D0B6;
-    --copper:#A65A26; --copper-d:#8A4519; --teal:#17605E; --gold:#D6A24E; --soft:#4E4A44; --soft-d:#C8CFDD;
+    --lapis:#0B106E; --lapis2:#1B2391; --sand:#EDEDED; --sand2:#E2E3EA; --card:#F8F8FB; --line:#D3D5E0;
+    --copper:#E8640A; --copper-d:#A94300; --teal:#0E7C86; --gold:#F07A1E; --soft:#4A4A58; --soft-d:#C9CCE8;
   }
   * { box-sizing:border-box; }
   html, body { margin:0; height:100%; background:var(--sand); color:var(--lapis); }
@@ -2352,7 +2352,7 @@ var qrcode = function() {
   .rows { display:flex; flex-direction:column; gap:.9em; }
   .vrow { display:flex; align-items:center; gap:1em; }
   .vname { width:7.5em; flex:none; }
-  .chip { display:inline-block; color:#FBF7F0; font-weight:700; border-radius:.45em; padding:.2em .7em; text-align:center; min-width:6.5em; }
+  .chip { display:inline-block; color:#F8F8FB; font-weight:700; border-radius:.45em; padding:.2em .7em; text-align:center; min-width:6.5em; }
   .track { flex:1; position:relative; height:2.1em; background:var(--sand2); border-radius:1em; }
   .fill { position:absolute; right:0; top:0; bottom:0; border-radius:1em; transition:width .9s ease; }
   .mark { position:absolute; top:-.35em; bottom:-.35em; width:4px; border-radius:2px; }
@@ -2398,8 +2398,8 @@ var qrcode = function() {
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-  <pattern id="strip" width="44" height="44" patternUnits="userSpaceOnUse"><rect width="44" height="44" fill="#EADCC4"/><g fill="none" stroke="#A65A26" stroke-width="1.6"><rect x="13" y="13" width="18" height="18"/><rect x="13" y="13" width="18" height="18" transform="rotate(45 22 22)"/><circle cx="22" cy="22" r="3"/></g></pattern>
-  <pattern id="bandp" width="30" height="18" patternUnits="userSpaceOnUse"><g fill="none" stroke="#D6A24E" stroke-width="1.2"><rect x="9" y="4" width="10" height="10"/><rect x="9" y="4" width="10" height="10" transform="rotate(45 14 9)"/><path d="M0 9H4M26 9H30"/></g></pattern>
+  <pattern id="strip" width="44" height="44" patternUnits="userSpaceOnUse"><rect width="44" height="44" fill="#E2E3EA"/><g fill="none" stroke="#E8640A" stroke-width="1.6"><rect x="13" y="13" width="18" height="18"/><rect x="13" y="13" width="18" height="18" transform="rotate(45 22 22)"/><circle cx="22" cy="22" r="3"/></g></pattern>
+  <pattern id="bandp" width="30" height="18" patternUnits="userSpaceOnUse"><g fill="none" stroke="#F07A1E" stroke-width="1.2"><rect x="9" y="4" width="10" height="10"/><rect x="9" y="4" width="10" height="10" transform="rotate(45 14 9)"/><path d="M0 9H4M26 9H30"/></g></pattern>
 </defs></svg>
 
 <header>
@@ -2437,7 +2437,7 @@ var qrcode = function() {
     <h2>ترتيب قيم القاعة</h2>
     <div class="legend">
       <span>العمود: هذه القاعة</span>
-      <span><i style="width:4px;height:1.2em;background:var(--lapis);border-radius:2px"></i>طلبة جامعتكم في الدراسة (ن = 157)</span>
+      <span><i style="width:4px;height:1.2em;background:var(--lapis);border-radius:2px"></i>طلبة فرع عبري في الدراسة (ن = 157)</span>
       <span><i style="width:4px;height:1.2em;background:var(--gold);border-radius:2px"></i>العينة الكلية (ن = 975)</span>
     </div>
     <div class="rows" id="rank"></div>
@@ -2483,12 +2483,12 @@ var qrcode = function() {
   var KEY = <?!= JSON.stringify(key) ?>;
 
   var VALUES = [
-    { name:'العلمية', color:'#2C4F8A', tu:2.24, all:2.29 },
-    { name:'الاقتصادية', color:'#A65A26', tu:2.13, all:2.10 },
-    { name:'الاجتماعية', color:'#17605E', tu:2.37, all:2.41 },
-    { name:'الجمالية', color:'#8C2F45', tu:2.21, all:2.26 },
+    { name:'العلمية', color:'#3C5CA8', tu:2.24, all:2.29 },
+    { name:'الاقتصادية', color:'#E8640A', tu:2.13, all:2.10 },
+    { name:'الاجتماعية', color:'#0E7C86', tu:2.37, all:2.41 },
+    { name:'الجمالية', color:'#A3305F', tu:2.21, all:2.26 },
     { name:'السياسية', color:'#5C5A1C', tu:2.16, all:2.17 },
-    { name:'الدينية', color:'#2E6B45', tu:2.55, all:2.59 }
+    { name:'الدينية', color:'#1F7A4A', tu:2.55, all:2.59 }
   ];
   var ITEMS = [
     'سؤال بقي بعد المحاضرة', 'مبلغ مالي غير متوقع', 'زميل جديد يجلس وحيدًا', 'عرض تقديمي لمشروعك',
@@ -2667,7 +2667,7 @@ var qrcode = function() {
 
     var rho = spearman(A.means, VALUES.map(function (v) { return v.tu; }));
     var sim = rho >= 0.8 ? 'يشبه كثيرًا' : rho >= 0.4 ? 'يتشابه جزئيًا مع' : 'يختلف عن';
-    box.appendChild(insight(['ترتيب القاعة ', B(sim), ' ترتيب طلبة جامعتكم في الدراسة (معامل سبيرمان للرتب ' + rho.toFixed(2) + ').']));
+    box.appendChild(insight(['ترتيب القاعة ', B(sim), ' ترتيب طلبة فرع عبري في الدراسة (معامل سبيرمان للرتب ' + rho.toFixed(2) + ').']));
 
     var ecoRank = ranks(A.means)[1];
     box.appendChild(insight(['مفارقة البداية: جاءت ', B('الاقتصادية'), ' في المرتبة ', B(ar(ecoRank)), ' في القاعة، وكانت السادسة والأخيرة في الدراسة.']));

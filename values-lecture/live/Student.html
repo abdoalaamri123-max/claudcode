@@ -8,8 +8,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500..700&family=Tajawal:wght@400;500;700&display=swap">
 <style>
   :root {
-    --lapis:#1B2440; --lapis2:#273458; --sand:#F4ECDF; --sand2:#EADCC4; --card:#FBF7F0; --line:#E0D0B6;
-    --copper:#A65A26; --copper-d:#8A4519; --teal:#17605E; --gold:#D6A24E; --soft:#4E4A44;
+    --lapis:#0B106E; --lapis2:#1B2391; --sand:#EDEDED; --sand2:#E2E3EA; --card:#F8F8FB; --line:#D3D5E0;
+    --copper:#E8640A; --copper-d:#A94300; --teal:#0E7C86; --gold:#F07A1E; --soft:#4A4A58;
   }
   * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html, body { margin:0; background:var(--sand); color:var(--lapis); }
@@ -31,7 +31,7 @@
   .btn:disabled { opacity:.5; }
   .prog { display:flex; gap:7px; justify-content:center; margin:2px 0 16px; flex-wrap:wrap; }
   .pd { width:11px; height:11px; background:var(--line); transform:rotate(45deg); }
-  .pd.done { background:#C9A77E; }
+  .pd.done { background:#F3B27F; }
   .pd.on { width:15px; height:15px; background:var(--copper); }
   .qno { display:flex; align-items:center; gap:10px; color:var(--copper-d); font-weight:700; font-size:14px; margin-bottom:6px; }
   .star { position:relative; width:30px; height:30px; flex:none; }
@@ -58,14 +58,14 @@
   .bar-val { width:30px; text-align:left; font-weight:700; font-size:15px; }
   .top-msg { background:var(--lapis); color:var(--sand); border-radius:16px; padding:14px 16px; margin:14px 0; }
   .top-msg b { color:var(--gold); }
-  .err { color:#8C2F45; font-weight:700; margin-top:10px; display:none; }
+  .err { color:#A3305F; font-weight:700; margin-top:10px; display:none; }
   .spin { width:28px; height:28px; border:4px solid var(--line); border-top-color:var(--copper); border-radius:50%; animation:sp 1s linear infinite; margin:18px auto; }
   @keyframes sp { to { transform:rotate(360deg); } }
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-  <pattern id="bandp" width="26" height="22" patternUnits="userSpaceOnUse"><g fill="none" stroke="#D6A24E" stroke-width="1.2"><rect x="7" y="5" width="12" height="12"/><rect x="7" y="5" width="12" height="12" transform="rotate(45 13 11)"/><path d="M0 11H3M23 11H26"/></g></pattern>
+  <pattern id="bandp" width="26" height="22" patternUnits="userSpaceOnUse"><g fill="none" stroke="#F07A1E" stroke-width="1.2"><rect x="7" y="5" width="12" height="12"/><rect x="7" y="5" width="12" height="12" transform="rotate(45 13 11)"/><path d="M0 11H3M23 11H26"/></g></pattern>
 </defs></svg>
 
 <header class="top">
@@ -149,8 +149,8 @@
   ];
   // الموقف i يقيس القيمة (i mod 6) بهذا الترتيب
   var VALUES = [
-    ['العلمية', '#2C4F8A'], ['الاقتصادية', '#A65A26'], ['الاجتماعية', '#17605E'],
-    ['الجمالية', '#8C2F45'], ['السياسية', '#5C5A1C'], ['الدينية', '#2E6B45']
+    ['العلمية', '#3C5CA8'], ['الاقتصادية', '#E8640A'], ['الاجتماعية', '#0E7C86'],
+    ['الجمالية', '#A3305F'], ['السياسية', '#5C5A1C'], ['الدينية', '#1F7A4A']
   ];
   var AR = '٠١٢٣٤٥٦٧٨٩';
   function ar(n) { return String(n).replace(/[0-9]/g, function (d) { return AR[d]; }); }

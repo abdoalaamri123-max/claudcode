@@ -1,23 +1,23 @@
 :root {
-  --lapis: #1B2440;
-  --lapis2: #273458;
-  --sand: #F4ECDF;
-  --sand2: #EADCC4;
-  --card: #FBF7F0;
-  --line: #E0D0B6;
-  --copper: #A65A26;
-  --copper-d: #8A4519;
-  --teal: #17605E;
-  --gold: #D6A24E;
-  --ink: #1B2440;
-  --soft: #4E4A44;
-  --soft-d: #C8CFDD;
-  --v-sci: #2C4F8A;
-  --v-eco: #A65A26;
-  --v-soc: #17605E;
-  --v-aes: #8C2F45;
+  --lapis: #0B106E;
+  --lapis2: #1B2391;
+  --sand: #EDEDED;
+  --sand2: #E2E3EA;
+  --card: #F8F8FB;
+  --line: #D3D5E0;
+  --copper: #E8640A;
+  --copper-d: #A94300;
+  --teal: #3C5CA8;
+  --gold: #F07A1E;
+  --ink: #0B106E;
+  --soft: #4A4A58;
+  --soft-d: #C9CCE8;
+  --v-sci: #3C5CA8;
+  --v-eco: #E8640A;
+  --v-soc: #0E7C86;
+  --v-aes: #A3305F;
   --v-pol: #5C5A1C;
-  --v-rel: #2E6B45;
+  --v-rel: #1F7A4A;
 }
 
 /* Arabic, right to left: Slides drops `direction`, so every text block sets its own alignment and every row runs right-to-left with row-reverse. */
@@ -100,7 +100,7 @@ p { font-size: 32px; line-height: 1.6; }
 .dark .ref { color: var(--gold); }
 
 /* value colour chips */
-.chip { font-size: 28px; font-weight: 700; color: #FBF7F0; border-radius: 12px; padding: 8px 24px; text-align: center; }
+.chip { font-size: 28px; font-weight: 700; color: #F8F8FB; border-radius: 12px; padding: 8px 24px; text-align: center; }
 .sci { background: var(--v-sci); }
 .eco { background: var(--v-eco); }
 .soc { background: var(--v-soc); }
@@ -148,11 +148,11 @@ p { font-size: 32px; line-height: 1.6; }
 /* electronic activity: progress diamonds, read right to left */
 .prog { display: flex; flex-direction: row-reverse; gap: 14px; align-items: center; }
 .pd { width: 20px; height: 20px; background: var(--line); }
-.pd.done { background: #C9A77E; }
+.pd.done { background: #F3B27F; }
 .pd.on { width: 30px; height: 30px; background: var(--copper); }
 
 /* countdown bar: drains toward the right (the reading start) */
-.timer { width: 1616px; height: 24px; border-radius: 12px; background: rgba(214, 162, 78, .25); overflow: hidden; }
+.timer { width: 1616px; height: 24px; border-radius: 12px; background: rgba(240, 122, 30, .25); overflow: hidden; }
 .timer-bar { width: 1616px; height: 24px; border-radius: 12px; background: var(--gold); transform: translateX(1616px); animation: drain 420s linear both; }
 @keyframes drain { from { transform: translateX(0); } to { transform: translateX(1616px); } }
 .tlabel { font-size: 26px; font-weight: 700; color: var(--copper-d); }

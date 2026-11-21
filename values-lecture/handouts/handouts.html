@@ -7,9 +7,9 @@
 <style>
   @page { size: A4; margin: 0; }
   :root {
-    --lapis:#1B2440; --lapis2:#273458; --sand:#F4ECDF; --sand2:#EADCC4; --card:#FBF7F0; --line:#E0D0B6;
-    --copper:#A65A26; --copper-d:#8A4519; --teal:#17605E; --gold:#D6A24E; --soft:#4E4A44;
-    --v-sci:#2C4F8A; --v-eco:#A65A26; --v-soc:#17605E; --v-aes:#8C2F45; --v-pol:#5C5A1C; --v-rel:#2E6B45;
+    --lapis:#0B106E; --lapis2:#1B2391; --sand:#EDEDED; --sand2:#E2E3EA; --card:#F8F8FB; --line:#D3D5E0;
+    --copper:#E8640A; --copper-d:#A94300; --teal:#0E7C86; --gold:#F07A1E; --soft:#4A4A58;
+    --v-sci:#3C5CA8; --v-eco:#E8640A; --v-soc:#0E7C86; --v-aes:#A3305F; --v-pol:#5C5A1C; --v-rel:#1F7A4A;
   }
   * { box-sizing: border-box; }
   html, body { margin:0; background:#fff; }
@@ -53,7 +53,7 @@
   th { background:var(--lapis); color:var(--sand); font-family:'Reem Kufi', Tahoma, sans-serif; font-weight:600; font-size:11pt; }
   td.box-cell { width:16%; }
   td.box-cell div { width:42px; height:24px; border:1.5px solid var(--line); border-radius:6px; margin:0 auto; background:var(--card); }
-  .chip { display:inline-block; min-width:92px; text-align:center; color:#FBF7F0; font-weight:700; border-radius:7px; padding:2px 10px; font-size:11pt; }
+  .chip { display:inline-block; min-width:92px; text-align:center; color:#F8F8FB; font-weight:700; border-radius:7px; padding:2px 10px; font-size:11pt; }
   .sci { background:var(--v-sci); } .eco { background:var(--v-eco); } .soc { background:var(--v-soc); }
   .aes { background:var(--v-aes); } .pol { background:var(--v-pol); } .rel { background:var(--v-rel); }
   .profile td.bar { padding:6px 10px; }
@@ -65,7 +65,7 @@
   .read div { flex:1; border-radius:10px; padding:7px 10px; font-size:10pt; background:var(--sand); }
   .read b { display:block; font-family:'Reem Kufi', Tahoma, sans-serif; font-size:12pt; color:var(--copper-d); }
   .small { font-size:9.5pt; color:var(--soft); }
-  .lines { border-bottom:1px solid #C9B89A; height:27px; }
+  .lines { border-bottom:1px solid #C5C8D6; height:27px; }
   .reflect { border:1px solid var(--line); border-radius:12px; padding:8px 14px 10px; }
 
   /* other pages */
@@ -87,11 +87,11 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <pattern id="strip" width="45" height="45" patternUnits="userSpaceOnUse">
-      <rect width="45" height="45" fill="#EADCC4"/>
-      <g fill="none" stroke="#A65A26" stroke-width="1.6"><rect x="13" y="13" width="19" height="19"/><rect x="13" y="13" width="19" height="19" transform="rotate(45 22.5 22.5)"/><circle cx="22.5" cy="22.5" r="3"/></g>
+      <rect width="45" height="45" fill="#E2E3EA"/>
+      <g fill="none" stroke="#E8640A" stroke-width="1.6"><rect x="13" y="13" width="19" height="19"/><rect x="13" y="13" width="19" height="19" transform="rotate(45 22.5 22.5)"/><circle cx="22.5" cy="22.5" r="3"/></g>
     </pattern>
     <pattern id="bandp" width="34" height="34" patternUnits="userSpaceOnUse">
-      <g fill="none" stroke="#A65A26" stroke-width="1.3"><rect x="10" y="10" width="14" height="14"/><rect x="10" y="10" width="14" height="14" transform="rotate(45 17 17)"/><path d="M0 17H5M29 17H34"/></g>
+      <g fill="none" stroke="#E8640A" stroke-width="1.3"><rect x="10" y="10" width="14" height="14"/><rect x="10" y="10" width="14" height="14" transform="rotate(45 17 17)"/><path d="M0 17H5M29 17H34"/></g>
     </pattern>
   </defs>
 </svg>
