@@ -3,138 +3,198 @@
 <head>
 <meta charset="utf-8">
 <title>مطبوعات المحاضرة: بوصلتك الداخلية</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400..700&family=Tajawal:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400..700&family=Tajawal:wght@400;500;700&family=Amiri:wght@400;700&display=swap">
 <style>
-  @page { size: A4; margin: 14mm 14mm; }
-  :root { --navy:#17233A; --paper:#F6F1E7; --sand:#EBE2D0; --gold:#D9A441; --teal:#1D6B67; --soft:#4A4F5C; }
+  @page { size: A4; margin: 0; }
+  :root {
+    --lapis:#1B2440; --lapis2:#273458; --sand:#F4ECDF; --sand2:#EADCC4; --card:#FBF7F0; --line:#E0D0B6;
+    --copper:#A65A26; --copper-d:#8A4519; --teal:#17605E; --gold:#D6A24E; --soft:#4E4A44;
+    --v-sci:#2C4F8A; --v-eco:#A65A26; --v-soc:#17605E; --v-aes:#8C2F45; --v-pol:#5C5A1C; --v-rel:#2E6B45;
+  }
   * { box-sizing: border-box; }
-  body { margin:0; font-family:'Tajawal', Tahoma, sans-serif; color:var(--navy); font-size:12.5pt; line-height:1.55; background:#fff; }
-  h1,h2,h3 { font-family:'El Messiri', Georgia, serif; margin:0; line-height:1.3; }
-  h1 { font-size:24pt; }
-  h2 { font-size:17pt; }
+  html, body { margin:0; background:#fff; }
+  body { font-family:'Tajawal', Tahoma, sans-serif; color:var(--lapis); font-size:12.5pt; line-height:1.55; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  h1,h2,h3 { font-family:'Reem Kufi', Tahoma, sans-serif; margin:0; line-height:1.3; font-weight:700; }
+  h1 { font-size:26pt; }
+  h2 { font-size:18pt; }
   h3 { font-size:13.5pt; }
-  .page { page-break-after: always; break-after: page; }
-  .page:last-child { page-break-after: auto; break-after: auto; }
-  .head { display:flex; justify-content:space-between; align-items:flex-end; border-bottom:3px solid var(--gold); padding-bottom:6px; margin-bottom:10px; }
-  .head .tag { font-size:10pt; color:var(--teal); font-weight:700; }
-  .note { font-size:10.5pt; color:var(--soft); margin:6px 0 10px; }
-  .item { border:1px solid #D9CFBD; border-radius:10px; padding:8px 12px; margin-bottom:8px; break-inside: avoid; }
-  .item .q { font-weight:700; margin-bottom:4px; }
-  .item .q .n { display:inline-block; min-width:26px; height:26px; line-height:26px; text-align:center; border-radius:13px; background:var(--navy); color:#fff; font-size:11pt; margin-left:8px; }
-  .opts { display:flex; flex-direction:column; gap:2px; padding-right:34px; }
-  .opts span b { display:inline-block; width:22px; }
-  table { width:100%; border-collapse:collapse; margin:8px 0; }
-  th, td { border:1px solid #CFC5B3; padding:7px 9px; text-align:right; vertical-align:top; }
-  th { background:var(--sand); font-family:'El Messiri', Georgia, serif; }
-  .profile td.bar { padding:0; }
-  .cells { display:flex; height:30px; }
-  .cells div { flex:1; border-left:1px dashed #CFC5B3; }
-  .cells div:last-child { border-left:none; }
-  .scale { display:flex; font-size:9.5pt; color:var(--soft); }
+
+  /* every page: A4 with a strip of eight-pointed stars on the reading (right) edge */
+  .page { position:relative; width:210mm; height:297mm; padding:13mm 22mm 12mm 13mm; overflow:hidden; page-break-after:always; break-after:page; }
+  .page:last-child { page-break-after:auto; break-after:auto; }
+  .strip { position:absolute; right:0; top:0; width:12mm; height:297mm; }
+  .foot { position:absolute; left:13mm; right:22mm; bottom:5mm; display:flex; justify-content:space-between; font-size:8.5pt; color:var(--copper-d); }
+
+  /* header: eyebrow, title and an ornamental band */
+  .head { display:flex; justify-content:space-between; align-items:flex-end; }
+  .head .tag { font-size:10pt; color:var(--copper-d); font-weight:700; display:flex; align-items:center; gap:6px; }
+  .dia { display:inline-block; width:8px; height:8px; background:var(--copper); transform:rotate(45deg); }
+  .band { display:block; width:100%; height:9mm; margin:4px 0 8px; }
+  .note { font-size:10.5pt; color:var(--soft); margin:0 0 10px; background:var(--sand); border-right:4px solid var(--gold); border-radius:6px; padding:7px 12px; }
+
+  /* situations */
+  .item { border:1px solid var(--line); border-radius:12px; padding:7px 14px 7px 12px; margin-bottom:7px; break-inside:avoid; background:#fff; }
+  .item .q { display:flex; align-items:center; gap:10px; font-weight:700; margin-bottom:5px; }
+  .star { position:relative; flex:none; width:30px; height:30px; }
+  .star::before, .star::after { content:""; position:absolute; inset:4px; background:var(--copper); }
+  .star::after { transform:rotate(45deg); }
+  .star span { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:10.5pt; font-weight:700; z-index:1; }
+  .opts { display:flex; flex-direction:column; gap:2px; padding-right:40px; }
+  .opt { display:flex; align-items:center; gap:9px; }
+  .let { flex:none; width:24px; height:24px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-family:'Reem Kufi', Tahoma, sans-serif; font-weight:700; font-size:11.5pt; line-height:1; }
+  .let.a { background:var(--lapis); color:var(--sand); }
+  .let.b { background:var(--gold); color:var(--lapis); }
+  .let.c { background:#B9C2CC; color:var(--lapis); }
+
+  /* scoring and profile */
+  table { width:100%; border-collapse:separate; border-spacing:0; margin:6px 0 4px; border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  th, td { padding:6px 10px; text-align:right; vertical-align:middle; border-bottom:1px solid var(--line); }
+  tr:last-child td { border-bottom:none; }
+  th { background:var(--lapis); color:var(--sand); font-family:'Reem Kufi', Tahoma, sans-serif; font-weight:600; font-size:11pt; }
+  td.box-cell { width:16%; }
+  td.box-cell div { width:42px; height:24px; border:1.5px solid var(--line); border-radius:6px; margin:0 auto; background:var(--card); }
+  .chip { display:inline-block; min-width:92px; text-align:center; color:#FBF7F0; font-weight:700; border-radius:7px; padding:2px 10px; font-size:11pt; }
+  .sci { background:var(--v-sci); } .eco { background:var(--v-eco); } .soc { background:var(--v-soc); }
+  .aes { background:var(--v-aes); } .pol { background:var(--v-pol); } .rel { background:var(--v-rel); }
+  .profile td.bar { padding:6px 10px; }
+  .cells { display:flex; height:24px; gap:4px; }
+  .cells div { flex:1; border:1.5px solid var(--line); border-radius:5px; background:var(--card); }
+  .scale { display:flex; gap:4px; font-size:9.5pt; }
   .scale span { flex:1; text-align:center; }
-  .box { background:var(--paper); border-radius:10px; padding:10px 14px; margin:8px 0; }
-  .lines { border-bottom:1px solid #B9AE9A; height:28px; }
-  .case { border:2px solid var(--navy); border-radius:12px; padding:12px 16px; margin-bottom:12px; break-inside:avoid; }
-  .case .no { display:inline-block; background:var(--gold); color:var(--navy); font-weight:700; border-radius:20px; padding:1px 12px; font-size:10.5pt; margin-bottom:4px; }
-  .case ol { margin:6px 0 0; padding-right:22px; }
-  .cut { border-top:1.5px dashed #999; margin:10px 0; position:relative; }
-  .card { border:2.5px solid var(--navy); border-radius:16px; padding:16px 20px; height:128mm; display:flex; flex-direction:column; gap:8px; background:var(--paper); }
+  .read { display:flex; gap:8px; margin:10px 0 6px; }
+  .read div { flex:1; border-radius:10px; padding:7px 10px; font-size:10pt; background:var(--sand); }
+  .read b { display:block; font-family:'Reem Kufi', Tahoma, sans-serif; font-size:12pt; color:var(--copper-d); }
+  .small { font-size:9.5pt; color:var(--soft); }
+  .lines { border-bottom:1px solid #C9B89A; height:27px; }
+  .reflect { border:1px solid var(--line); border-radius:12px; padding:8px 14px 10px; }
+
+  /* other pages */
+  .case { border:1.5px solid var(--lapis); border-radius:12px; padding:12px 16px; margin-bottom:12px; break-inside:avoid; }
+  .case .no { display:inline-block; background:var(--gold); color:var(--lapis); font-weight:700; border-radius:20px; padding:1px 12px; font-size:10.5pt; margin-bottom:4px; }
+  .cut { border-top:1.5px dashed #999; margin:10px 0; }
+  .card { border:2px solid var(--lapis); border-radius:16px; padding:16px 20px; height:126mm; display:flex; flex-direction:column; gap:8px; background:var(--card); }
   .card .title { display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--gold); padding-bottom:6px; }
   .card .field { font-weight:700; margin-top:4px; }
-  .vote { height:80mm; border-radius:18px; display:flex; align-items:center; justify-content:center; margin-bottom:8mm; font-family:'El Messiri', Georgia, serif; font-size:150pt; font-weight:700; line-height:1; }
-  .vote.a { background:var(--navy); color:#F6F1E7; }
-  .vote.b { background:var(--gold); color:var(--navy); }
-  .vote.c { background:#B9C2CC; color:var(--navy); }
-  .small { font-size:10pt; color:var(--soft); }
+  .vote { height:80mm; border-radius:18px; display:flex; align-items:center; justify-content:center; margin-bottom:8mm; font-family:'Reem Kufi', Tahoma, sans-serif; font-size:150pt; font-weight:700; line-height:1; }
+  .vote.a { background:var(--lapis); color:var(--sand); }
+  .vote.b { background:var(--gold); color:var(--lapis); }
+  .vote.c { background:#B9C2CC; color:var(--lapis); }
 </style>
 </head>
 <body>
 
+<!-- one shared definition of the ornament patterns -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="strip" width="45" height="45" patternUnits="userSpaceOnUse">
+      <rect width="45" height="45" fill="#EADCC4"/>
+      <g fill="none" stroke="#A65A26" stroke-width="1.6"><rect x="13" y="13" width="19" height="19"/><rect x="13" y="13" width="19" height="19" transform="rotate(45 22.5 22.5)"/><circle cx="22.5" cy="22.5" r="3"/></g>
+    </pattern>
+    <pattern id="bandp" width="34" height="34" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="#A65A26" stroke-width="1.3"><rect x="10" y="10" width="14" height="14"/><rect x="10" y="10" width="14" height="14" transform="rotate(45 17 17)"/><path d="M0 17H5M29 17H34"/></g>
+    </pattern>
+  </defs>
+</svg>
+
 <!-- ============ 1. اكتشف قيمك ============ -->
 <section class="page">
-  <div class="head"><h1>اكتشف قيمك</h1><span class="tag">بوصلتك الداخلية · نشاط فردي</span></div>
+  <svg class="strip" viewBox="0 0 45 1120" preserveAspectRatio="xMidYMin slice" aria-hidden="true"><rect width="45" height="1120" fill="url(#strip)"/></svg>
+  <div class="head"><h1>اكتشف قيمك</h1><span class="tag"><i class="dia"></i>بوصلتك الداخلية · نشاط فردي</span></div>
+  <svg class="band" viewBox="0 0 680 34" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="680" height="34" fill="url(#bandp)"/></svg>
   <p class="note">اقرأ كل موقف، وضع دائرة حول البديل الذي ستفعله <b>فعلًا</b>، لا ما ترى أنه يجب أن تفعله. الورقة لك وحدك: لا تكتب اسمك، ولن تُجمع. هذه نسخة مختصرة للتأمل الذاتي، وليست المقياس الكامل.</p>
 
-  <div class="item"><div class="q"><span class="n">1</span>انتهت المحاضرة وبقي في ذهنك سؤال لم يُجب عنه.</div>
-    <div class="opts"><span><b>أ</b> أبحث عن الإجابة في مصادر موثوقة حتى أصل إليها.</span><span><b>ب</b> أسأل زميلًا عنه إن صادفته.</span><span><b>ج</b> أتركه، فهو ليس مطلوبًا في الامتحان.</span></div></div>
+  <div class="item"><div class="q"><span class="star"><span>١</span></span>انتهت المحاضرة وبقي في ذهنك سؤال لم يُجب عنه.</div>
+    <div class="opts"><div class="opt"><span class="let a">أ</span>أبحث عن الإجابة في مصادر موثوقة حتى أصل إليها.</div><div class="opt"><span class="let b">ب</span>أسأل زميلًا عنه إن صادفته.</div><div class="opt"><span class="let c">ج</span>أتركه، فهو ليس مطلوبًا في الامتحان.</div></div></div>
 
-  <div class="item"><div class="q"><span class="n">2</span>حصلت على مبلغ مالي غير متوقع.</div>
-    <div class="opts"><span><b>أ</b> أخصص جزءًا منه للادخار أو لمشروع ينمّيه.</span><span><b>ب</b> أدّخر ما يتبقى بعد مصروفاتي.</span><span><b>ج</b> أنفقه كاملًا على ما أرغب فيه.</span></div></div>
+  <div class="item"><div class="q"><span class="star"><span>٢</span></span>حصلت على مبلغ مالي غير متوقع.</div>
+    <div class="opts"><div class="opt"><span class="let a">أ</span>أخصص جزءًا منه للادخار أو لمشروع ينمّيه.</div><div class="opt"><span class="let b">ب</span>أدّخر ما يتبقى بعد مصروفاتي.</div><div class="opt"><span class="let c">ج</span>أنفقه كاملًا على ما أرغب فيه.</div></div></div>
 
-  <div class="item"><div class="q"><span class="n">3</span>لاحظت زميلًا جديدًا يجلس وحيدًا في كل محاضرة.</div>
-    <div class="opts"><span><b>أ</b> أبادر بالتعرف إليه وأدعوه إلى مجموعتنا.</span><span><b>ب</b> أسلّم عليه إن صادفته.</span><span><b>ج</b> لا أتدخل، فهذا شأنه.</span></div></div>
+  <div class="item"><div class="q"><span class="star"><span>٣</span></span>لاحظت زميلًا جديدًا يجلس وحيدًا في كل محاضرة.</div>
+    <div class="opts"><div class="opt"><span class="let a">أ</span>أبادر بالتعرف إليه وأدعوه إلى مجموعتنا.</div><div class="opt"><span class="let b">ب</span>أسلّم عليه إن صادفته.</div><div class="opt"><span class="let c">ج</span>لا أتدخل، فهذا شأنه.</div></div></div>
 
-  <div class="item"><div class="q"><span class="n">4</span>طُلب منك إعداد عرض تقديمي لمشروعك.</div>
-    <div class="opts"><span><b>أ</b> أهتم بتنسيقه وتناسق ألوانه حتى يكون جميلًا وواضحًا.</span><span><b>ب</b> أستخدم قالبًا جاهزًا دون تعديل.</span><span><b>ج</b> يكفيني أن يحتوي المعلومات.</span></div></div>
+  <div class="item"><div class="q"><span class="star"><span>٤</span></span>طُلب منك إعداد عرض تقديمي لمشروعك.</div>
+    <div class="opts"><div class="opt"><span class="let a">أ</span>أهتم بتنسيقه وتناسق ألوانه حتى يكون جميلًا وواضحًا.</div><div class="opt"><span class="let b">ب</span>أستخدم قالبًا جاهزًا دون تعديل.</div><div class="opt"><span class="let c">ج</span>يكفيني أن يحتوي المعلومات.</div></div></div>
 
-  <div class="item"><div class="q"><span class="n">5</span>أُعلن عن انتخابات مجلس الطلبة في كليتك.</div>
-    <div class="opts"><span><b>أ</b> أترشح، أو أساعد في حملة مرشح أقتنع به.</span><span><b>ب</b> أكتفي بالتصويت.</span><span><b>ج</b> لا أهتم بالانتخابات.</span></div></div>
+  <div class="item"><div class="q"><span class="star"><span>٥</span></span>أُعلن عن انتخابات مجلس الطلبة في كليتك.</div>
+    <div class="opts"><div class="opt"><span class="let a">أ</span>أترشح، أو أساعد في حملة مرشح أقتنع به.</div><div class="opt"><span class="let b">ب</span>أكتفي بالتصويت.</div><div class="opt"><span class="let c">ج</span>لا أهتم بالانتخابات.</div></div></div>
 
-  <div class="item"><div class="q"><span class="n">6</span>أذّن المؤذن وأنت في نقاش ممتع مع أصدقائك.</div>
-    <div class="opts"><span><b>أ</b> أستأذن لأداء الصلاة في وقتها، وأعود إليهم.</span><span><b>ب</b> أكمل النقاش ثم أصلي.</span><span><b>ج</b> أؤجلها دون أن أفكر في وقتها.</span></div></div>
+  <div class="item"><div class="q"><span class="star"><span>٦</span></span>أذّن المؤذن وأنت في نقاش ممتع مع أصدقائك.</div>
+    <div class="opts"><div class="opt"><span class="let a">أ</span>أستأذن لأداء الصلاة في وقتها، وأعود إليهم.</div><div class="opt"><span class="let b">ب</span>أكمل النقاش ثم أصلي.</div><div class="opt"><span class="let c">ج</span>أؤجلها دون أن أفكر في وقتها.</div></div></div>
+  <div class="foot"><span>بوصلتك الداخلية: رحلة في عالم القيم</span><span>١ / ٣</span></div>
 </section>
 
 <section class="page">
-  <div class="head"><h2>اكتشف قيمك (تابع)</h2><span class="tag">بوصلتك الداخلية</span></div>
+  <svg class="strip" viewBox="0 0 45 1120" preserveAspectRatio="xMidYMin slice" aria-hidden="true"><rect width="45" height="1120" fill="url(#strip)"/></svg>
+  <div class="head"><h2>اكتشف قيمك (تابع)</h2><span class="tag"><i class="dia"></i>بوصلتك الداخلية</span></div>
+  <svg class="band" viewBox="0 0 680 34" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="680" height="34" fill="url(#bandp)"/></svg>
 
-  <div class="item"><div class="q"><span class="n">7</span>قرأت منشورًا منتشرًا يدّعي معلومة صحية غريبة.</div>
-    <div class="opts"><span><b>أ</b> أتحقق من مصدرها قبل أن أصدّقها أو أنشرها.</span><span><b>ب</b> أصدّقها إن نشرها أشخاص كثيرون.</span><span><b>ج</b> لا أهتم بالأمر.</span></div></div>
+  <div class="item"><div class="q"><span class="star"><span>٧</span></span>قرأت منشورًا منتشرًا يدّعي معلومة صحية غريبة.</div>
+    <div class="opts"><div class="opt"><span class="let a">أ</span>أتحقق من مصدرها قبل أن أصدّقها أو أنشرها.</div><div class="opt"><span class="let b">ب</span>أصدّقها إن نشرها أشخاص كثيرون.</div><div class="opt"><span class="let c">ج</span>لا أهتم بالأمر.</div></div></div>
 
-  <div class="item"><div class="q"><span class="n">8</span>عُرضت عليك دورة قصيرة برسوم، تزيد فرصك في سوق العمل.</div>
-    <div class="opts"><span><b>أ</b> أدرس جدواها، وأشترك إن كان عائدها أعلى من كلفتها.</span><span><b>ب</b> أشترك إن اشترك زملائي.</span><span><b>ج</b> لا أفكر في الأمر الآن.</span></div></div>
+  <div class="item"><div class="q"><span class="star"><span>٨</span></span>عُرضت عليك دورة قصيرة برسوم، تزيد فرصك في سوق العمل.</div>
+    <div class="opts"><div class="opt"><span class="let a">أ</span>أدرس جدواها، وأشترك إن كان عائدها أعلى من كلفتها.</div><div class="opt"><span class="let b">ب</span>أشترك إن اشترك زملائي.</div><div class="opt"><span class="let c">ج</span>لا أفكر في الأمر الآن.</div></div></div>
 
-  <div class="item"><div class="q"><span class="n">9</span>أُعلن عن حملة تطوعية لتنظيف شاطئ في نهاية الأسبوع.</div>
-    <div class="opts"><span><b>أ</b> أشارك وأدعو أصدقائي للمشاركة.</span><span><b>ب</b> أشارك إن لم يكن لديّ ارتباط.</span><span><b>ج</b> أعتذر.</span></div></div>
+  <div class="item"><div class="q"><span class="star"><span>٩</span></span>أُعلن عن حملة تطوعية لتنظيف شاطئ في نهاية الأسبوع.</div>
+    <div class="opts"><div class="opt"><span class="let a">أ</span>أشارك وأدعو أصدقائي للمشاركة.</div><div class="opt"><span class="let b">ب</span>أشارك إن لم يكن لديّ ارتباط.</div><div class="opt"><span class="let c">ج</span>أعتذر.</div></div></div>
 
-  <div class="item"><div class="q"><span class="n">10</span>مررت بمعرض للفنون التشكيلية والخط العربي في الجامعة.</div>
-    <div class="opts"><span><b>أ</b> أدخل وأتأمل الأعمال.</span><span><b>ب</b> ألقي نظرة سريعة من الباب.</span><span><b>ج</b> أكمل طريقي.</span></div></div>
+  <div class="item"><div class="q"><span class="star"><span>١٠</span></span>مررت بمعرض للفنون التشكيلية والخط العربي في الجامعة.</div>
+    <div class="opts"><div class="opt"><span class="let a">أ</span>أدخل وأتأمل الأعمال.</div><div class="opt"><span class="let b">ب</span>ألقي نظرة سريعة من الباب.</div><div class="opt"><span class="let c">ج</span>أكمل طريقي.</div></div></div>
 
-  <div class="item"><div class="q"><span class="n">11</span>يتحاور زملاؤك حول قرار جديد يخص الطلبة.</div>
-    <div class="opts"><span><b>أ</b> أشارك برأيي وأقترح حلولًا، وأوصلها لمن يهمه الأمر.</span><span><b>ب</b> أستمع دون أن أشارك.</span><span><b>ج</b> أنصرف، فلا شأن لي.</span></div></div>
+  <div class="item"><div class="q"><span class="star"><span>١١</span></span>يتحاور زملاؤك حول قرار جديد يخص الطلبة.</div>
+    <div class="opts"><div class="opt"><span class="let a">أ</span>أشارك برأيي وأقترح حلولًا، وأوصلها لمن يهمه الأمر.</div><div class="opt"><span class="let b">ب</span>أستمع دون أن أشارك.</div><div class="opt"><span class="let c">ج</span>أنصرف، فلا شأن لي.</div></div></div>
 
-  <div class="item"><div class="q"><span class="n">12</span>وجدت محفظة فيها مال في ساحة الجامعة.</div>
-    <div class="opts"><span><b>أ</b> أسلّمها لإدارة الجامعة فورًا، أمانةً وطلبًا لرضا الله.</span><span><b>ب</b> أسلّمها إن مررت بمكتب الإدارة.</span><span><b>ج</b> أتركها مكانها.</span></div></div>
+  <div class="item"><div class="q"><span class="star"><span>١٢</span></span>وجدت محفظة فيها مال في ساحة الجامعة.</div>
+    <div class="opts"><div class="opt"><span class="let a">أ</span>أسلّمها لإدارة الجامعة فورًا، أمانةً وطلبًا لرضا الله.</div><div class="opt"><span class="let b">ب</span>أسلّمها إن مررت بمكتب الإدارة.</div><div class="opt"><span class="let c">ج</span>أتركها مكانها.</div></div></div>
+  <div class="foot"><span>بوصلتك الداخلية: رحلة في عالم القيم</span><span>٢ / ٣</span></div>
 </section>
 
 <section class="page">
-  <div class="head"><h2>صحّح وارسم ملفك القيمي</h2><span class="tag">بوصلتك الداخلية</span></div>
-  <p class="note">أعطِ نفسك: <b>أ = 3</b> درجات، <b>ب = 2</b>، <b>ج = 1</b>. اكتب درجة كل موقف ثم اجمع درجتي كل قيمة.</p>
+  <svg class="strip" viewBox="0 0 45 1120" preserveAspectRatio="xMidYMin slice" aria-hidden="true"><rect width="45" height="1120" fill="url(#strip)"/></svg>
+  <div class="head"><h2>صحّح وارسم ملفك القيمي</h2><span class="tag"><i class="dia"></i>بوصلتك الداخلية</span></div>
+  <svg class="band" viewBox="0 0 680 34" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="680" height="34" fill="url(#bandp)"/></svg>
+  <p class="note">أعطِ نفسك عن كل موقف: <span class="let a" style="display:inline-flex">أ</span> = 3 درجات، <span class="let b" style="display:inline-flex">ب</span> = درجتان، <span class="let c" style="display:inline-flex">ج</span> = درجة واحدة. ثم اجمع درجتي كل قيمة.</p>
   <table>
-    <tr><th style="width:24%">القيمة</th><th>الموقف</th><th>درجتي</th><th>الموقف</th><th>درجتي</th><th style="width:18%">المجموع (2–6)</th></tr>
-    <tr><td>العلمية</td><td>1</td><td></td><td>7</td><td></td><td></td></tr>
-    <tr><td>الاقتصادية</td><td>2</td><td></td><td>8</td><td></td><td></td></tr>
-    <tr><td>الاجتماعية</td><td>3</td><td></td><td>9</td><td></td><td></td></tr>
-    <tr><td>الجمالية</td><td>4</td><td></td><td>10</td><td></td><td></td></tr>
-    <tr><td>السياسية</td><td>5</td><td></td><td>11</td><td></td><td></td></tr>
-    <tr><td>الدينية</td><td>6</td><td></td><td>12</td><td></td><td></td></tr>
+    <tr><th style="width:26%">القيمة</th><th>الموقف</th><th style="text-align:center">درجتي</th><th>الموقف</th><th style="text-align:center">درجتي</th><th style="text-align:center">المجموع (٢–٦)</th></tr>
+    <tr><td><span class="chip sci">العلمية</span></td><td>١</td><td class="box-cell"><div></div></td><td>٧</td><td class="box-cell"><div></div></td><td class="box-cell"><div></div></td></tr>
+    <tr><td><span class="chip eco">الاقتصادية</span></td><td>٢</td><td class="box-cell"><div></div></td><td>٨</td><td class="box-cell"><div></div></td><td class="box-cell"><div></div></td></tr>
+    <tr><td><span class="chip soc">الاجتماعية</span></td><td>٣</td><td class="box-cell"><div></div></td><td>٩</td><td class="box-cell"><div></div></td><td class="box-cell"><div></div></td></tr>
+    <tr><td><span class="chip aes">الجمالية</span></td><td>٤</td><td class="box-cell"><div></div></td><td>١٠</td><td class="box-cell"><div></div></td><td class="box-cell"><div></div></td></tr>
+    <tr><td><span class="chip pol">السياسية</span></td><td>٥</td><td class="box-cell"><div></div></td><td>١١</td><td class="box-cell"><div></div></td><td class="box-cell"><div></div></td></tr>
+    <tr><td><span class="chip rel">الدينية</span></td><td>٦</td><td class="box-cell"><div></div></td><td>١٢</td><td class="box-cell"><div></div></td><td class="box-cell"><div></div></td></tr>
   </table>
 
-  <h3 style="margin-top:14px">ملفي القيمي: ظلّل الخانات حتى مجموعك</h3>
+  <h3 style="margin-top:12px">ملفي القيمي: ظلّل الخانات حتى مجموعك، بلون القيمة إن استطعت</h3>
   <table class="profile">
-    <tr><th style="width:24%">القيمة</th><th><div class="scale"><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div></th></tr>
-    <tr><td>العلمية</td><td class="bar"><div class="cells"><div></div><div></div><div></div><div></div><div></div></div></td></tr>
-    <tr><td>الاقتصادية</td><td class="bar"><div class="cells"><div></div><div></div><div></div><div></div><div></div></div></td></tr>
-    <tr><td>الاجتماعية</td><td class="bar"><div class="cells"><div></div><div></div><div></div><div></div><div></div></div></td></tr>
-    <tr><td>الجمالية</td><td class="bar"><div class="cells"><div></div><div></div><div></div><div></div><div></div></div></td></tr>
-    <tr><td>السياسية</td><td class="bar"><div class="cells"><div></div><div></div><div></div><div></div><div></div></div></td></tr>
-    <tr><td>الدينية</td><td class="bar"><div class="cells"><div></div><div></div><div></div><div></div><div></div></div></td></tr>
+    <tr><th style="width:26%">القيمة</th><th><div class="scale"><span>٢</span><span>٣</span><span>٤</span><span>٥</span><span>٦</span></div></th></tr>
+    <tr><td><span class="chip sci">العلمية</span></td><td class="bar"><div class="cells"><div></div><div></div><div></div><div></div><div></div></div></td></tr>
+    <tr><td><span class="chip eco">الاقتصادية</span></td><td class="bar"><div class="cells"><div></div><div></div><div></div><div></div><div></div></div></td></tr>
+    <tr><td><span class="chip soc">الاجتماعية</span></td><td class="bar"><div class="cells"><div></div><div></div><div></div><div></div><div></div></div></td></tr>
+    <tr><td><span class="chip aes">الجمالية</span></td><td class="bar"><div class="cells"><div></div><div></div><div></div><div></div><div></div></div></td></tr>
+    <tr><td><span class="chip pol">السياسية</span></td><td class="bar"><div class="cells"><div></div><div></div><div></div><div></div><div></div></div></td></tr>
+    <tr><td><span class="chip rel">الدينية</span></td><td class="bar"><div class="cells"><div></div><div></div><div></div><div></div><div></div></div></td></tr>
   </table>
 
-  <div class="box">
-    <b>كيف أقرأ نتيجتي؟</b><br>
-    <b>5 أو 6:</b> قيمة بارزة توجّه كثيرًا من قراراتك. · <b>4:</b> قيمة حاضرة. · <b>2 أو 3:</b> قيمة أقل تأثيرًا في قراراتك الآن، وليست عيبًا.<br>
-    <span class="small">موقفان لكل قيمة لا يكفيان للحكم النهائي. استخدم النتيجة بداية للتأمل، لا تشخيصًا.</span>
+  <div class="read">
+    <div><b>٥ أو ٦</b>قيمة بارزة توجّه كثيرًا من قراراتك</div>
+    <div><b>٤</b>قيمة حاضرة في حياتك</div>
+    <div><b>٢ أو ٣</b>أقل تأثيرًا في قراراتك الآن، وليست عيبًا</div>
   </div>
+  <p class="small" style="margin:0 0 8px">موقفان لكل قيمة لا يكفيان للحكم النهائي. استخدم النتيجة بداية للتأمل، لا تشخيصًا.</p>
 
-  <h3 style="margin-top:10px">تأمّل</h3>
-  <p style="margin:4px 0">أعلى قيمتين عندي: ............................ و ............................</p>
-  <p style="margin:4px 0">هل تشبه النتيجة ما كنت أتوقعه عن نفسي؟ ولماذا؟</p>
-  <div class="lines"></div><div class="lines"></div>
+  <div class="reflect">
+    <h3>تأمّل</h3>
+    <p style="margin:4px 0">أعلى قيمتين عندي: ............................ و ............................</p>
+    <p style="margin:4px 0">هل تشبه النتيجة ما كنت أتوقعه عن نفسي؟ ولماذا؟</p>
+    <div class="lines"></div><div class="lines"></div>
+  </div>
+  <div class="foot"><span>بوصلتك الداخلية: رحلة في عالم القيم</span><span>٣ / ٣</span></div>
 </section>
 
 <!-- ============ 2. حالات صراع القيم ============ -->
 <section class="page">
-  <div class="head"><h1>حالات صراع القيم</h1><span class="tag">للمجموعات · قصّ على الخط</span></div>
+  <svg class="strip" viewBox="0 0 45 1120" preserveAspectRatio="xMidYMin slice" aria-hidden="true"><rect width="45" height="1120" fill="url(#strip)"/></svg>
+  <div class="head"><h1>حالات صراع القيم</h1><span class="tag"><i class="dia"></i>للمجموعات · قصّ على الخط</span></div>
+  <svg class="band" viewBox="0 0 680 34" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="680" height="34" fill="url(#bandp)"/></svg>
   <p class="note">أسئلة النقاش لكل حالة: (1) ما القيمتان المتصارعتان؟ (2) ماذا ستفعل أنت؟ قرار واحد، لا "يعتمد". (3) ما الثمن؟ (4) هل يوجد طريق ثالث يحفظ القيمتين معًا؟</p>
 
   <div class="case"><span class="no">الحالة 1</span><h3>عرس أخي</h3>
@@ -148,7 +208,9 @@
 </section>
 
 <section class="page">
-  <div class="head"><h2>حالات صراع القيم (تابع)</h2><span class="tag">للمجموعات · قصّ على الخط</span></div>
+  <svg class="strip" viewBox="0 0 45 1120" preserveAspectRatio="xMidYMin slice" aria-hidden="true"><rect width="45" height="1120" fill="url(#strip)"/></svg>
+  <div class="head"><h2>حالات صراع القيم (تابع)</h2><span class="tag"><i class="dia"></i>للمجموعات · قصّ على الخط</span></div>
+  <svg class="band" viewBox="0 0 680 34" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="680" height="34" fill="url(#bandp)"/></svg>
 
   <div class="case"><span class="no">الحالة 4</span><h3>متجر إنستغرام</h3>
     <p style="margin:4px 0">بدأت مع أختك متجرًا صغيرًا على إنستغرام لبيع العطور والبخور. لاحظتما أن المنشورات التي تبالغ في وصف الجودة ("أصلي 100%"، "أفضل عود في عُمان") تبيع ضعف غيرها، والمنتج جيد لكنه ليس كما تصفه تلك العبارات.</p></div>
@@ -162,8 +224,9 @@
 
 <!-- ============ 3. بطاقة قيمي ============ -->
 <section class="page">
+  <svg class="strip" viewBox="0 0 45 1120" preserveAspectRatio="xMidYMin slice" aria-hidden="true"><rect width="45" height="1120" fill="url(#strip)"/></svg>
   <div class="card">
-    <div class="title"><h2>بطاقة "قيمي"</h2><span class="small">بوصلتك الداخلية</span></div>
+    <div class="title"><h2>بطاقة "قيمي"</h2><span class="tag" style="font-size:10pt; color:var(--copper-d); font-weight:700">بوصلتك الداخلية</span></div>
     <div class="field">أهم قيمتين عندي:</div><div class="lines"></div>
     <div class="field">قيمة أريد أن أنمّيها، وخطوة صغيرة لتنميتها هذا الشهر:</div><div class="lines"></div><div class="lines"></div>
     <div class="field">قرار قادم هذا الأسبوع سأتخذه وأنا واعٍ بقيمي:</div><div class="lines"></div><div class="lines"></div>
@@ -171,7 +234,7 @@
   </div>
   <div class="cut" style="margin:6mm 0"></div>
   <div class="card">
-    <div class="title"><h2>بطاقة "قيمي"</h2><span class="small">بوصلتك الداخلية</span></div>
+    <div class="title"><h2>بطاقة "قيمي"</h2><span class="tag" style="font-size:10pt; color:var(--copper-d); font-weight:700">بوصلتك الداخلية</span></div>
     <div class="field">أهم قيمتين عندي:</div><div class="lines"></div>
     <div class="field">قيمة أريد أن أنمّيها، وخطوة صغيرة لتنميتها هذا الشهر:</div><div class="lines"></div><div class="lines"></div>
     <div class="field">قرار قادم هذا الأسبوع سأتخذه وأنا واعٍ بقيمي:</div><div class="lines"></div><div class="lines"></div>
