@@ -20,7 +20,7 @@
   --v-rel: #1F7A4A;
 }
 
-/* Arabic, right to left: Slides drops `direction`, so every text block sets its own alignment and every row runs right-to-left with row-reverse. */
+/* Arabic, right to left: Slides drops `direction`, so every text block sets its own alignment. Rows are written left-to-right in the file and packed to the right with justify-content:flex-end (the editor does not keep row-reverse). */
 body { font-family: 'Tajawal', Tahoma, sans-serif; color: var(--ink); }
 section {
   padding: 120px 176px 112px 128px;
@@ -53,13 +53,13 @@ p { font-size: 32px; line-height: 1.6; }
 .strip { position: absolute; left: 1856px; top: 0; width: 64px; height: 1080px; }
 
 /* eyebrow: a diamond then the label, reading from the right */
-.eb { display: flex; flex-direction: row-reverse; align-items: center; gap: 16px; }
+.eb { display: flex; flex-direction: row; justify-content: flex-end; align-items: center; gap: 16px; }
 .eb .dia { width: 22px; height: 22px; background: var(--copper); }
 .dark .eb .dia { background: var(--gold); }
 .eyebrow { font-size: 28px; font-weight: 700; color: var(--copper-d); }
 .dark .eyebrow { color: var(--gold); }
 
-.row { display: flex; flex-direction: row-reverse; gap: 32px; }
+.row { display: flex; flex-direction: row; justify-content: flex-end; gap: 32px; }
 .col { display: flex; flex-direction: column; gap: 16px; }
 .spacer { flex: 1; }
 
@@ -109,7 +109,7 @@ p { font-size: 32px; line-height: 1.6; }
 .rel { background: var(--v-rel); }
 
 /* poll options */
-.opt { display: flex; flex-direction: row-reverse; align-items: center; gap: 28px; background: var(--card); border-radius: 20px; padding: 22px 36px; }
+.opt { display: flex; flex-direction: row; justify-content: flex-end; align-items: center; gap: 28px; background: var(--card); border-radius: 20px; padding: 22px 36px; }
 .opt .letter { font-family: 'Tajawal', Tahoma, sans-serif; font-size: 44px; font-weight: 700; width: 76px; height: 76px; border-radius: 38px; background: var(--lapis); color: var(--sand); text-align: center; line-height: 76px; }
 .opt .letter.b { background: var(--gold); color: var(--lapis); }
 .opt .letter.c { background: #B9C2CC; color: var(--lapis); }
@@ -120,14 +120,14 @@ p { font-size: 32px; line-height: 1.6; }
 .fragment.visible { opacity: 1; transition: opacity 400ms ease; }
 
 /* identity slides: three labelled bands */
-.band { display: flex; flex-direction: row-reverse; gap: 28px; align-items: flex-start; border-bottom: 2px solid var(--line); padding-bottom: 22px; }
+.band { display: flex; flex-direction: row; justify-content: flex-end; gap: 28px; align-items: flex-start; border-bottom: 2px solid var(--line); padding-bottom: 22px; }
 .band .tag { width: 230px; font-size: 26px; font-weight: 700; color: var(--copper-d); padding-top: 10px; }
 .band .content { flex: 1; display: flex; flex-direction: column; gap: 4px; }
 .band .content p { font-size: 32px; }
 
 /* bar chart, bars grow from the right */
 .bars { display: flex; flex-direction: column; gap: 28px; }
-.bar-row { display: flex; flex-direction: row-reverse; align-items: center; gap: 28px; }
+.bar-row { display: flex; flex-direction: row; justify-content: flex-end; align-items: center; gap: 28px; }
 .bar-label { font-size: 36px; font-weight: 700; width: 230px; }
 .bar-track { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; width: 760px; }
 .bar { height: 40px; border-radius: 20px 0 0 20px; background: var(--teal); }
@@ -135,18 +135,18 @@ p { font-size: 32px; line-height: 1.6; }
 .bar-num { font-size: 34px; font-weight: 700; width: 110px; font-variant-numeric: tabular-nums; }
 .bar-num.t { color: var(--teal); }
 .bar-num.g { color: var(--copper-d); }
-.key { display: flex; flex-direction: row-reverse; gap: 14px; align-items: center; }
+.key { display: flex; flex-direction: row; justify-content: flex-end; gap: 14px; align-items: center; }
 .swatch { width: 44px; height: 22px; border-radius: 6px; background: var(--teal); }
 .swatch.g { background: var(--gold); height: 12px; }
 
 /* flex table */
-.trow { display: flex; flex-direction: row-reverse; gap: 0; border-bottom: 2px solid var(--line); }
+.trow { display: flex; flex-direction: row; justify-content: flex-end; gap: 0; border-bottom: 2px solid var(--line); }
 .trow.head { background: var(--lapis); border-radius: 14px 14px 0 0; border-bottom: none; }
 .trow p { font-size: 32px; padding: 14px 24px; }
 .trow.head p { color: var(--sand); font-weight: 700; }
 
 /* electronic activity: progress diamonds, read right to left */
-.prog { display: flex; flex-direction: row-reverse; gap: 14px; align-items: center; }
+.prog { display: flex; flex-direction: row; justify-content: flex-end; gap: 14px; align-items: center; }
 .pd { width: 20px; height: 20px; background: var(--line); }
 .pd.done { background: #F3B27F; }
 .pd.on { width: 30px; height: 30px; background: var(--copper); }
