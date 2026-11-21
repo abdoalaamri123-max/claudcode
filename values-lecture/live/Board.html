@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>بوصلتك الداخلية · لوحة النتائج</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500..700&family=Tajawal:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500..700&family=Tajawal:wght@400;500;700;800&display=swap">
 <!-- qrcode-generator 1.4.4 (MIT, Kazuhiko Arase), embedded so the page needs no CDN -->
 <script>
 //---------------------------------------------------------------------
@@ -2310,131 +2310,159 @@ var qrcode = function() {
 <style>
   :root {
     --lapis:#0B106E; --lapis2:#1B2391; --sand:#EDEDED; --sand2:#E2E3EA; --card:#F8F8FB; --line:#D3D5E0;
-    --copper:#E8640A; --copper-d:#A94300; --blue:#3C5CA8; --gold:#F07A1E; --soft:#4A4A58; --soft-d:#C9CCE8;
+    --copper:#E8640A; --copper-d:#A94300; --blue:#3C5CA8; --gold:#F07A1E; --soft:#4A4A58; --soft-d:#C9CCE8; --green:#1F7A4A;
   }
   * { box-sizing:border-box; }
-  html, body { margin:0; height:100%; background:var(--sand); color:var(--lapis); }
-  body { font-family:'Tajawal', Tahoma, sans-serif; font-size:clamp(15px, 1.2vw, 24px); line-height:1.5; display:flex; flex-direction:column; }
+  html, body { margin:0; height:100%; background:var(--sand); color:var(--lapis); overflow:hidden; }
+  body { font-family:'Tajawal', Tahoma, sans-serif; font-size:clamp(15px, 1.15vw, 26px); line-height:1.5; display:flex; flex-direction:column; }
   h1, h2, h3 { font-family:'Reem Kufi', Tahoma, sans-serif; margin:0; line-height:1.3; }
   button { font-family:'Tajawal', Tahoma, sans-serif; cursor:pointer; }
 
-  header { background:var(--lapis); color:#fff; display:flex; align-items:center; gap:1em; padding:.6em 1.2em .45em; flex-wrap:wrap; }
+  /* ---------- header ---------- */
+  header { background:var(--lapis); color:#fff; display:flex; align-items:center; gap:.9em; padding:.55em 1.2em .4em; flex-wrap:wrap; transition:all .3s; }
   header .title { display:flex; flex-direction:column; }
   header .brand { color:var(--gold); font-size:.72em; font-weight:700; }
-  header h1 { font-size:1.45em; }
+  header h1 { font-size:1.4em; }
   nav { display:flex; gap:.35em; flex-wrap:wrap; margin-right:auto; }
   nav button { border:0; background:var(--lapis2); color:var(--soft-d); font-weight:700; font-size:.82em; padding:.5em .95em; border-radius:2em; position:relative; }
   nav button.on { background:var(--gold); color:var(--lapis); }
-  nav button.live::after { content:""; position:absolute; top:.2em; left:.2em; width:.55em; height:.55em; border-radius:50%; background:#3BD16F; box-shadow:0 0 0 2px var(--lapis); }
+  nav button.live::after { content:""; position:absolute; top:.15em; left:.15em; width:.6em; height:.6em; border-radius:50%; background:#3BD16F; box-shadow:0 0 0 2px var(--lapis); animation:pulse 1.6s infinite; }
+  @keyframes pulse { 0% { box-shadow:0 0 0 2px var(--lapis), 0 0 0 2px rgba(59,209,111,.6); } 100% { box-shadow:0 0 0 2px var(--lapis), 0 0 0 10px rgba(59,209,111,0); } }
+  .presence { display:flex; align-items:center; gap:.5em; background:var(--lapis2); border-radius:2em; padding:.3em .9em; font-weight:700; font-size:.85em; color:var(--soft-d); }
+  .presence b { font-family:'Reem Kufi', Tahoma, sans-serif; font-size:1.35em; color:#fff; }
+  .presence .dot { width:.6em; height:.6em; border-radius:50%; background:#3BD16F; }
+  .tool { border:0; background:var(--lapis2); color:#fff; width:2.3em; height:2.3em; border-radius:50%; font-weight:800; font-size:.85em; }
   .miniqr { background:#fff; padding:4px; border-radius:6px; line-height:0; }
-  .miniqr svg { width:64px; height:64px; }
-  .band { display:block; width:100%; height:16px; background:var(--lapis); }
+  .miniqr svg { width:60px; height:60px; }
+  .band { display:block; width:100%; height:14px; background:var(--lapis); flex:none; }
+  body.present header .brand, body.present nav, body.present .tool.help { display:none; }
+  body.present header { padding:.4em 1.2em; }
 
+  /* ---------- layout ---------- */
   main { flex:1; display:flex; min-height:0; }
-  .strip { width:40px; flex:none; }
-  .view { display:none; flex:1; padding:1.1em 1.6em 1em; flex-direction:column; gap:.9em; min-width:0; overflow:auto; }
-  .view.on { display:flex; animation:fade .3s ease; }
-  @keyframes fade { from { opacity:0; } to { opacity:1; } }
+  .strip { width:38px; flex:none; }
+  .view { display:none; flex:1; padding:1em 1.6em .8em; flex-direction:column; gap:.85em; min-width:0; overflow:auto; }
+  .view.on { display:flex; animation:fade .35s ease; }
+  @keyframes fade { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
   .eb { display:flex; align-items:center; gap:.5em; color:var(--copper-d); font-weight:700; font-size:.85em; }
   .eb::before { content:""; width:.55em; height:.55em; background:var(--copper); transform:rotate(45deg); }
   h2 { font-size:2em; }
-  .note { color:var(--soft); font-size:.8em; }
-  .ctrl { display:flex; align-items:center; gap:.8em; flex-wrap:wrap; }
-  .ctrl .go { border:0; background:var(--copper); color:#fff; font-weight:700; padding:.5em 1.1em; border-radius:2em; }
-  .ctrl .go.stop { background:var(--lapis); }
-  .ctrl .status { font-weight:700; font-size:.85em; color:var(--soft); }
-  .ctrl .status.live { color:#1F7A4A; }
-  .ctrl .n { margin-right:auto; display:flex; align-items:baseline; gap:.3em; color:var(--copper-d); font-weight:700; }
-  .ctrl .n b { font-family:'Reem Kufi', Tahoma, sans-serif; font-size:2em; line-height:1; color:var(--copper); }
+  .note { color:var(--soft); font-size:.78em; }
   .sub { display:flex; gap:.35em; flex-wrap:wrap; }
-  .sub button { border:1px solid var(--line); background:var(--card); color:var(--lapis); font-weight:700; font-size:.85em; padding:.4em .9em; border-radius:2em; }
+  .sub button { border:1px solid var(--line); background:var(--card); color:var(--lapis); font-weight:700; font-size:.85em; padding:.4em .9em; border-radius:2em; position:relative; }
   .sub button.on { background:var(--lapis); color:#fff; border-color:var(--lapis); }
+  .sub button.live::after { content:""; position:absolute; top:-.1em; left:-.1em; width:.6em; height:.6em; border-radius:50%; background:#3BD16F; }
   .panel { display:none; flex-direction:column; gap:.9em; }
   .panel.on { display:flex; }
-  .empty { color:var(--soft); font-size:1.1em; padding:1.5em 0; }
+  .empty { color:var(--soft); font-size:1.1em; padding:1em 0; }
 
-  /* join */
-  .join { display:flex; gap:2.5em; align-items:center; flex:1; }
-  .join .txt { flex:1; display:flex; flex-direction:column; gap:.8em; }
+  /* ---------- control bar ---------- */
+  .ctrl { display:flex; align-items:center; gap:.7em; flex-wrap:wrap; background:var(--card); border-radius:1em; padding:.5em .8em; box-shadow:0 2px 12px rgba(11,16,110,.06); }
+  .ctrl .go { border:0; background:var(--copper); color:#fff; font-weight:800; padding:.5em 1.1em; border-radius:2em; }
+  .ctrl .go.stop { background:var(--lapis); }
+  .ctrl .rev { border:2px solid var(--lapis); background:#fff; color:var(--lapis); font-weight:800; padding:.4em 1em; border-radius:2em; }
+  .ctrl .rev.on { background:var(--lapis); color:#fff; }
+  .ctrl .status { font-weight:700; font-size:.85em; color:var(--soft); }
+  .ctrl .status.live { color:var(--green); }
+  .ctrl .meter { margin-right:auto; display:flex; align-items:center; gap:.6em; font-weight:700; color:var(--copper-d); }
+  .ctrl .meter b { font-family:'Reem Kufi', Tahoma, sans-serif; font-size:1.8em; line-height:1; color:var(--copper); display:inline-block; }
+  .ctrl .meter b.bump { animation:bump .5s ease; }
+  @keyframes bump { 40% { transform:scale(1.35); } }
+  .ctrl .mbar { width:9em; height:.7em; border-radius:1em; background:var(--sand2); overflow:hidden; display:flex; justify-content:flex-start; }
+  .ctrl .mbar div { height:100%; background:var(--copper); border-radius:1em; transition:width .8s ease; }
+
+  /* ---------- hidden results ---------- */
+  .veil { display:none; flex:1; flex-direction:column; align-items:center; justify-content:center; gap:.8em; text-align:center; min-height:16em; }
+  .hidden-res .veil { display:flex; }
+  .hidden-res .res { display:none !important; }
+  .veil .big { font:800 6em 'Reem Kufi', Tahoma, sans-serif; color:var(--copper); line-height:1; }
+  .veil .of { font-size:1.4em; font-weight:700; color:var(--lapis); }
+  .veil .hint { color:var(--soft); }
+  .veil .ring { width:min(40vh, 18em); height:1.1em; border-radius:1em; background:var(--sand2); overflow:hidden; display:flex; }
+  .veil .ring div { background:linear-gradient(90deg, var(--gold), var(--copper)); transition:width .8s ease; }
+
+  /* ---------- join ---------- */
+  .join { display:flex; gap:2.2em; align-items:center; flex:1; }
+  .join .txt { flex:1; display:flex; flex-direction:column; gap:.75em; }
   .qr { background:#fff; padding:1em; border-radius:1.2em; box-shadow:0 6px 28px rgba(11,16,110,.12); flex:none; line-height:0; }
-  .qr svg { display:block; width:min(34vw, 50vh); height:auto; }
-  .url { direction:ltr; text-align:left; font-size:.72em; color:var(--soft); word-break:break-all; background:var(--card); border-radius:.6em; padding:.5em .8em; }
+  .qr svg { display:block; width:min(32vw, 48vh); height:auto; }
+  .counts { display:flex; gap:2em; align-items:flex-end; }
+  .counts .num { font:800 5.2em 'Reem Kufi', Tahoma, sans-serif; color:var(--copper); line-height:1; }
+  .counts .num.on { color:var(--green); }
+  .counts .lab { font-weight:700; }
+  .crowd { display:flex; flex-wrap:wrap; gap:.35em; max-height:7.5em; overflow:hidden; }
+  .crowd span { width:1.1em; height:1.1em; transform:rotate(45deg) scale(1); background:var(--copper); border-radius:.15em; animation:pop .45s ease both; }
+  .crowd span.off { background:var(--line); }
+  @keyframes pop { from { transform:rotate(45deg) scale(0); } to { transform:rotate(45deg) scale(1); } }
+  .url { direction:ltr; text-align:left; font-size:.7em; color:var(--soft); word-break:break-all; background:var(--card); border-radius:.6em; padding:.45em .8em; }
 
-  /* bars */
+  /* ---------- charts ---------- */
   .legend { display:flex; gap:1.4em; flex-wrap:wrap; font-size:.8em; color:var(--soft); align-items:center; }
   .legend i { display:inline-block; vertical-align:middle; margin-left:.4em; }
-  .rows { display:flex; flex-direction:column; gap:.85em; }
-  .vrow { display:flex; align-items:center; gap:1em; }
+  .rows { display:flex; flex-direction:column; gap:.8em; }
+  .vrow { display:flex; align-items:center; gap:1em; animation:fade .5s ease both; }
   .vname { width:8em; flex:none; }
   .chip { display:inline-block; color:#fff; font-weight:700; border-radius:.45em; padding:.2em .7em; text-align:center; min-width:6.5em; }
   .track { flex:1; position:relative; height:2.1em; background:var(--sand2); border-radius:1em; }
-  .fill { position:absolute; right:0; top:0; bottom:0; border-radius:1em; transition:width .9s ease; }
+  .fill { position:absolute; right:0; top:0; bottom:0; border-radius:1em; transition:width 1s cubic-bezier(.2,.8,.2,1); }
   .mark { position:absolute; top:-.35em; bottom:-.35em; width:4px; border-radius:2px; }
   .mark.tu { background:var(--lapis); }
   .mark.all { background:var(--gold); }
-  .vval { width:3.6em; flex:none; font-weight:700; font-variant-numeric:tabular-nums; text-align:left; }
+  .vval { width:3.6em; flex:none; font-weight:800; font-variant-numeric:tabular-nums; text-align:left; }
   .rank { width:9.5em; flex:none; font-size:.8em; color:var(--soft); }
-
-  /* tiles */
   .tiles { display:grid; grid-template-columns:repeat(6, 1fr); gap:1em; flex:1; min-height:16em; }
   .tile { background:var(--card); border-radius:1.2em; padding:1em .8em; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:.6em; box-shadow:0 4px 20px rgba(11,16,110,.07); }
-  .tile .col { width:60%; border-radius:.6em .6em 0 0; transition:height .9s ease; min-height:4px; }
-  .tile .pct { font-family:'Reem Kufi', Tahoma, sans-serif; font-size:2.1em; line-height:1; }
-
-  /* items */
+  .tile .col { width:60%; border-radius:.6em .6em 0 0; transition:height 1s cubic-bezier(.2,.8,.2,1); min-height:4px; }
+  .tile .pct { font:800 2.1em 'Reem Kufi', Tahoma, sans-serif; line-height:1; }
   .items { display:flex; flex-direction:column; gap:.45em; }
   .irow { display:flex; align-items:center; gap:.8em; font-size:.85em; }
   .ino { width:1.8em; flex:none; font-weight:700; color:var(--copper-d); }
   .itext { width:22em; flex:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .stack { flex:1; display:flex; height:1.6em; border-radius:.8em; overflow:hidden; background:var(--sand2); }
-  .stack div { display:flex; align-items:center; justify-content:center; font-size:.85em; font-weight:700; transition:width .9s ease; overflow:hidden; white-space:nowrap; }
+  .stack div { display:flex; align-items:center; justify-content:center; font-size:.85em; font-weight:700; transition:width 1s ease; overflow:hidden; white-space:nowrap; }
   .sa { background:var(--lapis); color:#fff; }
   .sb { background:var(--gold); color:var(--lapis); }
   .sc { background:#B9C2CC; color:var(--lapis); }
-
-  /* poll / jobs big bars */
-  .big-rows { display:flex; flex-direction:column; gap:1.4em; margin-top:.6em; }
-  .brow { display:flex; align-items:center; gap:1em; }
+  .big-rows { display:flex; flex-direction:column; gap:1.5em; margin-top:.6em; }
+  .brow { display:flex; align-items:center; gap:1em; animation:fade .5s ease both; }
   .blet { width:2.2em; height:2.2em; flex:none; border-radius:50%; display:flex; align-items:center; justify-content:center; font:700 1.1em 'Reem Kufi', Tahoma, sans-serif; }
   .btext { width:16em; flex:none; font-weight:700; }
-  .btrack { flex:1; position:relative; height:2.6em; background:var(--sand2); border-radius:1.3em; }
-  .bfill { position:absolute; right:0; top:0; bottom:0; border-radius:1.3em; transition:width .9s ease; }
-  .bpct { width:4.2em; flex:none; font:700 1.6em 'Reem Kufi', Tahoma, sans-serif; text-align:left; color:var(--copper); }
+  .btrack { flex:1; position:relative; height:2.7em; background:var(--sand2); border-radius:1.35em; }
+  .bfill { position:absolute; right:0; top:0; bottom:0; border-radius:1.35em; transition:width 1s cubic-bezier(.2,.8,.2,1); }
+  .bpct { width:4.2em; flex:none; font:800 1.7em 'Reem Kufi', Tahoma, sans-serif; text-align:left; color:var(--copper); }
   .smark { position:absolute; top:-.45em; bottom:-.45em; width:5px; background:var(--lapis); border-radius:3px; }
   .smark span { position:absolute; top:-1.6em; right:-2.5em; width:5em; text-align:center; font-size:.7em; font-weight:700; color:var(--lapis); white-space:nowrap; }
-
-  /* cases */
-  .cases { display:grid; grid-template-columns:repeat(3, 1fr); gap:1em; }
-  .case { background:var(--card); border-radius:1.1em; padding:.9em 1.1em; display:flex; flex-direction:column; gap:.45em; box-shadow:0 4px 20px rgba(11,16,110,.07); }
-  .case h3 { font-size:1.2em; }
-  .case .meta { color:var(--soft); font-size:.8em; }
-  .split { display:flex; height:1.6em; border-radius:.8em; overflow:hidden; background:var(--sand2); }
-  .split div { display:flex; align-items:center; justify-content:center; color:#fff; font-size:.75em; font-weight:700; white-space:nowrap; overflow:hidden; }
-  .ideas { display:none; flex-direction:column; gap:.3em; font-size:.85em; }
-  .ideas.on { display:flex; }
-  .ideas p { margin:0; background:#fff; border-right:4px solid var(--gold); border-radius:.4em; padding:.3em .6em; }
-  .case button { align-self:flex-start; border:1px solid var(--line); background:#fff; color:var(--copper-d); font-weight:700; font-size:.75em; border-radius:2em; padding:.25em .8em; }
-
-  /* tables */
+  .casebox { background:var(--card); border-radius:1em; padding:.8em 1.1em; border-right:6px solid var(--copper); }
+  .casebox h3 { font-size:1.3em; margin-bottom:.2em; }
+  .casebox p { margin:0; font-size:.95em; }
+  .keybtn { align-self:flex-start; border:1px solid var(--line); background:#fff; color:var(--copper-d); font-weight:700; font-size:.8em; border-radius:2em; padding:.3em .9em; }
   table { border-collapse:separate; border-spacing:0; width:100%; background:var(--card); border-radius:1em; overflow:hidden; }
   th, td { padding:.5em .8em; text-align:right; border-bottom:1px solid var(--line); }
   th { background:var(--lapis); color:#fff; font-family:'Reem Kufi', Tahoma, sans-serif; font-weight:600; }
   tr:last-child td { border-bottom:none; }
   td.num { font-variant-numeric:tabular-nums; font-weight:700; }
   .hi { color:var(--blue); }
-
   .insights { display:flex; flex-direction:column; gap:.7em; }
-  .ins { background:var(--card); border-radius:1em; padding:.7em 1.1em; border-right:6px solid var(--gold); }
+  .ins { background:var(--card); border-radius:1em; padding:.7em 1.1em; border-right:6px solid var(--gold); animation:fade .5s ease both; }
   .ins b { color:var(--copper-d); }
 
-  footer { display:flex; gap:1em; align-items:center; padding:.35em 1.6em .6em 3.2em; font-size:.72em; color:var(--soft); }
-  footer button { border:1px solid var(--line); background:var(--card); color:var(--copper-d); font-weight:700; border-radius:2em; padding:.35em 1em; }
+  footer { display:flex; gap:1em; align-items:center; padding:.3em 1.6em .5em 3.2em; font-size:.72em; color:var(--soft); flex:none; }
+  footer button { border:1px solid var(--line); background:var(--card); color:var(--copper-d); font-weight:700; border-radius:2em; padding:.3em 1em; }
+
+  /* ---------- overlays ---------- */
+  .toast { position:fixed; bottom:1.2em; left:50%; transform:translateX(-50%) translateY(150%); background:var(--lapis); color:#fff; padding:.7em 1.3em; border-radius:2em; font-weight:700; transition:transform .3s; z-index:20; }
+  .toast.on { transform:translateX(-50%) translateY(0); }
+  .help { position:fixed; inset:0; background:rgba(11,16,110,.55); display:none; align-items:center; justify-content:center; z-index:30; }
+  .help.on { display:flex; }
+  .help .box { background:#fff; border-radius:1.2em; padding:1.4em 1.8em; max-width:34em; }
+  .help td { border-bottom:1px solid var(--line); padding:.4em .6em; }
+  .help kbd { display:inline-block; min-width:1.8em; text-align:center; background:var(--sand2); border-radius:.35em; padding:.05em .45em; font-weight:800; font-family:Tahoma, sans-serif; }
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-  <pattern id="strip" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="#E2E3EA"/><g fill="none" stroke="#E8640A" stroke-width="1.5"><rect x="12" y="12" width="16" height="16"/><rect x="12" y="12" width="16" height="16" transform="rotate(45 20 20)"/><circle cx="20" cy="20" r="3"/></g></pattern>
-  <pattern id="bandp" width="30" height="16" patternUnits="userSpaceOnUse"><g fill="none" stroke="#F07A1E" stroke-width="1.2"><rect x="9" y="3" width="10" height="10"/><rect x="9" y="3" width="10" height="10" transform="rotate(45 14 8)"/><path d="M0 8H4M26 8H30"/></g></pattern>
+  <pattern id="strip" width="38" height="38" patternUnits="userSpaceOnUse"><rect width="38" height="38" fill="#E2E3EA"/><g fill="none" stroke="#E8640A" stroke-width="1.5"><rect x="11" y="11" width="16" height="16"/><rect x="11" y="11" width="16" height="16" transform="rotate(45 19 19)"/><circle cx="19" cy="19" r="3"/></g></pattern>
+  <pattern id="bandp" width="30" height="14" patternUnits="userSpaceOnUse"><g fill="none" stroke="#F07A1E" stroke-width="1.2"><rect x="9" y="2" width="10" height="10"/><rect x="9" y="2" width="10" height="10" transform="rotate(45 14 7)"/><path d="M0 7H4M26 7H30"/></g></pattern>
 </defs></svg>
 
 <header>
@@ -2444,23 +2472,32 @@ var qrcode = function() {
     <button data-v="jobs" data-act="jobs">الوظيفتان</button>
     <button data-v="discover" data-act="discover">اكتشف قيمك</button>
     <button data-v="polls" data-act="lead help exam">التصويتات</button>
-    <button data-v="conflict" data-act="conflict">صراع القيم</button>
-    <button data-v="share" data-act="share">بيت جدّي</button>
+    <button data-v="conflict" data-act="c1 c2 c3 c4 c5 c6">صراع القيم</button>
+    <button data-v="share" data-act="share">البيت</button>
     <button data-v="card" data-act="card">بطاقة قيمي</button>
   </nav>
+  <div class="presence" title="المنضمون إلى الجلسة · المتصلون الآن"><span class="dot"></span><b id="hJoined">٠</b>منضم · <b id="hOnline">٠</b>متصل</div>
+  <button class="tool" id="btnPresent" title="وضع العرض (P)">⛶</button>
+  <button class="tool help" id="btnHelp" title="اختصارات لوحة المفاتيح (?)">؟</button>
   <div class="miniqr" id="miniqr" title="رمز الانضمام"></div>
 </header>
-<svg class="band" viewBox="0 0 1200 16" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="1200" height="16" fill="url(#bandp)"/></svg>
+<svg class="band" viewBox="0 0 1200 14" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="1200" height="14" fill="url(#bandp)"/></svg>
 
 <main>
-  <svg class="strip" aria-hidden="true"><rect width="40" height="100%" fill="url(#strip)"/></svg>
+  <svg class="strip" aria-hidden="true"><rect width="38" height="100%" fill="url(#strip)"/></svg>
 
+  <!-- join -->
   <section class="view on" id="v-join">
     <div class="join">
       <div class="txt">
         <span class="eb">امسح الرمز بكاميرا جوالك</span>
         <h2>انضم إلى أنشطة المحاضرة</h2>
         <p style="margin:0">امسح الرمز مرة واحدة وأبقِ الصفحة مفتوحة. كل نشاط يبدأ سيظهر على جوالك تلقائيًا، بلا اسم ولا تسجيل دخول.</p>
+        <div class="counts">
+          <div><div class="num" id="jJoined">٠</div><div class="lab">طالبًا انضموا</div></div>
+          <div><div class="num on" id="jOnline">٠</div><div class="lab">متصلون الآن</div></div>
+        </div>
+        <div class="crowd" id="crowd" aria-hidden="true"></div>
         <p style="margin:0; font-weight:700" id="joinAct"></p>
         <div class="url" id="url"></div>
       </div>
@@ -2468,80 +2505,88 @@ var qrcode = function() {
     </div>
   </section>
 
+  <!-- jobs -->
   <section class="view" id="v-jobs">
     <div class="ctrl" data-act="jobs"></div>
     <span class="eb">النشاط الافتتاحي</span>
     <h2>أيّ العرضين اختارت القاعة؟</h2>
-    <div class="big-rows" id="jobs-bars"></div>
-    <div class="insights" id="jobs-read"></div>
+    <div class="veil"></div>
+    <div class="res"><div class="big-rows" id="jobs-bars"></div><div class="insights" id="jobs-read" style="margin-top:1em"></div></div>
   </section>
 
+  <!-- discover -->
   <section class="view" id="v-discover">
     <div class="ctrl" data-act="discover"></div>
-    <div class="sub" id="dsub">
-      <button data-p="rank" class="on">ترتيب القاعة</button><button data-p="top">أعلى قيمة</button><button data-p="items">المواقف</button><button data-p="groups">المجموعات</button><button data-p="read">قراءة سريعة</button>
-    </div>
-    <div class="panel on" id="p-rank">
-      <h2>ترتيب قيم القاعة</h2>
-      <div class="legend">
-        <span>العمود: هذه القاعة</span>
-        <span><i style="width:4px;height:1.2em;background:var(--lapis);border-radius:2px"></i>طلبة جامعتكم في الدراسة (ن = 157)</span>
-        <span><i style="width:4px;height:1.2em;background:var(--gold);border-radius:2px"></i>العينة الكلية (ن = 975)</span>
+    <div class="veil"></div>
+    <div class="res" style="display:flex; flex-direction:column; gap:.9em">
+      <div class="sub" id="dsub">
+        <button data-p="rank" class="on">ترتيب القاعة</button><button data-p="top">أعلى قيمة</button><button data-p="items">المواقف</button><button data-p="groups">المجموعات</button><button data-p="read">قراءة سريعة</button>
       </div>
-      <div class="rows" id="rank"></div>
-      <p class="note">القاعة أجابت عن 12 موقفًا مختصرًا، والدراسة استخدمت 79 موقفًا. المقارنة توضيحية وليست اختبارًا إحصائيًا.</p>
-    </div>
-    <div class="panel" id="p-top">
-      <h2>كم طالبًا كانت هذه أعلى قيمه؟</h2>
-      <div class="tiles" id="tiles"></div>
-      <p class="note">من تعادلت لديه أعلى قيمتين أو أكثر يُوزَّع صوته بينها بالتساوي.</p>
-    </div>
-    <div class="panel" id="p-items">
-      <h2>ماذا اختارت القاعة في كل موقف؟</h2>
-      <div class="items" id="items"></div>
-    </div>
-    <div class="panel" id="p-groups">
-      <h2>بين الكليات، وبين الطلاب والطالبات</h2>
-      <div id="groups"></div>
-      <p class="note">تظهر المجموعة حين يجيب منها 5 طلبة على الأقل. أرقام وصفية لقاعة واحدة، بلا اختبار دلالة.</p>
-    </div>
-    <div class="panel" id="p-read">
-      <h2>قراءة سريعة في نتائج القاعة</h2>
-      <div class="insights" id="insights"></div>
+      <div class="panel on" id="p-rank">
+        <h2>ترتيب قيم القاعة</h2>
+        <div class="legend">
+          <span>العمود: هذه القاعة</span>
+          <span><i style="width:4px;height:1.2em;background:var(--lapis);border-radius:2px"></i>طلبة جامعتكم في الدراسة (ن = 157)</span>
+          <span><i style="width:4px;height:1.2em;background:var(--gold);border-radius:2px"></i>العينة الكلية (ن = 975)</span>
+        </div>
+        <div class="rows" id="rank"></div>
+        <p class="note">القاعة أجابت عن 12 موقفًا مختصرًا، والدراسة استخدمت 79 موقفًا. المقارنة توضيحية وليست اختبارًا إحصائيًا.</p>
+      </div>
+      <div class="panel" id="p-top"><h2>كم طالبًا كانت هذه أعلى قيمه؟</h2><div class="tiles" id="tiles"></div><p class="note">من تعادلت لديه أعلى قيمتين أو أكثر يُوزَّع صوته بينها بالتساوي.</p></div>
+      <div class="panel" id="p-items"><h2>ماذا اختارت القاعة في كل موقف؟</h2><div class="items" id="items"></div></div>
+      <div class="panel" id="p-groups"><h2>بين الكليات، وبين الطلاب والطالبات</h2><div id="groups"></div><p class="note">تظهر المجموعة حين يجيب منها 5 طلبة على الأقل. أرقام وصفية لقاعة واحدة، بلا اختبار دلالة.</p></div>
+      <div class="panel" id="p-read"><h2>قراءة سريعة في نتائج القاعة</h2><div class="insights" id="insights"></div></div>
     </div>
   </section>
 
+  <!-- polls -->
   <section class="view" id="v-polls">
     <div class="sub" id="psub"><button data-a="lead" class="on">الترشح</button><button data-a="help">المساعدة المالية</button><button data-a="exam">الامتحان والمقال</button></div>
     <div class="ctrl" id="pctrl" data-act="lead"></div>
     <h2 id="poll-q"></h2>
-    <div class="legend"><span>العمود: هذه القاعة</span><span><i style="width:5px;height:1.2em;background:var(--lapis);border-radius:2px"></i>طلبة جامعتكم في الدراسة</span></div>
-    <div class="big-rows" id="poll-bars"></div>
-    <div class="insights" id="poll-read"></div>
+    <div class="veil"></div>
+    <div class="res">
+      <div class="legend"><span>العمود: هذه القاعة</span><span><i style="width:5px;height:1.2em;background:var(--lapis);border-radius:2px"></i>طلبة جامعتكم في الدراسة</span></div>
+      <div class="big-rows" id="poll-bars"></div>
+      <div class="insights" id="poll-read" style="margin-top:1em"></div>
+    </div>
   </section>
 
+  <!-- conflict -->
   <section class="view" id="v-conflict">
-    <div class="ctrl" data-act="conflict"></div>
-    <h2>ماذا قررت المجموعات؟</h2>
-    <div class="cases" id="cases"></div>
-    <p class="note">أفكار "الطريق الثالث" يكتبها الطلبة بلا أسماء، ولا تظهر إلا حين تضغط "اعرض الأفكار". اقرأها قبل عرضها على الشاشة.</p>
+    <div class="sub" id="csub"></div>
+    <div class="ctrl" id="cctrl" data-act="c1"></div>
+    <div class="casebox" id="casebox"></div>
+    <div class="veil"></div>
+    <div class="res" style="display:flex; flex-direction:column; gap:.8em">
+      <h3>ما القيمتان المتصارعتان في رأي القاعة؟</h3>
+      <div class="rows" id="c-rows"></div>
+      <div class="insights" id="c-read"></div>
+      <button class="keybtn" id="keybtn">اعرض مفتاح المحاضر</button>
+      <div class="insights" id="c-key" style="display:none"></div>
+    </div>
   </section>
 
+  <!-- home -->
   <section class="view" id="v-share">
     <div class="ctrl" data-act="share"></div>
-    <h2>القيم التي تعلّمناها من بيوتنا</h2>
-    <div class="tiles" id="share-tiles"></div>
-    <div class="insights" id="share-read"></div>
+    <h2>القيم التي تعلّمناها في بيوتنا</h2>
+    <div class="veil"></div>
+    <div class="res" style="display:flex; flex-direction:column; gap:.9em; flex:1"><div class="tiles" id="share-tiles"></div><div class="insights" id="share-read"></div></div>
   </section>
 
+  <!-- card -->
   <section class="view" id="v-card">
     <div class="ctrl" data-act="card"></div>
     <h2>بوصلة القاعة</h2>
-    <div style="display:flex; gap:2em; flex-wrap:wrap">
-      <div style="flex:1; min-width:18em"><h3 style="margin-bottom:.6em">قيم نعتز بها (أهم قيمتين)</h3><div class="rows" id="card-top"></div></div>
-      <div style="flex:1; min-width:18em"><h3 style="margin-bottom:.6em">قيم نريد أن ننمّيها</h3><div class="rows" id="card-grow"></div></div>
+    <div class="veil"></div>
+    <div class="res" style="display:flex; flex-direction:column; gap:.9em">
+      <div style="display:flex; gap:2em; flex-wrap:wrap">
+        <div style="flex:1; min-width:18em"><h3 style="margin-bottom:.6em">قيم نعتز بها (أهم قيمتين)</h3><div class="rows" id="card-top"></div></div>
+        <div style="flex:1; min-width:18em"><h3 style="margin-bottom:.6em">قيم نريد أن ننمّيها</h3><div class="rows" id="card-grow"></div></div>
+      </div>
+      <div class="insights" id="card-read"></div>
     </div>
-    <div class="insights" id="card-read"></div>
   </section>
 </main>
 
@@ -2550,6 +2595,21 @@ var qrcode = function() {
   <span style="margin-right:auto"></span>
   <button id="newsess">جلسة جديدة</button>
 </footer>
+
+<div class="toast" id="toast"></div>
+<div class="help" id="help"><div class="box">
+  <h3 style="margin-bottom:.6em">اختصارات لوحة المفاتيح</h3>
+  <table>
+    <tr><td><kbd>0</kbd> إلى <kbd>6</kbd></td><td>التبويبات بالترتيب: انضم، الوظيفتان، اكتشف قيمك، التصويتات، صراع القيم، البيت، بطاقة قيمي</td></tr>
+    <tr><td><kbd>مسافة</kbd></td><td>تفعيل النشاط الظاهر على الجوالات أو إيقافه</td></tr>
+    <tr><td><kbd>R</kbd></td><td>كشف النتائج أو إخفاؤها</td></tr>
+    <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>التصويت أو الحالة التالية والسابقة</td></tr>
+    <tr><td><kbd>P</kbd></td><td>وضع العرض: يخفي القوائم ويكبّر النتائج</td></tr>
+    <tr><td><kbd>F11</kbd></td><td>ملء الشاشة (من المتصفح)</td></tr>
+    <tr><td><kbd>?</kbd></td><td>هذه النافذة</td></tr>
+  </table>
+  <p class="note" style="margin-top:.8em">اضغط في أي مكان للإغلاق.</p>
+</div></div>
 
 <script>
   var STUDENT_URL = <?!= JSON.stringify(studentUrl) ?>;
@@ -2563,7 +2623,8 @@ var qrcode = function() {
     { name:'السياسية', color:'#5C5A1C', tu:2.16, all:2.17 },
     { name:'الدينية', color:'#1F7A4A', tu:2.55, all:2.59 }
   ];
-  var ACT_NAMES = { jobs:'العرضان الوظيفيان', discover:'اكتشف قيمك', lead:'تصويت الترشح', help:'تصويت المساعدة المالية', exam:'تصويت الامتحان والمقال', conflict:'صراع القيم', share:'قيمة من بيت جدّي', card:'بطاقة قيمي' };
+  var ACT_NAMES = { jobs:'العرضان الوظيفيان', discover:'اكتشف قيمك', lead:'تصويت الترشح', help:'تصويت المساعدة المالية', exam:'تصويت الامتحان والمقال', share:'قيمة من البيت', card:'بطاقة قيمي',
+    c1:'صراع القيم: عرس أخي', c2:'صراع القيم: عرض الدقم', c3:'صراع القيم: كود الصديق', c4:'صراع القيم: متجر إنستغرام', c5:'صراع القيم: مجلس الطلبة', c6:'صراع القيم: تصميم المشروع' };
   var ITEMS = ['سؤال بقي بعد المحاضرة', 'مبلغ مالي غير متوقع', 'زميل جديد يجلس وحيدًا', 'عرض تقديمي لمشروعك', 'انتخابات مجلس الطلبة', 'الأذان أثناء نقاش ممتع', 'منشور صحي غريب', 'دورة برسوم لسوق العمل', 'حملة تطوعية لتنظيف شاطئ', 'معرض فنون وخط عربي', 'حوار حول قرار يخص الطلبة', 'محفظة فيها مال'];
   // نسب الدراسة لطلبة جامعتكم. "ب" في الامتحان محسوبة بالطرح من 100، وفي المساعدة المالية تُعرف نسبة "أ" وحدها.
   var POLLS = {
@@ -2572,7 +2633,14 @@ var qrcode = function() {
     exam: { q:'امتحان غدًا ومقال علمي مثير', opts:['أقرأ المقال الآن', 'أقرأ جزءًا وأكمله لاحقًا', 'أركز على المذاكرة'], study:[11, 30, 59] }
   };
   var JOBS = ['شركة كبرى في مسقط، راتب أعلى', 'مؤسسة قريبة، عمل ذو معنى'];
-  var CASES = ['عرس أخي', 'عرض الدقم', 'كود الصديق', 'متجر إنستغرام', 'مجلس الطلبة', 'تصميم المشروع'];
+  var CASES = [
+    ['عرس أخي', 'زفاف أخيك الليلة في الولاية، وامتحانك النهائي صباح الغد.', [2, 0]],
+    ['عرض الدقم', 'راتب يقارب الضعف في الدقم، أو عمل قريب من والديك المسنّين.', [1, 2]],
+    ['كود الصديق', 'صديقك يطلب جزءًا من كود مشروعك ليسلّمه باسمه.', [2, 5]],
+    ['متجر إنستغرام', 'المبالغة في وصف المنتج تضاعف المبيعات.', [1, 5]],
+    ['مجلس الطلبة', 'نجحت في الانتخابات، والمهام تأكل وقت مذاكرتك.', [4, 0]],
+    ['تصميم المشروع', 'الواجهة الأجمل تكلّف ضعف الميزانية، والأبسط تكفي.', [3, 1]]
+  ];
   var COLLEGES = { eng:'الهندسة', it:'تقنية المعلومات', bus:'الاقتصاد وإدارة الأعمال', other:'أخرى' };
   var GENDERS = { m:'الطلاب', f:'الطالبات' };
   var MIN_GROUP = 5;
@@ -2585,6 +2653,17 @@ var qrcode = function() {
   function B(t) { return el('b', null, t); }
   function insight(box, parts) { var p = el('div', 'ins'); parts.forEach(function (x) { p.appendChild(typeof x === 'string' ? document.createTextNode(x) : x); }); box.appendChild(p); }
   function parse(s) { try { return JSON.parse(s); } catch (e) { return null; } }
+  function toast(t) { var e = document.getElementById('toast'); e.textContent = t; e.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(function () { e.classList.remove('on'); }, 2600); }
+
+  /* animated numbers */
+  var shownNum = {};
+  function countTo(node, id, target) {
+    var from = shownNum[id] || 0; shownNum[id] = target;
+    if (from === target) { node.textContent = ar(target); return; }
+    if (target > from) { node.classList.remove('bump'); void node.offsetWidth; node.classList.add('bump'); }
+    var t0 = performance.now(), dur = 700;
+    (function step(t) { var k = Math.min(1, (t - t0) / dur); node.textContent = ar(Math.round(from + (target - from) * (1 - Math.pow(1 - k, 3)))); if (k < 1) requestAnimationFrame(step); })(t0);
+  }
 
   /* ---------- QR ---------- */
   document.getElementById('url').textContent = STUDENT_URL;
@@ -2595,15 +2674,15 @@ var qrcode = function() {
   } catch (e) { document.getElementById('qr').textContent = 'تعذّر رسم الرمز. انسخ الرابط الظاهر بجانبه.'; }
 
   /* ---------- navigation ---------- */
-  var view = 'join', pollAct = 'lead';
-  document.querySelectorAll('#nav button').forEach(function (b) {
-    b.onclick = function () {
-      view = b.getAttribute('data-v');
-      document.querySelectorAll('#nav button').forEach(function (x) { x.classList.toggle('on', x === b); });
-      document.querySelectorAll('.view').forEach(function (v) { v.classList.toggle('on', v.id === 'v-' + view); });
-      refresh();
-    };
-  });
+  var VIEWS = ['join', 'jobs', 'discover', 'polls', 'conflict', 'share', 'card'];
+  var view = 'join', pollAct = 'lead', caseAct = 'c1';
+  function showView(v) {
+    view = v;
+    document.querySelectorAll('#nav button').forEach(function (x) { x.classList.toggle('on', x.getAttribute('data-v') === v); });
+    document.querySelectorAll('.view').forEach(function (x) { x.classList.toggle('on', x.id === 'v-' + v); });
+    applyVeils(); refresh();
+  }
+  document.querySelectorAll('#nav button').forEach(function (b) { b.onclick = function () { showView(b.getAttribute('data-v')); }; });
   document.querySelectorAll('#dsub button').forEach(function (b) {
     b.onclick = function () {
       var p = b.getAttribute('data-p');
@@ -2611,67 +2690,154 @@ var qrcode = function() {
       document.querySelectorAll('#v-discover .panel').forEach(function (x) { x.classList.toggle('on', x.id === 'p-' + p); });
     };
   });
-  document.querySelectorAll('#psub button').forEach(function (b) {
-    b.onclick = function () {
-      pollAct = b.getAttribute('data-a');
-      document.querySelectorAll('#psub button').forEach(function (x) { x.classList.toggle('on', x === b); });
-      document.getElementById('pctrl').setAttribute('data-act', pollAct);
-      drawCtrls(); refresh();
-    };
+  function setPoll(a) {
+    pollAct = a;
+    document.querySelectorAll('#psub button').forEach(function (x) { x.classList.toggle('on', x.getAttribute('data-a') === a); });
+    document.getElementById('pctrl').setAttribute('data-act', a);
+    document.getElementById('poll-q').textContent = POLLS[a].q;
+    drawCtrls(); applyVeils(); refresh();
+  }
+  document.querySelectorAll('#psub button').forEach(function (b) { b.onclick = function () { setPoll(b.getAttribute('data-a')); }; });
+  var csub = document.getElementById('csub');
+  CASES.forEach(function (c, i) {
+    var b = el('button', i === 0 ? 'on' : '', ar(i + 1) + ' · ' + c[0]); b.setAttribute('data-a', 'c' + (i + 1));
+    b.onclick = function () { setCase('c' + (i + 1)); }; csub.appendChild(b);
   });
-  function visibleAct() { return view === 'join' ? null : view === 'polls' ? pollAct : view; }
+  var keyShown = false;
+  function setCase(a) {
+    caseAct = a; keyShown = false;
+    var ci = Number(a.slice(1)) - 1;
+    csub.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x.getAttribute('data-a') === a); });
+    document.getElementById('cctrl').setAttribute('data-act', a);
+    var box = document.getElementById('casebox'); box.innerHTML = '';
+    box.appendChild(el('h3', null, 'الحالة ' + ar(ci + 1) + ' · ' + CASES[ci][0])); box.appendChild(el('p', null, CASES[ci][1]));
+    document.getElementById('c-key').style.display = 'none';
+    document.getElementById('keybtn').textContent = 'اعرض مفتاح المحاضر';
+    drawCtrls(); applyVeils(); refresh();
+  }
+  document.getElementById('keybtn').onclick = function () {
+    keyShown = !keyShown;
+    document.getElementById('c-key').style.display = keyShown ? 'flex' : 'none';
+    this.textContent = keyShown ? 'أخفِ مفتاح المحاضر' : 'اعرض مفتاح المحاضر';
+  };
+  function visibleAct() { return view === 'join' ? null : view === 'polls' ? pollAct : view === 'conflict' ? caseAct : view; }
 
-  /* ---------- activation controls ---------- */
-  var state = { act:'', session:'' }, lastN = {};
+  /* ---------- reveal ---------- */
+  var revealed = {};
+  function applyVeils() {
+    document.querySelectorAll('.view').forEach(function (v) {
+      var id = v.id.slice(2), act = id === 'polls' ? pollAct : id === 'conflict' ? caseAct : id;
+      v.classList.toggle('hidden-res', id !== 'join' && !revealed[act]);
+    });
+  }
+  function toggleReveal(act) { revealed[act] = !revealed[act]; applyVeils(); drawCtrls(); toast(revealed[act] ? 'كُشفت النتائج' : 'أُخفيت النتائج'); refresh(); }
+
+  /* ---------- state & controls ---------- */
+  var state = { act:'', session:'' }, lastN = {}, presence = { joined:0, online:0 };
+  function activate(act) {
+    var live = state.act === act;
+    google.script.run.withSuccessHandler(function (s) { onState(s); toast(live ? 'أُوقف النشاط على الجوالات' : 'فُعّل على الجوالات: ' + ACT_NAMES[act]); }).setActivity(KEY, live ? '' : act);
+  }
   function drawCtrls() {
     document.querySelectorAll('.ctrl').forEach(function (c) {
-      var act = c.getAttribute('data-act'), live = state.act === act;
+      var act = c.getAttribute('data-act'), live = state.act === act, n = lastN[act] || 0;
       c.innerHTML = '';
       var go = el('button', 'go' + (live ? ' stop' : ''), live ? 'أوقف على الجوالات' : 'فعّل على الجوالات');
-      go.onclick = function () { google.script.run.withSuccessHandler(onState).setActivity(KEY, live ? '' : act); };
-      c.appendChild(go);
-      c.appendChild(el('span', 'status' + (live ? ' live' : ''), live ? 'مفعّل الآن على جوالات الطلبة' : 'غير مفعّل'));
-      var n = el('span', 'n'); n.appendChild(el('b', null, ar(lastN[act] || 0))); n.appendChild(document.createTextNode('إجابة')); c.appendChild(n);
+      go.onclick = function () { activate(act); };
+      var rv = el('button', 'rev' + (revealed[act] ? ' on' : ''), revealed[act] ? 'أخفِ النتائج' : 'اكشف النتائج');
+      rv.onclick = function () { toggleReveal(act); };
+      c.appendChild(go); c.appendChild(rv);
+      c.appendChild(el('span', 'status' + (live ? ' live' : ''), live ? 'مفعّل الآن على الجوالات' : 'غير مفعّل'));
+      var m = el('span', 'meter'); var b = el('b', null, ar(n));
+      m.appendChild(b); m.appendChild(document.createTextNode('أجابوا من ' + ar(presence.joined)));
+      var bar = el('span', 'mbar'), f = el('div'); f.style.width = (presence.joined ? Math.min(100, n / presence.joined * 100) : 0) + '%'; bar.appendChild(f); m.appendChild(bar);
+      c.appendChild(m);
     });
     document.querySelectorAll('#nav button').forEach(function (b) {
       var acts = (b.getAttribute('data-act') || '').split(' ');
       b.classList.toggle('live', !!state.act && acts.indexOf(state.act) >= 0);
     });
+    document.querySelectorAll('#psub button, #csub button').forEach(function (b) { b.classList.toggle('live', state.act === b.getAttribute('data-a')); });
     document.getElementById('joinAct').textContent = state.act ? 'النشاط المفعّل الآن: ' + ACT_NAMES[state.act] : 'لا يوجد نشاط مفعّل الآن.';
     document.getElementById('htitle').textContent = state.act ? ACT_NAMES[state.act] : 'الأنشطة التفاعلية';
   }
-  function onState(s) { state = s; drawCtrls(); }
+  function onState(s) { state = { act: s.act, session: s.session }; drawCtrls(); }
+
+  function drawPresence() {
+    countTo(document.getElementById('hJoined'), 'hj', presence.joined);
+    countTo(document.getElementById('hOnline'), 'ho', presence.online);
+    countTo(document.getElementById('jJoined'), 'jj', presence.joined);
+    countTo(document.getElementById('jOnline'), 'jo', presence.online);
+    var crowd = document.getElementById('crowd'), want = Math.min(presence.joined, 160);
+    while (crowd.children.length < want) { var d = el('span'); d.style.animationDelay = (crowd.children.length % 12) * 30 + 'ms'; crowd.appendChild(d); }
+    while (crowd.children.length > want) crowd.removeChild(crowd.lastChild);
+    Array.prototype.forEach.call(crowd.children, function (d, i) { d.classList.toggle('off', i >= presence.online); });
+  }
+
+  function drawVeil(act) {
+    var v = document.querySelector('.view.on .veil'); if (!v) return;
+    var n = lastN[act] || 0, j = presence.joined;
+    v.innerHTML = '';
+    var big = el('div', 'big'); v.appendChild(big); countTo(big, 'veil-' + act, n);
+    v.appendChild(el('div', 'of', 'أجاب ' + ar(n) + ' من ' + ar(j) + ' طالبًا'));
+    var r = el('div', 'ring'), f = el('div'); f.style.width = (j ? Math.min(100, n / j * 100) : 0) + '%'; r.appendChild(f); v.appendChild(r);
+    v.appendChild(el('div', 'hint', state.act === act ? 'النتائج مخفية حتى تكشفها، حتى لا تتأثر إجابات القاعة' : 'فعّل النشاط على الجوالات، ثم اكشف النتائج حين يكتمل العدد'));
+  }
 
   /* ---------- polling ---------- */
   var busy = false;
   function refresh() {
-    google.script.run.withSuccessHandler(onState).getState();
+    if (busy) return; busy = true;
     var act = visibleAct();
-    if (!act || busy) return;
-    busy = true;
+    google.script.run.withSuccessHandler(onState).getState();
     google.script.run
       .withSuccessHandler(function (d) {
-        busy = false; lastN[act] = d.rows.length; drawCtrls();
-        if (act === visibleAct()) RENDER[act](d.rows);
+        busy = false;
+        presence = { joined: d.joined, online: d.online }; drawPresence();
+        if (act) { lastN[act] = d.rows.length; }
+        drawCtrls();
+        if (act && act === visibleAct()) { RENDER[/^c\d$/.test(act) ? 'conflict' : act](d.rows, act); drawVeil(act); }
         document.getElementById('upd').textContent = 'آخر تحديث ' + new Date(d.at).toLocaleTimeString('ar-OM') + ' · الجلسة ' + d.session;
       })
       .withFailureHandler(function () { busy = false; document.getElementById('upd').textContent = 'تعذّر التحديث، ستُعاد المحاولة تلقائيًا…'; })
-      .getResults(KEY, act);
+      .getResults(KEY, act || '');
   }
-  setInterval(refresh, 5000);
-  refresh();
+  setInterval(refresh, 3500);
 
   document.getElementById('newsess').onclick = function () {
-    if (!confirm('بدء جلسة جديدة يخفي إجابات الجلسة الحالية من اللوحة ويوقف النشاط المفعّل (تبقى الإجابات محفوظة في جدول Google). هل تريد المتابعة؟')) return;
-    google.script.run.withSuccessHandler(function (s) { onState(s); lastN = {}; refresh(); }).startNewSession(KEY);
+    if (!confirm('بدء جلسة جديدة يخفي إجابات الجلسة الحالية من اللوحة ويصفّر عدد المنضمين ويوقف النشاط المفعّل (تبقى الإجابات محفوظة في جدول Google). على الطلبة بعدها إعادة تحميل الصفحة أو الانتظار حتى تنضم جوالاتهم تلقائيًا. هل تريد المتابعة؟')) return;
+    google.script.run.withSuccessHandler(function (s) { onState(s); lastN = {}; revealed = {}; applyVeils(); refresh(); toast('بدأت جلسة جديدة'); }).startNewSession(KEY);
   };
 
-  /* ---------- shared drawing ---------- */
+  /* ---------- presentation & keyboard ---------- */
+  function togglePresent() { document.body.classList.toggle('present'); toast(document.body.classList.contains('present') ? 'وضع العرض: اضغط P للخروج، وF11 لملء الشاشة' : 'خرجت من وضع العرض'); }
+  document.getElementById('btnPresent').onclick = togglePresent;
+  document.getElementById('btnHelp').onclick = function () { document.getElementById('help').classList.add('on'); };
+  document.getElementById('help').onclick = function () { this.classList.remove('on'); };
+  document.addEventListener('keydown', function (e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    var k = e.key;
+    if (/^[0-6]$/.test(k)) { showView(VIEWS[Number(k)]); return; }
+    if (k === '٠' || k === '١' || k === '٢' || k === '٣' || k === '٤' || k === '٥' || k === '٦') { showView(VIEWS[AR.indexOf(k)]); return; }
+    var act = visibleAct();
+    if (k === ' ' && act) { e.preventDefault(); activate(act); return; }
+    if ((k === 'r' || k === 'R' || k === 'ق') && act) { toggleReveal(act); return; }
+    if (k === 'p' || k === 'P' || k === 'ح') { togglePresent(); return; }
+    if (k === '?' || k === '؟') { document.getElementById('help').classList.toggle('on'); return; }
+    if (k === 'Escape') { document.getElementById('help').classList.remove('on'); return; }
+    if (k === 'ArrowLeft' || k === 'ArrowRight') {
+      var dir = k === 'ArrowLeft' ? 1 : -1;
+      if (view === 'polls') { var P = ['lead', 'help', 'exam']; setPoll(P[(P.indexOf(pollAct) + dir + 3) % 3]); }
+      else if (view === 'conflict') { var c = Number(caseAct.slice(1)) - 1; setCase('c' + ((c + dir + 6) % 6 + 1)); }
+    }
+  });
+
+  /* ---------- drawing helpers ---------- */
   function bigBars(box, labels, counts, study) {
     box.innerHTML = '';
     var tot = counts.reduce(function (a, b) { return a + b; }, 0);
     labels.forEach(function (lab, i) {
-      var row = el('div', 'brow');
+      var row = el('div', 'brow'); row.style.animationDelay = i * 90 + 'ms';
       row.appendChild(el('span', 'blet ' + ['sa', 'sb', 'sc'][i], 'أبج'[i]));
       row.appendChild(el('span', 'btext', lab));
       var tr = el('div', 'btrack');
@@ -2688,8 +2854,8 @@ var qrcode = function() {
   function valueRows(box, counts, denom) {
     box.innerHTML = '';
     var order = [0, 1, 2, 3, 4, 5].sort(function (x, y) { return counts[y] - counts[x]; });
-    order.forEach(function (i) {
-      var v = VALUES[i], row = el('div', 'vrow');
+    order.forEach(function (i, k) {
+      var v = VALUES[i], row = el('div', 'vrow'); row.style.animationDelay = k * 70 + 'ms';
       var nm = el('div', 'vname'); var ch = el('span', 'chip', v.name); ch.style.background = v.color; nm.appendChild(ch);
       var tr = el('div', 'track'), fi = el('div', 'fill'); fi.style.background = v.color; fi.style.width = (denom ? counts[i] / denom * 100 : 0) + '%'; tr.appendChild(fi);
       row.appendChild(nm); row.appendChild(tr); row.appendChild(el('div', 'vval', denom ? pc(counts[i] / denom * 100) : '—'));
@@ -2721,9 +2887,8 @@ var qrcode = function() {
     insight(box, ['احتفظوا بهذه النتيجة: في الدراسة جاءت القيمة ', B('الاقتصادية'), ' في المرتبة الأخيرة لدى طلبة جامعتكم.']);
   };
 
-  RENDER.lead = RENDER.help = RENDER.exam = function (rows) {
-    var P = POLLS[pollAct];
-    document.getElementById('poll-q').textContent = P.q;
+  RENDER.lead = RENDER.help = RENDER.exam = function (rows, act) {
+    var P = POLLS[act];
     var c = countLetters(rows, 3), tot = bigBars(document.getElementById('poll-bars'), P.opts, c, P.study);
     var box = document.getElementById('poll-read'); box.innerHTML = '';
     if (!tot) { box.appendChild(el('p', 'empty', 'ننتظر الأصوات…')); return; }
@@ -2735,46 +2900,21 @@ var qrcode = function() {
     insight(box, mx < 45 ? ['القاعة ', B('منقسمة'), ': لا يتجاوز أي بديل ' + pc(mx) + '.'] : ['أغلب القاعة (' + pc(mx) + ') اختارت البديل ', B('أبج'[share.indexOf(mx)]), '.']);
   };
 
-  var openIdeas = {};
-  RENDER.conflict = function (rows) {
-    var box = document.getElementById('cases'); box.innerHTML = '';
-    var data = rows.map(function (r) { return parse(r[2]); }).filter(Boolean);
-    CASES.forEach(function (title, ci) {
-      var ds = data.filter(function (d) { return d.c === ci + 1; });
-      var card = el('div', 'case');
-      card.appendChild(el('h3', null, ar(ci + 1) + ' · ' + title));
-      card.appendChild(el('span', 'meta', ar(ds.length) + ' إجابة'));
-      if (ds.length) {
-        var pairs = {};
-        ds.forEach(function (d) { var k = d.v.slice().sort().join('-'); pairs[k] = (pairs[k] || 0) + 1; });
-        var bestKey = Object.keys(pairs).sort(function (a, b) { return pairs[b] - pairs[a]; })[0], best = bestKey.split('-').map(Number);
-        var pr = el('p'); pr.style.margin = '0';
-        pr.appendChild(document.createTextNode('الصراع الأكثر ذكرًا: '));
-        pr.appendChild(B(VALUES[best[0]].name + ' و' + VALUES[best[1]].name));
-        pr.appendChild(document.createTextNode(' (' + pc(pairs[bestKey] / ds.length * 100) + ')'));
-        card.appendChild(pr);
-        var onPair = ds.filter(function (d) { return d.v.slice().sort().join('-') === bestKey; });
-        card.appendChild(el('span', 'meta', 'أيّهما قدّموا؟'));
-        var sp = el('div', 'split');
-        best.forEach(function (vi) {
-          var k = onPair.filter(function (d) { return d.p === vi; }).length;
-          var part = el('div', null, k ? VALUES[vi].name + ' ' + pc(k / onPair.length * 100) : '');
-          part.style.background = VALUES[vi].color; part.style.width = (k / onPair.length * 100) + '%';
-          sp.appendChild(part);
-        });
-        card.appendChild(sp);
-        var ideas = ds.map(function (d) { return d.t; }).filter(function (t) { return t; }).slice(-6);
-        if (ideas.length) {
-          var list = el('div', 'ideas');
-          ideas.forEach(function (t) { list.appendChild(el('p', null, t)); });
-          var btn = el('button', null, 'اعرض أفكار الطريق الثالث (' + ar(ideas.length) + ')');
-          btn.onclick = function () { list.classList.toggle('on'); openIdeas[ci] = list.classList.contains('on'); };
-          if (openIdeas[ci]) list.classList.add('on');
-          card.appendChild(btn); card.appendChild(list);
-        }
-      }
-      box.appendChild(card);
-    });
+  RENDER.conflict = function (rows, act) {
+    var ci = Number(act.slice(1)) - 1;
+    var data = rows.map(function (r) { return parse(r[2]); }).filter(function (d) { return d && d.v; });
+    var n = data.length, counts = [0, 0, 0, 0, 0, 0], pairs = {};
+    data.forEach(function (d) { d.v.forEach(function (i) { counts[i]++; }); var k = d.v.slice().sort().join('-'); pairs[k] = (pairs[k] || 0) + 1; });
+    valueRows(document.getElementById('c-rows'), counts, n);
+    var box = document.getElementById('c-read'); box.innerHTML = '';
+    var kbox = document.getElementById('c-key'); kbox.innerHTML = '';
+    var exp = CASES[ci][2], ek = exp.slice().sort().join('-');
+    insight(kbox, ['في مفتاح المحاضر: ', B(VALUES[exp[0]].name + ' و' + VALUES[exp[1]].name), n ? '، واختار هذا الزوج نفسه ' + pc((pairs[ek] || 0) / n * 100) + ' من القاعة.' : '.']);
+    if (!n) { box.appendChild(el('p', 'empty', 'ننتظر الإجابات…')); return; }
+    var bestKey = Object.keys(pairs).sort(function (a, b) { return pairs[b] - pairs[a]; })[0], best = bestKey.split('-').map(Number);
+    insight(box, ['الصراع الأكثر ذكرًا: ', B(VALUES[best[0]].name + ' و' + VALUES[best[1]].name), ' (' + pc(pairs[bestKey] / n * 100) + ' من القاعة).']);
+    var others = Object.keys(pairs).length;
+    if (others > 1) insight(box, ['رأت القاعة في هذا الموقف ', B(ar(others) + ' صراعات مختلفة'), '، وهذا يدل على أن ترتيب القيم يختلف بيننا.']);
   };
 
   RENDER.share = function (rows) {
@@ -2785,7 +2925,7 @@ var qrcode = function() {
     var box = document.getElementById('share-read'); box.innerHTML = '';
     if (!tot) { box.appendChild(el('p', 'empty', 'ننتظر الإجابات…')); return; }
     var mi = c.indexOf(Math.max.apply(null, c));
-    insight(box, ['أكثر ما تعلّمناه من بيوتنا: القيمة ', B(VALUES[mi].name), ' (' + pc(c[mi] / tot * 100) + '). والأسرة أول مصادر اكتساب القيم.']);
+    insight(box, ['أكثر ما تعلّمناه في بيوتنا: القيمة ', B(VALUES[mi].name), ' (' + pc(c[mi] / tot * 100) + '). والأسرة أول مصادر اكتساب القيم.']);
   };
 
   RENDER.card = function (rows) {
@@ -2799,7 +2939,6 @@ var qrcode = function() {
     insight(box, ['أكثر قيمة تعتز بها القاعة: ', B(VALUES[o1[0]].name), '، وأكثر قيمة تريد القاعة تنميتها: ', B(VALUES[o2[0]].name), '.']);
   };
 
-  /* ---------- discover ---------- */
   function score(ch) { return ch === 'a' ? 3 : ch === 'b' ? 2 : 1; }
   function ranks(arr) { var order = arr.map(function (v, i) { return i; }).sort(function (x, y) { return arr[y] - arr[x]; }); var r = []; order.forEach(function (i, k) { r[i] = k + 1; }); return r; }
   function spearman(a, b) { var ra = ranks(a), rb = ranks(b), d2 = 0; for (var i = 0; i < a.length; i++) d2 += Math.pow(ra[i] - rb[i], 2); return 1 - 6 * d2 / (a.length * (a.length * a.length - 1)); }
@@ -2816,8 +2955,8 @@ var qrcode = function() {
     if (!n) box.appendChild(el('p', 'empty', 'ننتظر أول إجابة…'));
     else {
       var rr = ranks(means), sr = ranks(VALUES.map(function (v) { return v.tu; }));
-      means.map(function (v, i) { return i; }).sort(function (x, y) { return means[y] - means[x]; }).forEach(function (i) {
-        var v = VALUES[i], row = el('div', 'vrow');
+      means.map(function (v, i) { return i; }).sort(function (x, y) { return means[y] - means[x]; }).forEach(function (i, k) {
+        var v = VALUES[i], row = el('div', 'vrow'); row.style.animationDelay = k * 70 + 'ms';
         var nm = el('div', 'vname'); var ch = el('span', 'chip', v.name); ch.style.background = v.color; nm.appendChild(ch);
         var tr = el('div', 'track'), fi = el('div', 'fill'); fi.style.background = v.color; fi.style.width = ((means[i] - 1) / 2 * 100) + '%';
         var mt = el('div', 'mark tu'); mt.style.right = ((v.tu - 1) / 2 * 100) + '%';
@@ -2879,6 +3018,9 @@ var qrcode = function() {
     insight(rb, ['أكثر المواقف إجماعًا: ', B('«' + ITEMS[cons] + '»'), ' (' + pc(cv * 100) + ' اختاروا البديل نفسه). وأكثرها انقسامًا: ', B('«' + ITEMS[split] + '»'), '.']);
     rb.appendChild(el('p', 'note', 'قراءة وصفية لقاعة واحدة و12 موقفًا مختصرًا، فلا تُعمَّم ولا تُعامل نتيجةً بحثية.'));
   };
+
+  /* ---------- start ---------- */
+  setPoll('lead'); setCase('c1'); showView('join');
 </script>
 </body>
 </html>

@@ -13,7 +13,8 @@ const ADMIN_KEY = 'change-me';
 
 const SHEET_NAME = 'answers';
 const HEADER = ['time', 'session', 'activity', 'client', 'college', 'gender', 'data'];
-const ACTS = ['jobs', 'discover', 'lead', 'help', 'exam', 'conflict', 'share', 'card'];
+const ACTS = ['jobs', 'discover', 'lead', 'help', 'exam', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'share', 'card'];
+const HEARTBEAT_SECONDS = 75; // يُعدّ الجوال متصلًا إن سأل عن النشاط خلال هذه المدة
 const COLLEGES = ['eng', 'it', 'bus', 'other'];
 const GENDERS = ['m', 'f'];
 
@@ -45,8 +46,32 @@ function doGet(e) {
 
 /* ---------------- state ---------------- */
 
-/** ما يسأل عنه جوال الطالب كل بضع ثوانٍ: النشاط المفعّل والجلسة. */
-function getState() {
+/** ما يسأل عنه جوال الطالب كل بضع ثوانٍ: النشاط المفعّل والجلسة. ويسجّل أن الجوال متصل. */
+function getState(client) {
+  if (validClient_(client)) CacheService.getScriptCache().put('hb:' + client, '1', HEARTBEAT_SECONDS);
+  return state_();
+}
+
+/** أول ما يفعله جوال الطالب: يسجّل انضمامه إلى الجلسة مرة واحدة. */
+function join(client) {
+  if (!validClient_(client)) throw new Error('bad_client');
+  const cache = CacheService.getScriptCache();
+  const state = state_();
+  cache.put('hb:' + client, '1', HEARTBEAT_SECONDS);
+  const k = 'j:' + state.session + ':' + client;
+  if (!cache.get(k)) {
+    const sheet = getSheet_();
+    const lock = LockService.getScriptLock();
+    lock.waitLock(15000);
+    try { sheet.appendRow([new Date(), state.session, 'join', client, '', '', '']); } finally { lock.releaseLock(); }
+    cache.put(k, '1', 21600);
+  }
+  return state;
+}
+
+function validClient_(c) { return typeof c === 'string' && /^[A-Za-z0-9-]{8,40}$/.test(c); }
+
+function state_() {
   const cache = CacheService.getScriptCache();
   const hit = cache.get('STATE');
   if (hit) return JSON.parse(hit);
@@ -61,7 +86,7 @@ function setActivity(key, act) {
   if (act && ACTS.indexOf(act) < 0) throw new Error('bad_activity');
   PropertiesService.getScriptProperties().setProperty('ACT', act || '');
   CacheService.getScriptCache().remove('STATE');
-  return getState();
+  return state_();
 }
 
 function startNewSession(key) {
@@ -69,7 +94,7 @@ function startNewSession(key) {
   newSession_();
   PropertiesService.getScriptProperties().setProperty('ACT', '');
   CacheService.getScriptCache().remove('STATE');
-  return getState();
+  return state_();
 }
 
 function newSession_() {
@@ -86,12 +111,12 @@ function submit(payload) {
   const act = String(payload.act || '');
   if (ACTS.indexOf(act) < 0) throw new Error('bad_activity');
   const client = String(payload.client || '');
-  if (!/^[A-Za-z0-9-]{8,40}$/.test(client)) throw new Error('bad_client');
+  if (!validClient_(client)) throw new Error('bad_client');
   const data = validate_(act, payload.data);
   const college = act === 'discover' && COLLEGES.indexOf(payload.college) >= 0 ? payload.college : '';
   const gender = act === 'discover' && GENDERS.indexOf(payload.gender) >= 0 ? payload.gender : '';
 
-  const session = getState().session || newSession_();
+  const session = state_().session || newSession_();
   const sheet = getSheet_();
   const lock = LockService.getScriptLock();
   lock.waitLock(15000);
@@ -121,32 +146,38 @@ function validate_(act, d) {
     case 'card':
       if (!d || !Array.isArray(d.top) || d.top.length !== 2 || !d.top.every(isIdx) || d.top[0] === d.top[1] || !isIdx(d.grow)) throw new Error('bad_data');
       return JSON.stringify({ top: d.top, grow: d.grow });
-    case 'conflict': {
-      if (!d || !Number.isInteger(d.c) || d.c < 1 || d.c > 6) throw new Error('bad_data');
-      if (!Array.isArray(d.v) || d.v.length !== 2 || !d.v.every(isIdx) || d.v[0] === d.v[1]) throw new Error('bad_data');
-      if (d.v.indexOf(d.p) < 0) throw new Error('bad_data');
-      const t = String(d.t || '').replace(/[\u0000-\u001F\u007F]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 140);
-      return JSON.stringify({ c: d.c, v: d.v, p: d.p, t: t });
-    }
+    case 'c1': case 'c2': case 'c3': case 'c4': case 'c5': case 'c6':
+      if (!d || !Array.isArray(d.v) || d.v.length !== 2 || !d.v.every(isIdx) || d.v[0] === d.v[1]) throw new Error('bad_data');
+      return JSON.stringify({ v: d.v.slice().sort() });
   }
   throw new Error('bad_activity');
 }
 
-/** للوحة المحاضر: آخر إجابة لكل جوال في نشاط واحد من الجلسة الحالية. */
+/** للوحة المحاضر: عدد المنضمين والمتصلين، وآخر إجابة لكل جوال في النشاط المطلوب (إن طُلب). */
 function getResults(key, act) {
   checkKey_(key);
-  if (ACTS.indexOf(act) < 0) throw new Error('bad_activity');
-  const state = getState();
+  if (act && ACTS.indexOf(act) < 0) throw new Error('bad_activity');
+  const state = state_();
   const sheet = getSheet_();
   const last = sheet.getLastRow();
   const rows = last < 2 ? [] : sheet.getRange(2, 1, last - 1, HEADER.length).getValues();
-  const byClient = {};
+  const byClient = {}, joined = {};
   for (const r of rows) {
-    if (String(r[1]) !== state.session || String(r[2]) !== act) continue;
+    if (String(r[1]) !== state.session) continue;
+    const a = String(r[2]);
+    if (a === 'join') { joined[String(r[3])] = 1; continue; }
+    if (a !== act) continue;
     byClient[String(r[3])] = [String(r[4]), String(r[5]), String(r[6])];
+    joined[String(r[3])] = 1;
+  }
+  const ids = Object.keys(joined);
+  let online = 0;
+  const cache = CacheService.getScriptCache();
+  for (let i = 0; i < ids.length; i += 500) {
+    online += Object.keys(cache.getAll(ids.slice(i, i + 500).map(function (c) { return 'hb:' + c; }))).length;
   }
   const out = Object.keys(byClient).map(function (k) { return byClient[k]; });
-  return { session: state.session, act: state.act, rows: out, at: new Date().toISOString() };
+  return { session: state.session, act: state.act, rows: out, joined: ids.length, online: online, at: new Date().toISOString() };
 }
 
 function checkKey_(key) {

@@ -97,7 +97,8 @@
   ];
   var TITLES = {
     jobs: 'العرضان الوظيفيان', discover: 'اكتشف قيمك', lead: 'تصويت: الترشح', help: 'تصويت: المساعدة المالية',
-    exam: 'تصويت: الامتحان والمقال', conflict: 'صراع القيم', share: 'قيمة من بيت جدّي', card: 'بطاقة قيمي'
+    exam: 'تصويت: الامتحان والمقال', share: 'قيمة من البيت', card: 'بطاقة قيمي',
+    c1: 'صراع القيم', c2: 'صراع القيم', c3: 'صراع القيم', c4: 'صراع القيم', c5: 'صراع القيم', c6: 'صراع القيم'
   };
   var JOBS = { q: 'تخرّجت، وأمامك عرضان. أيّهما تختار؟', a: ['شركة كبرى في مسقط', 'راتب مرتفع وحوافز، وساعات عمل طويلة، وبُعد عن الأهل والولاية'], b: ['مؤسسة قريبة من بيتك', 'راتب أقل، وعمل تشعر بقيمته ومعناه، ووقت كافٍ للأسرة والمجتمع'] };
   // [راجع البدائل مع الملحق 5 حتى تطابق نص المقياس]
@@ -120,7 +121,14 @@
     ['يتحاور زملاؤك حول قرار جديد يخص الطلبة', 'أشارك برأيي وأقترح حلولًا، وأوصلها لمن يهمه الأمر', 'أستمع دون أن أشارك', 'أنصرف، فلا شأن لي'],
     ['وجدت محفظة فيها مال في ساحة الجامعة', 'أسلّمها لإدارة الجامعة فورًا، أمانةً وطلبًا لرضا الله', 'أسلّمها إن مررت بمكتب الإدارة', 'أتركها مكانها']
   ];
-  var CASES = ['عرس أخي', 'عرض الدقم', 'كود الصديق', 'متجر إنستغرام', 'مجلس الطلبة', 'تصميم المشروع'];
+  var CASES = [
+    ['عرس أخي', 'زفاف أخيك الأكبر الليلة في الولاية، والأهل ينتظرون حضورك ومساعدتك في استقبال الضيوف. امتحانك النهائي في مقرر صعب الساعة الثامنة صباح الغد، ولم تُنهِ المراجعة بعد. والطريق إلى البيت ساعة ونصف.'],
+    ['عرض الدقم', 'تخرجت مهندسًا، وجاءك عرض من شركة في الدقم براتب يقارب ضعف ما يعرضه مصنع قريب من بيتكم. والداك كبيران في السن، وأنت الابن الوحيد المقيم قريبًا منهما، وإخوتك يعملون خارج الولاية.'],
+    ['كود الصديق', 'صديقك المقرّب منذ المدرسة لم يُنهِ مشروع البرمجة، والتسليم الليلة. يطلب منك أن ترسل له جزءًا من الكود الذي كتبته ليعدّله قليلًا ويسلّمه باسمه، ويقول لك: لو كنت مكاني ما تركتك.'],
+    ['متجر إنستغرام', 'بدأت مع أختك متجرًا صغيرًا على إنستغرام لبيع العطور والبخور. لاحظتما أن المنشورات التي تبالغ في وصف الجودة، مثل "أصلي 100%" و"أفضل عود في عُمان"، تبيع ضعف غيرها، والمنتج جيد لكنه ليس كما تصفه تلك العبارات.'],
+    ['مجلس الطلبة', 'ترشحت لمجلس الطلبة ونجحت بأصوات زملائك بعد وعود بتحسين خدمات النقل. بعد شهرين وجدت أن الاجتماعات والمتابعات تأخذ أكثر من عشر ساعات أسبوعيًا، وانخفض معدلك، والفصل القادم فيه مقررات تخصص ثقيلة.'],
+    ['تصميم المشروع', 'فريقك يعمل على مشروع تخرج لتطبيق خدمي. أمامكم تصميمان للواجهة: الأول جميل ومتقن ويحتاج شراء أدوات وقوالب بضعف الميزانية المتاحة من جيوبكم، والثاني بسيط ومجاني ويؤدي الوظيفة. وزميلكم المصمم متحمس جدًا للأول.']
+  ];
   /* ============================================================= */
 
   var AR = '٠١٢٣٤٥٦٧٨٩';
@@ -142,10 +150,14 @@
 
   /* ---------- polling ---------- */
   function poll() {
-    google.script.run.withSuccessHandler(onState).withFailureHandler(function () {}).getState();
+    google.script.run.withSuccessHandler(onState).withFailureHandler(function () {}).getState(CLIENT);
+  }
+  function joinNow() {
+    google.script.run.withSuccessHandler(onState).withFailureHandler(function () { setTimeout(joinNow, 4000); }).join(CLIENT);
   }
   function schedule() { setTimeout(function () { poll(); schedule(); }, 9000 + Math.random() * 5000); }
   function onState(st) {
+    if (state.session && st.session !== state.session) joinNow();
     var changed = st.act !== state.act || st.session !== state.session;
     state = st;
     if (!changed && shown !== null) return;
@@ -160,8 +172,10 @@
     if (!state.act) return renderWait();
     var saved = store(doneKey(state.act));
     if (saved) return renderSent(state.act, JSON.parse(saved));
-    ({ jobs: renderJobs, discover: renderDiscoverIntro, lead: renderPoll, help: renderPoll, exam: renderPoll,
-       conflict: renderConflict, share: renderShare, card: renderCard })[state.act]();
+    var R = { jobs: renderJobs, discover: renderDiscoverIntro, lead: renderPoll, help: renderPoll, exam: renderPoll,
+       c1: renderConflict, c2: renderConflict, c3: renderConflict, c4: renderConflict, c5: renderConflict, c6: renderConflict,
+       share: renderShare, card: renderCard }[state.act];
+    if (R) R(); else renderWait();
   }
 
   function renderWait() {
@@ -326,33 +340,20 @@
     n.appendChild(el('b', null, tops.join(' و'))); c.appendChild(n);
   }
 
-  /* ---------- conflict ---------- */
+  /* ---------- conflict: the presenter picks the case, students pick the two values ---------- */
   function renderConflict() {
-    busy = true; setTitle(TITLES.conflict); clear();
-    var pick = { c: [], v: [], p: [] };
+    var act = state.act, ci = Number(act.slice(1)) - 1, cs = CASES[ci];
+    busy = true; setTitle(TITLES[act]); clear();
+    var pick = [];
     var c = el('div', 'card');
-    c.appendChild(el('span', 'tag', 'بعد نقاش مجموعتك'));
-    c.appendChild(el('p', 'lbl', '١. ما حالة مجموعتك؟'));
-    chipGroup(c, CASES.map(function (t, i) { return ar(i + 1) + ' · ' + t; }), 1, pick.c, false, update);
-    c.appendChild(el('p', 'lbl', '٢. ما القيمتان المتصارعتان؟ (اختر اثنتين)'));
-    chipGroup(c, VALUES, 2, pick.v, true, function () { pick.p.length = 0; drawPriority(); update(); });
-    c.appendChild(el('p', 'lbl', '٣. أيّهما ستقدّم؟'));
-    var pr = el('div'); c.appendChild(pr);
-    function drawPriority() {
-      pr.innerHTML = '';
-      if (pick.v.length < 2) { pr.appendChild(el('p', 'muted', 'اختر القيمتين أولًا.')); return; }
-      chipGroup(pr, pick.v.map(function (i) { return VALUES[i]; }), 1, pick.p, true, update);
-    }
-    drawPriority();
-    c.appendChild(el('p', 'lbl', '٤. هل وجدتم طريقًا ثالثًا يحفظ القيمتين؟ (اختياري)'));
-    var ta = el('textarea'); ta.maxLength = 140; ta.placeholder = 'فكرة قصيرة، دون أسماء'; c.appendChild(ta);
-    var cnt = el('div', 'count', '٠ من ١٤٠ حرفًا'); c.appendChild(cnt);
-    ta.oninput = function () { cnt.textContent = ar(ta.value.length) + ' من ١٤٠ حرفًا'; };
-    var b = el('button', 'btn orange', 'أرسل'); b.disabled = true; c.appendChild(b);
-    function update() { b.disabled = !(pick.c.length && pick.v.length === 2 && pick.p.length); }
-    b.onclick = function () {
-      send('conflict', { c: pick.c[0] + 1, v: pick.v.slice(), p: pick.v[pick.p[0]], t: ta.value.trim() }, null, {});
-    };
+    c.appendChild(el('span', 'tag', 'الحالة ' + ar(ci + 1) + ' من ٦'));
+    c.appendChild(el('p', 'q', cs[0]));
+    c.appendChild(el('p', null, cs[1]));
+    c.appendChild(el('p', 'lbl', 'ما القيمتان المتصارعتان في هذا الموقف؟ (اختر اثنتين)'));
+    var b = el('button', 'btn orange', 'أرسل'); b.disabled = true;
+    chipGroup(c, VALUES, 2, pick, true, function () { b.disabled = pick.length !== 2; });
+    b.onclick = function () { send(act, { v: pick.slice() }, null, {}); };
+    c.appendChild(b);
     main.appendChild(c);
   }
 
@@ -361,7 +362,7 @@
     busy = true; setTitle(TITLES.share); clear();
     var sel = [];
     var c = el('div', 'card');
-    c.appendChild(el('p', 'q', 'قيمة تعلّمتها من جدّك أو جدّتك أو والديك: إلى أي القيم الست تنتمي؟'));
+    c.appendChild(el('p', 'q', 'تذكّر قيمة تعلّمتها في بيتك من أسرتك: إلى أي القيم الست تنتمي؟'));
     var b = el('button', 'btn orange', 'أرسل'); b.disabled = true;
     chipGroup(c, VALUES, 1, sel, true, function () { b.disabled = !sel.length; });
     b.onclick = function () { send('share', { v: sel[0] }, null, {}); };
@@ -400,7 +401,7 @@
     c.appendChild(el('p', 'muted', 'صوّر بطاقتك واجعلها خلفية جوالك أسبوعًا، وأكمل الجملة بكلماتك.'));
   }
 
-  poll();
+  joinNow();
   schedule();
 </script>
 </body>
