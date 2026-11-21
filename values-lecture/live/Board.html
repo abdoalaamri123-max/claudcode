@@ -2310,165 +2310,238 @@ var qrcode = function() {
 <style>
   :root {
     --lapis:#0B106E; --lapis2:#1B2391; --sand:#EDEDED; --sand2:#E2E3EA; --card:#F8F8FB; --line:#D3D5E0;
-    --copper:#E8640A; --copper-d:#A94300; --teal:#0E7C86; --gold:#F07A1E; --soft:#4A4A58; --soft-d:#C9CCE8;
+    --copper:#E8640A; --copper-d:#A94300; --blue:#3C5CA8; --gold:#F07A1E; --soft:#4A4A58; --soft-d:#C9CCE8;
   }
   * { box-sizing:border-box; }
   html, body { margin:0; height:100%; background:var(--sand); color:var(--lapis); }
-  body { font-family:'Tajawal', Tahoma, sans-serif; font-size:clamp(15px, 1.25vw, 24px); line-height:1.5; display:flex; flex-direction:column; }
+  body { font-family:'Tajawal', Tahoma, sans-serif; font-size:clamp(15px, 1.2vw, 24px); line-height:1.5; display:flex; flex-direction:column; }
   h1, h2, h3 { font-family:'Reem Kufi', Tahoma, sans-serif; margin:0; line-height:1.3; }
+  button { font-family:'Tajawal', Tahoma, sans-serif; cursor:pointer; }
 
-  header { background:var(--lapis); color:var(--sand); display:flex; align-items:center; gap:1.2em; padding:.7em 1.4em .5em; flex-wrap:wrap; }
+  header { background:var(--lapis); color:#fff; display:flex; align-items:center; gap:1em; padding:.6em 1.2em .45em; flex-wrap:wrap; }
   header .title { display:flex; flex-direction:column; }
-  header .brand { color:var(--gold); font-size:.75em; font-weight:700; }
-  header h1 { font-size:1.6em; }
-  nav { display:flex; gap:.4em; flex-wrap:wrap; margin-right:auto; }
-  nav button { border:0; background:var(--lapis2); color:var(--soft-d); font:700 .85em 'Tajawal', Tahoma, sans-serif; padding:.55em 1em; border-radius:2em; cursor:pointer; }
+  header .brand { color:var(--gold); font-size:.72em; font-weight:700; }
+  header h1 { font-size:1.45em; }
+  nav { display:flex; gap:.35em; flex-wrap:wrap; margin-right:auto; }
+  nav button { border:0; background:var(--lapis2); color:var(--soft-d); font-weight:700; font-size:.82em; padding:.5em .95em; border-radius:2em; position:relative; }
   nav button.on { background:var(--gold); color:var(--lapis); }
-  .count { display:flex; align-items:baseline; gap:.35em; color:var(--gold); }
-  .count b { font-family:'Reem Kufi', Tahoma, sans-serif; font-size:2em; line-height:1; }
-  .band { display:block; width:100%; height:18px; background:var(--lapis); }
+  nav button.live::after { content:""; position:absolute; top:.2em; left:.2em; width:.55em; height:.55em; border-radius:50%; background:#3BD16F; box-shadow:0 0 0 2px var(--lapis); }
+  .miniqr { background:#fff; padding:4px; border-radius:6px; line-height:0; }
+  .miniqr svg { width:64px; height:64px; }
+  .band { display:block; width:100%; height:16px; background:var(--lapis); }
 
-  main { flex:1; display:flex; position:relative; }
-  .strip { width:44px; flex:none; }
-  .view { display:none; flex:1; padding:1.4em 1.8em 1.2em; flex-direction:column; gap:1em; min-width:0; }
-  .view.on { display:flex; animation:fade .35s ease; }
+  main { flex:1; display:flex; min-height:0; }
+  .strip { width:40px; flex:none; }
+  .view { display:none; flex:1; padding:1.1em 1.6em 1em; flex-direction:column; gap:.9em; min-width:0; overflow:auto; }
+  .view.on { display:flex; animation:fade .3s ease; }
   @keyframes fade { from { opacity:0; } to { opacity:1; } }
   .eb { display:flex; align-items:center; gap:.5em; color:var(--copper-d); font-weight:700; font-size:.85em; }
   .eb::before { content:""; width:.55em; height:.55em; background:var(--copper); transform:rotate(45deg); }
-  h2 { font-size:2.1em; }
+  h2 { font-size:2em; }
   .note { color:var(--soft); font-size:.8em; }
+  .ctrl { display:flex; align-items:center; gap:.8em; flex-wrap:wrap; }
+  .ctrl .go { border:0; background:var(--copper); color:#fff; font-weight:700; padding:.5em 1.1em; border-radius:2em; }
+  .ctrl .go.stop { background:var(--lapis); }
+  .ctrl .status { font-weight:700; font-size:.85em; color:var(--soft); }
+  .ctrl .status.live { color:#1F7A4A; }
+  .ctrl .n { margin-right:auto; display:flex; align-items:baseline; gap:.3em; color:var(--copper-d); font-weight:700; }
+  .ctrl .n b { font-family:'Reem Kufi', Tahoma, sans-serif; font-size:2em; line-height:1; color:var(--copper); }
+  .sub { display:flex; gap:.35em; flex-wrap:wrap; }
+  .sub button { border:1px solid var(--line); background:var(--card); color:var(--lapis); font-weight:700; font-size:.85em; padding:.4em .9em; border-radius:2em; }
+  .sub button.on { background:var(--lapis); color:#fff; border-color:var(--lapis); }
+  .panel { display:none; flex-direction:column; gap:.9em; }
+  .panel.on { display:flex; }
+  .empty { color:var(--soft); font-size:1.1em; padding:1.5em 0; }
 
   /* join */
   .join { display:flex; gap:2.5em; align-items:center; flex:1; }
   .join .txt { flex:1; display:flex; flex-direction:column; gap:.8em; }
-  .qr { background:#fff; padding:1em; border-radius:1.2em; box-shadow:0 6px 28px rgba(27,36,64,.12); flex:none; }
-  .qr svg, .qr img { display:block; width:min(36vw, 52vh); height:auto; }
-  .url { direction:ltr; text-align:left; font-size:.75em; color:var(--soft); word-break:break-all; background:var(--card); border-radius:.6em; padding:.5em .8em; }
-  .bignum { font-family:'Reem Kufi', Tahoma, sans-serif; font-size:6em; color:var(--copper); line-height:1; }
+  .qr { background:#fff; padding:1em; border-radius:1.2em; box-shadow:0 6px 28px rgba(11,16,110,.12); flex:none; line-height:0; }
+  .qr svg { display:block; width:min(34vw, 50vh); height:auto; }
+  .url { direction:ltr; text-align:left; font-size:.72em; color:var(--soft); word-break:break-all; background:var(--card); border-radius:.6em; padding:.5em .8em; }
 
   /* bars */
-  .legend { display:flex; gap:1.6em; flex-wrap:wrap; font-size:.8em; color:var(--soft); align-items:center; }
+  .legend { display:flex; gap:1.4em; flex-wrap:wrap; font-size:.8em; color:var(--soft); align-items:center; }
   .legend i { display:inline-block; vertical-align:middle; margin-left:.4em; }
-  .rows { display:flex; flex-direction:column; gap:.9em; }
+  .rows { display:flex; flex-direction:column; gap:.85em; }
   .vrow { display:flex; align-items:center; gap:1em; }
-  .vname { width:7.5em; flex:none; }
-  .chip { display:inline-block; color:#F8F8FB; font-weight:700; border-radius:.45em; padding:.2em .7em; text-align:center; min-width:6.5em; }
+  .vname { width:8em; flex:none; }
+  .chip { display:inline-block; color:#fff; font-weight:700; border-radius:.45em; padding:.2em .7em; text-align:center; min-width:6.5em; }
   .track { flex:1; position:relative; height:2.1em; background:var(--sand2); border-radius:1em; }
   .fill { position:absolute; right:0; top:0; bottom:0; border-radius:1em; transition:width .9s ease; }
   .mark { position:absolute; top:-.35em; bottom:-.35em; width:4px; border-radius:2px; }
   .mark.tu { background:var(--lapis); }
   .mark.all { background:var(--gold); }
-  .vval { width:3.2em; flex:none; font-weight:700; font-variant-numeric:tabular-nums; text-align:left; }
+  .vval { width:3.6em; flex:none; font-weight:700; font-variant-numeric:tabular-nums; text-align:left; }
   .rank { width:9.5em; flex:none; font-size:.8em; color:var(--soft); }
 
   /* tiles */
-  .tiles { display:grid; grid-template-columns:repeat(6, 1fr); gap:1em; flex:1; align-items:stretch; }
-  .tile { background:var(--card); border-radius:1.2em; padding:1em .8em; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:.6em; box-shadow:0 4px 20px rgba(27,36,64,.07); }
+  .tiles { display:grid; grid-template-columns:repeat(6, 1fr); gap:1em; flex:1; min-height:16em; }
+  .tile { background:var(--card); border-radius:1.2em; padding:1em .8em; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:.6em; box-shadow:0 4px 20px rgba(11,16,110,.07); }
   .tile .col { width:60%; border-radius:.6em .6em 0 0; transition:height .9s ease; min-height:4px; }
-  .tile .pct { font-family:'Reem Kufi', Tahoma, sans-serif; font-size:2.2em; line-height:1; }
+  .tile .pct { font-family:'Reem Kufi', Tahoma, sans-serif; font-size:2.1em; line-height:1; }
 
   /* items */
-  .items { display:flex; flex-direction:column; gap:.45em; overflow:auto; }
+  .items { display:flex; flex-direction:column; gap:.45em; }
   .irow { display:flex; align-items:center; gap:.8em; font-size:.85em; }
   .ino { width:1.8em; flex:none; font-weight:700; color:var(--copper-d); }
-  .itext { width:24em; flex:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .itext { width:22em; flex:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .stack { flex:1; display:flex; height:1.6em; border-radius:.8em; overflow:hidden; background:var(--sand2); }
   .stack div { display:flex; align-items:center; justify-content:center; font-size:.85em; font-weight:700; transition:width .9s ease; overflow:hidden; white-space:nowrap; }
-  .sa { background:var(--lapis); color:var(--sand); }
+  .sa { background:var(--lapis); color:#fff; }
   .sb { background:var(--gold); color:var(--lapis); }
   .sc { background:#B9C2CC; color:var(--lapis); }
 
-  /* groups */
+  /* poll / jobs big bars */
+  .big-rows { display:flex; flex-direction:column; gap:1.4em; margin-top:.6em; }
+  .brow { display:flex; align-items:center; gap:1em; }
+  .blet { width:2.2em; height:2.2em; flex:none; border-radius:50%; display:flex; align-items:center; justify-content:center; font:700 1.1em 'Reem Kufi', Tahoma, sans-serif; }
+  .btext { width:16em; flex:none; font-weight:700; }
+  .btrack { flex:1; position:relative; height:2.6em; background:var(--sand2); border-radius:1.3em; }
+  .bfill { position:absolute; right:0; top:0; bottom:0; border-radius:1.3em; transition:width .9s ease; }
+  .bpct { width:4.2em; flex:none; font:700 1.6em 'Reem Kufi', Tahoma, sans-serif; text-align:left; color:var(--copper); }
+  .smark { position:absolute; top:-.45em; bottom:-.45em; width:5px; background:var(--lapis); border-radius:3px; }
+  .smark span { position:absolute; top:-1.6em; right:-2.5em; width:5em; text-align:center; font-size:.7em; font-weight:700; color:var(--lapis); white-space:nowrap; }
+
+  /* cases */
+  .cases { display:grid; grid-template-columns:repeat(3, 1fr); gap:1em; }
+  .case { background:var(--card); border-radius:1.1em; padding:.9em 1.1em; display:flex; flex-direction:column; gap:.45em; box-shadow:0 4px 20px rgba(11,16,110,.07); }
+  .case h3 { font-size:1.2em; }
+  .case .meta { color:var(--soft); font-size:.8em; }
+  .split { display:flex; height:1.6em; border-radius:.8em; overflow:hidden; background:var(--sand2); }
+  .split div { display:flex; align-items:center; justify-content:center; color:#fff; font-size:.75em; font-weight:700; white-space:nowrap; overflow:hidden; }
+  .ideas { display:none; flex-direction:column; gap:.3em; font-size:.85em; }
+  .ideas.on { display:flex; }
+  .ideas p { margin:0; background:#fff; border-right:4px solid var(--gold); border-radius:.4em; padding:.3em .6em; }
+  .case button { align-self:flex-start; border:1px solid var(--line); background:#fff; color:var(--copper-d); font-weight:700; font-size:.75em; border-radius:2em; padding:.25em .8em; }
+
+  /* tables */
   table { border-collapse:separate; border-spacing:0; width:100%; background:var(--card); border-radius:1em; overflow:hidden; }
-  th, td { padding:.55em .8em; text-align:right; border-bottom:1px solid var(--line); }
-  th { background:var(--lapis); color:var(--sand); font-family:'Reem Kufi', Tahoma, sans-serif; font-weight:600; }
+  th, td { padding:.5em .8em; text-align:right; border-bottom:1px solid var(--line); }
+  th { background:var(--lapis); color:#fff; font-family:'Reem Kufi', Tahoma, sans-serif; font-weight:600; }
   tr:last-child td { border-bottom:none; }
   td.num { font-variant-numeric:tabular-nums; font-weight:700; }
-  .hi { color:var(--teal); }
+  .hi { color:var(--blue); }
 
-  /* insights */
-  .insights { display:flex; flex-direction:column; gap:.8em; }
-  .ins { background:var(--card); border-radius:1em; padding:.8em 1.1em; border-right:6px solid var(--gold); font-size:1.05em; }
+  .insights { display:flex; flex-direction:column; gap:.7em; }
+  .ins { background:var(--card); border-radius:1em; padding:.7em 1.1em; border-right:6px solid var(--gold); }
   .ins b { color:var(--copper-d); }
 
-  footer { display:flex; gap:1em; align-items:center; padding:.4em 1.8em .7em 3.6em; font-size:.75em; color:var(--soft); }
-  footer button { border:1px solid var(--line); background:var(--card); color:var(--copper-d); font:700 1em 'Tajawal', Tahoma, sans-serif; border-radius:2em; padding:.35em 1em; cursor:pointer; }
-  .empty { color:var(--soft); font-size:1.1em; padding:2em 0; }
+  footer { display:flex; gap:1em; align-items:center; padding:.35em 1.6em .6em 3.2em; font-size:.72em; color:var(--soft); }
+  footer button { border:1px solid var(--line); background:var(--card); color:var(--copper-d); font-weight:700; border-radius:2em; padding:.35em 1em; }
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-  <pattern id="strip" width="44" height="44" patternUnits="userSpaceOnUse"><rect width="44" height="44" fill="#E2E3EA"/><g fill="none" stroke="#E8640A" stroke-width="1.6"><rect x="13" y="13" width="18" height="18"/><rect x="13" y="13" width="18" height="18" transform="rotate(45 22 22)"/><circle cx="22" cy="22" r="3"/></g></pattern>
-  <pattern id="bandp" width="30" height="18" patternUnits="userSpaceOnUse"><g fill="none" stroke="#F07A1E" stroke-width="1.2"><rect x="9" y="4" width="10" height="10"/><rect x="9" y="4" width="10" height="10" transform="rotate(45 14 9)"/><path d="M0 9H4M26 9H30"/></g></pattern>
+  <pattern id="strip" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="#E2E3EA"/><g fill="none" stroke="#E8640A" stroke-width="1.5"><rect x="12" y="12" width="16" height="16"/><rect x="12" y="12" width="16" height="16" transform="rotate(45 20 20)"/><circle cx="20" cy="20" r="3"/></g></pattern>
+  <pattern id="bandp" width="30" height="16" patternUnits="userSpaceOnUse"><g fill="none" stroke="#F07A1E" stroke-width="1.2"><rect x="9" y="3" width="10" height="10"/><rect x="9" y="3" width="10" height="10" transform="rotate(45 14 8)"/><path d="M0 8H4M26 8H30"/></g></pattern>
 </defs></svg>
 
 <header>
-  <div class="title"><span class="brand">بوصلتك الداخلية · نتائج القاعة مباشرة</span><h1>اكتشف قيمك</h1></div>
+  <div class="title"><span class="brand">بوصلتك الداخلية · نتائج القاعة مباشرة</span><h1 id="htitle">الأنشطة التفاعلية</h1></div>
   <nav id="nav">
     <button data-v="join" class="on">انضم</button>
-    <button data-v="rank">ترتيب القاعة</button>
-    <button data-v="top">أعلى قيمة</button>
-    <button data-v="items">المواقف</button>
-    <button data-v="groups">المجموعات</button>
-    <button data-v="read">قراءة سريعة</button>
+    <button data-v="jobs" data-act="jobs">الوظيفتان</button>
+    <button data-v="discover" data-act="discover">اكتشف قيمك</button>
+    <button data-v="polls" data-act="lead help exam">التصويتات</button>
+    <button data-v="conflict" data-act="conflict">صراع القيم</button>
+    <button data-v="share" data-act="share">بيت جدّي</button>
+    <button data-v="card" data-act="card">بطاقة قيمي</button>
   </nav>
-  <div class="count"><b id="n">٠</b><span>إجابة</span></div>
+  <div class="miniqr" id="miniqr" title="رمز الانضمام"></div>
 </header>
-<svg class="band" viewBox="0 0 1200 18" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="1200" height="18" fill="url(#bandp)"/></svg>
+<svg class="band" viewBox="0 0 1200 16" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="1200" height="16" fill="url(#bandp)"/></svg>
 
 <main>
-  <svg class="strip" aria-hidden="true"><rect width="44" height="100%" fill="url(#strip)"/></svg>
+  <svg class="strip" aria-hidden="true"><rect width="40" height="100%" fill="url(#strip)"/></svg>
 
   <section class="view on" id="v-join">
     <div class="join">
       <div class="txt">
         <span class="eb">امسح الرمز بكاميرا جوالك</span>
-        <h2>اكتشف قيمك في 12 موقفًا</h2>
-        <p style="margin:0">أجب على جوالك بصدق، بلا اسم. سترى ملفك القيمي فورًا، وتظهر هنا نتائج القاعة مجتمعة.</p>
-        <div><span class="bignum" id="n2">٠</span> <span style="font-size:1.2em">إجابة وصلت</span></div>
+        <h2>انضم إلى أنشطة المحاضرة</h2>
+        <p style="margin:0">امسح الرمز مرة واحدة وأبقِ الصفحة مفتوحة. كل نشاط يبدأ سيظهر على جوالك تلقائيًا، بلا اسم ولا تسجيل دخول.</p>
+        <p style="margin:0; font-weight:700" id="joinAct"></p>
         <div class="url" id="url"></div>
       </div>
       <div class="qr" id="qr"></div>
     </div>
   </section>
 
-  <section class="view" id="v-rank">
-    <span class="eb">متوسط كل قيمة من 1 إلى 3</span>
-    <h2>ترتيب قيم القاعة</h2>
-    <div class="legend">
-      <span>العمود: هذه القاعة</span>
-      <span><i style="width:4px;height:1.2em;background:var(--lapis);border-radius:2px"></i>طلبة جامعتكم في الدراسة (ن = 157)</span>
-      <span><i style="width:4px;height:1.2em;background:var(--gold);border-radius:2px"></i>العينة الكلية (ن = 975)</span>
+  <section class="view" id="v-jobs">
+    <div class="ctrl" data-act="jobs"></div>
+    <span class="eb">النشاط الافتتاحي</span>
+    <h2>أيّ العرضين اختارت القاعة؟</h2>
+    <div class="big-rows" id="jobs-bars"></div>
+    <div class="insights" id="jobs-read"></div>
+  </section>
+
+  <section class="view" id="v-discover">
+    <div class="ctrl" data-act="discover"></div>
+    <div class="sub" id="dsub">
+      <button data-p="rank" class="on">ترتيب القاعة</button><button data-p="top">أعلى قيمة</button><button data-p="items">المواقف</button><button data-p="groups">المجموعات</button><button data-p="read">قراءة سريعة</button>
     </div>
-    <div class="rows" id="rank"></div>
-    <p class="note">القاعة أجابت عن 12 موقفًا مختصرًا، والدراسة استخدمت 79 موقفًا. المقارنة توضيحية وليست اختبارًا إحصائيًا.</p>
+    <div class="panel on" id="p-rank">
+      <h2>ترتيب قيم القاعة</h2>
+      <div class="legend">
+        <span>العمود: هذه القاعة</span>
+        <span><i style="width:4px;height:1.2em;background:var(--lapis);border-radius:2px"></i>طلبة جامعتكم في الدراسة (ن = 157)</span>
+        <span><i style="width:4px;height:1.2em;background:var(--gold);border-radius:2px"></i>العينة الكلية (ن = 975)</span>
+      </div>
+      <div class="rows" id="rank"></div>
+      <p class="note">القاعة أجابت عن 12 موقفًا مختصرًا، والدراسة استخدمت 79 موقفًا. المقارنة توضيحية وليست اختبارًا إحصائيًا.</p>
+    </div>
+    <div class="panel" id="p-top">
+      <h2>كم طالبًا كانت هذه أعلى قيمه؟</h2>
+      <div class="tiles" id="tiles"></div>
+      <p class="note">من تعادلت لديه أعلى قيمتين أو أكثر يُوزَّع صوته بينها بالتساوي.</p>
+    </div>
+    <div class="panel" id="p-items">
+      <h2>ماذا اختارت القاعة في كل موقف؟</h2>
+      <div class="items" id="items"></div>
+    </div>
+    <div class="panel" id="p-groups">
+      <h2>بين الكليات، وبين الطلاب والطالبات</h2>
+      <div id="groups"></div>
+      <p class="note">تظهر المجموعة حين يجيب منها 5 طلبة على الأقل. أرقام وصفية لقاعة واحدة، بلا اختبار دلالة.</p>
+    </div>
+    <div class="panel" id="p-read">
+      <h2>قراءة سريعة في نتائج القاعة</h2>
+      <div class="insights" id="insights"></div>
+    </div>
   </section>
 
-  <section class="view" id="v-top">
-    <span class="eb">خريطة قيم القاعة</span>
-    <h2>كم طالبًا كانت هذه أعلى قيمه؟</h2>
-    <div class="tiles" id="tiles"></div>
-    <p class="note">من تعادلت لديه أعلى قيمتين أو أكثر يُوزَّع صوته بينها بالتساوي.</p>
+  <section class="view" id="v-polls">
+    <div class="sub" id="psub"><button data-a="lead" class="on">الترشح</button><button data-a="help">المساعدة المالية</button><button data-a="exam">الامتحان والمقال</button></div>
+    <div class="ctrl" id="pctrl" data-act="lead"></div>
+    <h2 id="poll-q"></h2>
+    <div class="legend"><span>العمود: هذه القاعة</span><span><i style="width:5px;height:1.2em;background:var(--lapis);border-radius:2px"></i>طلبة جامعتكم في الدراسة</span></div>
+    <div class="big-rows" id="poll-bars"></div>
+    <div class="insights" id="poll-read"></div>
   </section>
 
-  <section class="view" id="v-items">
-    <span class="eb">نسب البدائل في كل موقف</span>
-    <h2>ماذا اختارت القاعة؟</h2>
-    <div class="legend"><span><i class="sa" style="width:1em;height:1em;border-radius:50%"></i>أ</span><span><i class="sb" style="width:1em;height:1em;border-radius:50%"></i>ب</span><span><i class="sc" style="width:1em;height:1em;border-radius:50%"></i>ج</span></div>
-    <div class="items" id="items"></div>
+  <section class="view" id="v-conflict">
+    <div class="ctrl" data-act="conflict"></div>
+    <h2>ماذا قررت المجموعات؟</h2>
+    <div class="cases" id="cases"></div>
+    <p class="note">أفكار "الطريق الثالث" يكتبها الطلبة بلا أسماء، ولا تظهر إلا حين تضغط "اعرض الأفكار". اقرأها قبل عرضها على الشاشة.</p>
   </section>
 
-  <section class="view" id="v-groups">
-    <span class="eb">مقارنة وصفية بين المجموعات</span>
-    <h2>بين الكليات، وبين الطلاب والطالبات</h2>
-    <div id="groups"></div>
-    <p class="note">تظهر المجموعة حين يجيب منها 5 طلبة على الأقل. أرقام وصفية لقاعة واحدة، بلا اختبار دلالة.</p>
+  <section class="view" id="v-share">
+    <div class="ctrl" data-act="share"></div>
+    <h2>القيم التي تعلّمناها من بيوتنا</h2>
+    <div class="tiles" id="share-tiles"></div>
+    <div class="insights" id="share-read"></div>
   </section>
 
-  <section class="view" id="v-read">
-    <span class="eb">تحليل آلي يتحدّث مع كل إجابة</span>
-    <h2>قراءة سريعة في نتائج القاعة</h2>
-    <div class="insights" id="insights"></div>
+  <section class="view" id="v-card">
+    <div class="ctrl" data-act="card"></div>
+    <h2>بوصلة القاعة</h2>
+    <div style="display:flex; gap:2em; flex-wrap:wrap">
+      <div style="flex:1; min-width:18em"><h3 style="margin-bottom:.6em">قيم نعتز بها (أهم قيمتين)</h3><div class="rows" id="card-top"></div></div>
+      <div style="flex:1; min-width:18em"><h3 style="margin-bottom:.6em">قيم نريد أن ننمّيها</h3><div class="rows" id="card-grow"></div></div>
+    </div>
+    <div class="insights" id="card-read"></div>
   </section>
 </main>
 
@@ -2490,232 +2563,321 @@ var qrcode = function() {
     { name:'السياسية', color:'#5C5A1C', tu:2.16, all:2.17 },
     { name:'الدينية', color:'#1F7A4A', tu:2.55, all:2.59 }
   ];
-  var ITEMS = [
-    'سؤال بقي بعد المحاضرة', 'مبلغ مالي غير متوقع', 'زميل جديد يجلس وحيدًا', 'عرض تقديمي لمشروعك',
-    'انتخابات مجلس الطلبة', 'الأذان أثناء نقاش ممتع', 'منشور صحي غريب', 'دورة برسوم لسوق العمل',
-    'حملة تطوعية لتنظيف شاطئ', 'معرض فنون وخط عربي', 'حوار حول قرار يخص الطلبة', 'محفظة فيها مال'
-  ];
+  var ACT_NAMES = { jobs:'العرضان الوظيفيان', discover:'اكتشف قيمك', lead:'تصويت الترشح', help:'تصويت المساعدة المالية', exam:'تصويت الامتحان والمقال', conflict:'صراع القيم', share:'قيمة من بيت جدّي', card:'بطاقة قيمي' };
+  var ITEMS = ['سؤال بقي بعد المحاضرة', 'مبلغ مالي غير متوقع', 'زميل جديد يجلس وحيدًا', 'عرض تقديمي لمشروعك', 'انتخابات مجلس الطلبة', 'الأذان أثناء نقاش ممتع', 'منشور صحي غريب', 'دورة برسوم لسوق العمل', 'حملة تطوعية لتنظيف شاطئ', 'معرض فنون وخط عربي', 'حوار حول قرار يخص الطلبة', 'محفظة فيها مال'];
+  // نسب الدراسة لطلبة جامعتكم. "ب" في الامتحان محسوبة بالطرح من 100، وفي المساعدة المالية تُعرف نسبة "أ" وحدها.
+  var POLLS = {
+    lead: { q:'عُرض عليك الترشح لرئاسة جماعة طلابية', opts:['أقبل الترشح', 'أقبل إن وجدت دعمًا', 'أعتذر'], study:[33, 31, 36] },
+    help: { q:'زميلك يطلب منك مساعدة مالية', opts:['أساعده بما أستطيع', 'إن كان المبلغ صغيرًا', 'أعتذر منه'], study:[80, null, null] },
+    exam: { q:'امتحان غدًا ومقال علمي مثير', opts:['أقرأ المقال الآن', 'أقرأ جزءًا وأكمله لاحقًا', 'أركز على المذاكرة'], study:[11, 30, 59] }
+  };
+  var JOBS = ['شركة كبرى في مسقط، راتب أعلى', 'مؤسسة قريبة، عمل ذو معنى'];
+  var CASES = ['عرس أخي', 'عرض الدقم', 'كود الصديق', 'متجر إنستغرام', 'مجلس الطلبة', 'تصميم المشروع'];
   var COLLEGES = { eng:'الهندسة', it:'تقنية المعلومات', bus:'الاقتصاد وإدارة الأعمال', other:'أخرى' };
   var GENDERS = { m:'الطلاب', f:'الطالبات' };
   var MIN_GROUP = 5;
+
   var AR = '٠١٢٣٤٥٦٧٨٩';
   function ar(n) { return String(n).replace(/[0-9]/g, function (d) { return AR[d]; }); }
+  function pc(x) { return ar(Math.round(x)) + '٪'; }
   function f2(x) { return x.toFixed(2); }
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
-
-  /* ---------- navigation ---------- */
-  document.querySelectorAll('#nav button').forEach(function (b) {
-    b.onclick = function () {
-      document.querySelectorAll('#nav button').forEach(function (x) { x.classList.toggle('on', x === b); });
-      document.querySelectorAll('.view').forEach(function (v) { v.classList.toggle('on', v.id === 'v-' + b.getAttribute('data-v')); });
-    };
-  });
+  function B(t) { return el('b', null, t); }
+  function insight(box, parts) { var p = el('div', 'ins'); parts.forEach(function (x) { p.appendChild(typeof x === 'string' ? document.createTextNode(x) : x); }); box.appendChild(p); }
+  function parse(s) { try { return JSON.parse(s); } catch (e) { return null; } }
 
   /* ---------- QR ---------- */
   document.getElementById('url').textContent = STUDENT_URL;
   try {
     var q = qrcode(0, 'M'); q.addData(STUDENT_URL); q.make();
     document.getElementById('qr').innerHTML = q.createSvgTag({ cellSize: 8, margin: 2, scalable: true });
-  } catch (e) {
-    document.getElementById('qr').textContent = 'تعذّر رسم الرمز. انسخ الرابط الظاهر بجانبه.';
-  }
+    document.getElementById('miniqr').innerHTML = q.createSvgTag({ cellSize: 2, margin: 1, scalable: true });
+  } catch (e) { document.getElementById('qr').textContent = 'تعذّر رسم الرمز. انسخ الرابط الظاهر بجانبه.'; }
 
-  /* ---------- analysis ---------- */
-  function score(ch) { return ch === 'a' ? 3 : ch === 'b' ? 2 : 1; }
+  /* ---------- navigation ---------- */
+  var view = 'join', pollAct = 'lead';
+  document.querySelectorAll('#nav button').forEach(function (b) {
+    b.onclick = function () {
+      view = b.getAttribute('data-v');
+      document.querySelectorAll('#nav button').forEach(function (x) { x.classList.toggle('on', x === b); });
+      document.querySelectorAll('.view').forEach(function (v) { v.classList.toggle('on', v.id === 'v-' + view); });
+      refresh();
+    };
+  });
+  document.querySelectorAll('#dsub button').forEach(function (b) {
+    b.onclick = function () {
+      var p = b.getAttribute('data-p');
+      document.querySelectorAll('#dsub button').forEach(function (x) { x.classList.toggle('on', x === b); });
+      document.querySelectorAll('#v-discover .panel').forEach(function (x) { x.classList.toggle('on', x.id === 'p-' + p); });
+    };
+  });
+  document.querySelectorAll('#psub button').forEach(function (b) {
+    b.onclick = function () {
+      pollAct = b.getAttribute('data-a');
+      document.querySelectorAll('#psub button').forEach(function (x) { x.classList.toggle('on', x === b); });
+      document.getElementById('pctrl').setAttribute('data-act', pollAct);
+      drawCtrls(); refresh();
+    };
+  });
+  function visibleAct() { return view === 'join' ? null : view === 'polls' ? pollAct : view; }
 
-  function analyse(rows) {
-    var n = rows.length;
-    var profiles = rows.map(function (r) {
-      var s = [0, 0, 0, 0, 0, 0];
-      for (var i = 0; i < 12; i++) s[i % 6] += score(r[2][i]);
-      return s.map(function (x) { return x / 2; });
+  /* ---------- activation controls ---------- */
+  var state = { act:'', session:'' }, lastN = {};
+  function drawCtrls() {
+    document.querySelectorAll('.ctrl').forEach(function (c) {
+      var act = c.getAttribute('data-act'), live = state.act === act;
+      c.innerHTML = '';
+      var go = el('button', 'go' + (live ? ' stop' : ''), live ? 'أوقف على الجوالات' : 'فعّل على الجوالات');
+      go.onclick = function () { google.script.run.withSuccessHandler(onState).setActivity(KEY, live ? '' : act); };
+      c.appendChild(go);
+      c.appendChild(el('span', 'status' + (live ? ' live' : ''), live ? 'مفعّل الآن على جوالات الطلبة' : 'غير مفعّل'));
+      var n = el('span', 'n'); n.appendChild(el('b', null, ar(lastN[act] || 0))); n.appendChild(document.createTextNode('إجابة')); c.appendChild(n);
     });
-    var means = [0, 1, 2, 3, 4, 5].map(function (v) {
-      return n ? profiles.reduce(function (a, p) { return a + p[v]; }, 0) / n : 0;
+    document.querySelectorAll('#nav button').forEach(function (b) {
+      var acts = (b.getAttribute('data-act') || '').split(' ');
+      b.classList.toggle('live', !!state.act && acts.indexOf(state.act) >= 0);
     });
-    var top = [0, 0, 0, 0, 0, 0];
-    profiles.forEach(function (p) {
-      var m = Math.max.apply(null, p);
-      var idx = []; p.forEach(function (x, i) { if (x === m) idx.push(i); });
-      idx.forEach(function (i) { top[i] += 1 / idx.length; });
-    });
-    var items = [];
-    for (var i = 0; i < 12; i++) {
-      var c = { a:0, b:0, c:0 };
-      rows.forEach(function (r) { c[r[2][i]]++; });
-      items.push(c);
-    }
-    function groupMeans(colIdx, labels) {
-      var out = [];
-      Object.keys(labels).forEach(function (k) {
-        var idx = rows.map(function (r, j) { return r[colIdx] === k ? j : -1; }).filter(function (j) { return j >= 0; });
-        if (!idx.length) return;
-        var m = [0, 1, 2, 3, 4, 5].map(function (v) { return idx.reduce(function (a, j) { return a + profiles[j][v]; }, 0) / idx.length; });
-        var total = idx.reduce(function (a, j) { return a + profiles[j].reduce(function (x, y) { return x + y; }, 0) / 6; }, 0) / idx.length;
-        out.push({ label: labels[k], n: idx.length, means: m, total: total });
-      });
-      return out;
-    }
-    return { n:n, means:means, top:top, items:items, colleges:groupMeans(0, COLLEGES), genders:groupMeans(1, GENDERS) };
+    document.getElementById('joinAct').textContent = state.act ? 'النشاط المفعّل الآن: ' + ACT_NAMES[state.act] : 'لا يوجد نشاط مفعّل الآن.';
+    document.getElementById('htitle').textContent = state.act ? ACT_NAMES[state.act] : 'الأنشطة التفاعلية';
   }
-
-  function ranks(arr) {
-    var order = arr.map(function (v, i) { return i; }).sort(function (x, y) { return arr[y] - arr[x]; });
-    var r = []; order.forEach(function (i, k) { r[i] = k + 1; }); return r;
-  }
-  function spearman(a, b) {
-    var ra = ranks(a), rb = ranks(b), d2 = 0;
-    for (var i = 0; i < a.length; i++) d2 += Math.pow(ra[i] - rb[i], 2);
-    return 1 - 6 * d2 / (a.length * (a.length * a.length - 1));
-  }
-
-  /* ---------- rendering ---------- */
-  function renderRank(A) {
-    var box = document.getElementById('rank'); box.innerHTML = '';
-    if (!A.n) { box.appendChild(el('p', 'empty', 'ننتظر أول إجابة…')); return; }
-    var roomRank = ranks(A.means), studyRank = ranks(VALUES.map(function (v) { return v.tu; }));
-    var order = A.means.map(function (v, i) { return i; }).sort(function (x, y) { return A.means[y] - A.means[x]; });
-    order.forEach(function (i) {
-      var v = VALUES[i];
-      var row = el('div', 'vrow');
-      var nm = el('div', 'vname'); var ch = el('span', 'chip', v.name); ch.style.background = v.color; nm.appendChild(ch);
-      var tr = el('div', 'track');
-      var fi = el('div', 'fill'); fi.style.background = v.color; fi.style.width = ((A.means[i] - 1) / 2 * 100) + '%';
-      var mt = el('div', 'mark tu'); mt.style.right = ((v.tu - 1) / 2 * 100) + '%';
-      var ma = el('div', 'mark all'); ma.style.right = ((v.all - 1) / 2 * 100) + '%';
-      tr.appendChild(fi); tr.appendChild(mt); tr.appendChild(ma);
-      var val = el('div', 'vval', f2(A.means[i]));
-      var rk = el('div', 'rank', 'القاعة ' + ar(roomRank[i]) + ' · الدراسة ' + ar(studyRank[i]));
-      row.appendChild(nm); row.appendChild(tr); row.appendChild(val); row.appendChild(rk);
-      box.appendChild(row);
-    });
-  }
-
-  function renderTop(A) {
-    var box = document.getElementById('tiles'); box.innerHTML = '';
-    var max = Math.max.apply(null, A.top.concat([1]));
-    VALUES.forEach(function (v, i) {
-      var t = el('div', 'tile');
-      var pct = A.n ? Math.round(A.top[i] / A.n * 100) : 0;
-      var p = el('div', 'pct', ar(pct) + '٪'); p.style.color = v.color;
-      var c = el('div', 'col'); c.style.background = v.color; c.style.height = (A.top[i] / max * 22) + 'vh';
-      var ch = el('span', 'chip', v.name); ch.style.background = v.color;
-      t.appendChild(p); t.appendChild(c); t.appendChild(ch);
-      box.appendChild(t);
-    });
-  }
-
-  function renderItems(A) {
-    var box = document.getElementById('items'); box.innerHTML = '';
-    ITEMS.forEach(function (txt, i) {
-      var c = A.items[i], tot = c.a + c.b + c.c;
-      var row = el('div', 'irow');
-      row.appendChild(el('span', 'ino', ar(i + 1)));
-      row.appendChild(el('span', 'itext', txt));
-      var st = el('div', 'stack');
-      ['a', 'b', 'c'].forEach(function (k) {
-        var pc = tot ? Math.round(c[k] / tot * 100) : 0;
-        var d = el('div', 's' + k, pc >= 8 ? ar(pc) + '٪' : '');
-        d.style.width = (tot ? c[k] / tot * 100 : 0) + '%';
-        st.appendChild(d);
-      });
-      row.appendChild(st);
-      box.appendChild(row);
-    });
-  }
-
-  function groupTable(title, groups) {
-    var wrap = el('div'); wrap.style.marginBottom = '1em';
-    var shown = groups.filter(function (g) { return g.n >= MIN_GROUP; });
-    if (!shown.length) { wrap.appendChild(el('p', 'empty', title + ': لا توجد بعدُ مجموعة فيها ' + ar(MIN_GROUP) + ' إجابات.')); return wrap; }
-    var t = el('table'), h = el('tr');
-    h.appendChild(el('th', null, title)); h.appendChild(el('th', null, 'ن'));
-    VALUES.forEach(function (v) { h.appendChild(el('th', null, v.name)); });
-    h.appendChild(el('th', null, 'الكلي'));
-    t.appendChild(h);
-    shown.forEach(function (g) {
-      var tr = el('tr');
-      tr.appendChild(el('td', null, g.label)); tr.appendChild(el('td', 'num', ar(g.n)));
-      var mx = Math.max.apply(null, g.means);
-      g.means.forEach(function (m) { tr.appendChild(el('td', 'num' + (m === mx ? ' hi' : ''), f2(m))); });
-      tr.appendChild(el('td', 'num', f2(g.total)));
-      t.appendChild(tr);
-    });
-    wrap.appendChild(t);
-    return wrap;
-  }
-
-  function renderGroups(A) {
-    var box = document.getElementById('groups'); box.innerHTML = '';
-    box.appendChild(groupTable('الكلية', A.colleges));
-    box.appendChild(groupTable('الجنس', A.genders));
-  }
-
-  function insight(parts) {
-    var p = el('div', 'ins');
-    parts.forEach(function (x) { p.appendChild(typeof x === 'string' ? document.createTextNode(x) : x); });
-    return p;
-  }
-  function B(t) { return el('b', null, t); }
-
-  function renderRead(A) {
-    var box = document.getElementById('insights'); box.innerHTML = '';
-    if (A.n < 3) { box.appendChild(el('p', 'empty', 'تظهر القراءة بعد وصول ثلاث إجابات على الأقل.')); return; }
-    var order = A.means.map(function (v, i) { return i; }).sort(function (x, y) { return A.means[y] - A.means[x]; });
-    var hi = order[0], lo = order[5];
-    box.appendChild(insight(['أجاب ', B(ar(A.n) + ' طالبًا وطالبة'), '. أعلى قيمة في القاعة ', B(VALUES[hi].name), ' (' + f2(A.means[hi]) + ')، وأدناها ', B(VALUES[lo].name), ' (' + f2(A.means[lo]) + ').']));
-
-    var rho = spearman(A.means, VALUES.map(function (v) { return v.tu; }));
-    var sim = rho >= 0.8 ? 'يشبه كثيرًا' : rho >= 0.4 ? 'يتشابه جزئيًا مع' : 'يختلف عن';
-    box.appendChild(insight(['ترتيب القاعة ', B(sim), ' ترتيب طلبة جامعتكم في الدراسة (معامل سبيرمان للرتب ' + rho.toFixed(2) + ').']));
-
-    var ecoRank = ranks(A.means)[1];
-    box.appendChild(insight(['مفارقة البداية: جاءت ', B('الاقتصادية'), ' في المرتبة ', B(ar(ecoRank)), ' في القاعة، وكانت السادسة والأخيرة في الدراسة.']));
-
-    var gaps = A.means.map(function (m, i) { return m - VALUES[i].tu; });
-    var gi = 0; gaps.forEach(function (g, i) { if (Math.abs(g) > Math.abs(gaps[gi])) gi = i; });
-    box.appendChild(insight(['أكبر فرق عن الدراسة في ', B(VALUES[gi].name), ': القاعة ' + (gaps[gi] >= 0 ? 'أعلى' : 'أقل') + ' بمقدار ' + Math.abs(gaps[gi]).toFixed(2) + ' درجة.']));
-
-    var split = 0, cons = 0, splitV = -1, consV = -1;
-    A.items.forEach(function (c, i) {
-      var tot = c.a + c.b + c.c; if (!tot) return;
-      var shares = [c.a / tot, c.b / tot, c.c / tot];
-      var mx = Math.max.apply(null, shares);
-      if (1 - mx > splitV) { splitV = 1 - mx; split = i; }
-      if (mx > consV) { consV = mx; cons = i; }
-    });
-    box.appendChild(insight(['أكثر المواقف إجماعًا: ', B('«' + ITEMS[cons] + '»'), ' (' + ar(Math.round(consV * 100)) + '٪ اختاروا البديل نفسه). وأكثرها انقسامًا: ', B('«' + ITEMS[split] + '»'), '.']));
-
-    var ti = 0; A.top.forEach(function (t, i) { if (t > A.top[ti]) ti = i; });
-    box.appendChild(insight(['أكبر مجموعة في خريطة القاعة: من كانت ', B(VALUES[ti].name), ' أعلى قيمهم (' + ar(Math.round(A.top[ti] / A.n * 100)) + '٪).']));
-
-    box.appendChild(el('p', 'note', 'قراءة وصفية لقاعة واحدة و12 موقفًا مختصرًا، فلا تُعمَّم ولا تُعامل نتيجةً بحثية.'));
-  }
-
-  function render(data) {
-    var A = analyse(data.rows);
-    document.getElementById('n').textContent = ar(A.n);
-    document.getElementById('n2').textContent = ar(A.n);
-    renderRank(A); renderTop(A); renderItems(A); renderGroups(A); renderRead(A);
-    var t = new Date(data.at);
-    document.getElementById('upd').textContent = 'آخر تحديث ' + t.toLocaleTimeString('ar-OM') + ' · الجلسة ' + data.session;
-  }
+  function onState(s) { state = s; drawCtrls(); }
 
   /* ---------- polling ---------- */
   var busy = false;
-  function poll() {
-    if (busy) return; busy = true;
+  function refresh() {
+    google.script.run.withSuccessHandler(onState).getState();
+    var act = visibleAct();
+    if (!act || busy) return;
+    busy = true;
     google.script.run
-      .withSuccessHandler(function (d) { busy = false; render(d); })
+      .withSuccessHandler(function (d) {
+        busy = false; lastN[act] = d.rows.length; drawCtrls();
+        if (act === visibleAct()) RENDER[act](d.rows);
+        document.getElementById('upd').textContent = 'آخر تحديث ' + new Date(d.at).toLocaleTimeString('ar-OM') + ' · الجلسة ' + d.session;
+      })
       .withFailureHandler(function () { busy = false; document.getElementById('upd').textContent = 'تعذّر التحديث، ستُعاد المحاولة تلقائيًا…'; })
-      .getResults(KEY);
+      .getResults(KEY, act);
   }
-  poll();
-  setInterval(poll, 5000);
+  setInterval(refresh, 5000);
+  refresh();
 
   document.getElementById('newsess').onclick = function () {
-    if (!confirm('بدء جلسة جديدة يخفي إجابات الجلسة الحالية من اللوحة (تبقى محفوظة في جدول Google). هل تريد المتابعة؟')) return;
-    google.script.run.withSuccessHandler(function () { poll(); }).startNewSession(KEY);
+    if (!confirm('بدء جلسة جديدة يخفي إجابات الجلسة الحالية من اللوحة ويوقف النشاط المفعّل (تبقى الإجابات محفوظة في جدول Google). هل تريد المتابعة؟')) return;
+    google.script.run.withSuccessHandler(function (s) { onState(s); lastN = {}; refresh(); }).startNewSession(KEY);
+  };
+
+  /* ---------- shared drawing ---------- */
+  function bigBars(box, labels, counts, study) {
+    box.innerHTML = '';
+    var tot = counts.reduce(function (a, b) { return a + b; }, 0);
+    labels.forEach(function (lab, i) {
+      var row = el('div', 'brow');
+      row.appendChild(el('span', 'blet ' + ['sa', 'sb', 'sc'][i], 'أبج'[i]));
+      row.appendChild(el('span', 'btext', lab));
+      var tr = el('div', 'btrack');
+      var f = el('div', 'bfill'); f.style.background = ['#0B106E', '#F07A1E', '#9AA3B5'][i]; f.style.width = (tot ? counts[i] / tot * 100 : 0) + '%';
+      tr.appendChild(f);
+      if (study && study[i] != null) { var m = el('div', 'smark'); m.style.right = study[i] + '%'; m.appendChild(el('span', null, 'الدراسة ' + pc(study[i]))); tr.appendChild(m); }
+      row.appendChild(tr);
+      row.appendChild(el('span', 'bpct', tot ? pc(counts[i] / tot * 100) : '—'));
+      box.appendChild(row);
+    });
+    return tot;
+  }
+  function countLetters(rows, n) { var c = [0, 0, 0].slice(0, n); rows.forEach(function (r) { var i = 'abc'.indexOf(r[2]); if (i >= 0 && i < n) c[i]++; }); return c; }
+  function valueRows(box, counts, denom) {
+    box.innerHTML = '';
+    var order = [0, 1, 2, 3, 4, 5].sort(function (x, y) { return counts[y] - counts[x]; });
+    order.forEach(function (i) {
+      var v = VALUES[i], row = el('div', 'vrow');
+      var nm = el('div', 'vname'); var ch = el('span', 'chip', v.name); ch.style.background = v.color; nm.appendChild(ch);
+      var tr = el('div', 'track'), fi = el('div', 'fill'); fi.style.background = v.color; fi.style.width = (denom ? counts[i] / denom * 100 : 0) + '%'; tr.appendChild(fi);
+      row.appendChild(nm); row.appendChild(tr); row.appendChild(el('div', 'vval', denom ? pc(counts[i] / denom * 100) : '—'));
+      box.appendChild(row);
+    });
+    return order;
+  }
+  function tiles(box, counts, denom) {
+    box.innerHTML = '';
+    var max = Math.max.apply(null, counts.concat([1]));
+    VALUES.forEach(function (v, i) {
+      var t = el('div', 'tile');
+      var p = el('div', 'pct', denom ? pc(counts[i] / denom * 100) : '٠٪'); p.style.color = v.color;
+      var c = el('div', 'col'); c.style.background = v.color; c.style.height = (counts[i] / max * 22) + 'vh';
+      var ch = el('span', 'chip', v.name); ch.style.background = v.color;
+      t.appendChild(p); t.appendChild(c); t.appendChild(ch); box.appendChild(t);
+    });
+  }
+
+  /* ---------- per-activity rendering ---------- */
+  var RENDER = {};
+
+  RENDER.jobs = function (rows) {
+    var c = countLetters(rows, 2), tot = bigBars(document.getElementById('jobs-bars'), JOBS, c, null);
+    var box = document.getElementById('jobs-read'); box.innerHTML = '';
+    if (!tot) { box.appendChild(el('p', 'empty', 'ننتظر الأصوات…')); return; }
+    var b = c[1] / tot * 100;
+    insight(box, [B(pc(b)), ' اختاروا العمل القريب ذا المعنى رغم الراتب الأقل، و', B(pc(100 - b)), ' اختاروا الراتب الأعلى.']);
+    insight(box, ['احتفظوا بهذه النتيجة: في الدراسة جاءت القيمة ', B('الاقتصادية'), ' في المرتبة الأخيرة لدى طلبة جامعتكم.']);
+  };
+
+  RENDER.lead = RENDER.help = RENDER.exam = function (rows) {
+    var P = POLLS[pollAct];
+    document.getElementById('poll-q').textContent = P.q;
+    var c = countLetters(rows, 3), tot = bigBars(document.getElementById('poll-bars'), P.opts, c, P.study);
+    var box = document.getElementById('poll-read'); box.innerHTML = '';
+    if (!tot) { box.appendChild(el('p', 'empty', 'ننتظر الأصوات…')); return; }
+    var share = c.map(function (x) { return x / tot * 100; });
+    var gi = -1, gv = 0;
+    P.study.forEach(function (s, i) { if (s != null && Math.abs(share[i] - s) >= Math.abs(gv)) { gv = share[i] - s; gi = i; } });
+    if (gi >= 0) insight(box, ['أكبر فرق عن زملائكم في الدراسة في البديل ', B('أبج'[gi]), ': القاعة ' + (gv >= 0 ? 'أعلى' : 'أقل') + ' بـ ' + ar(Math.round(Math.abs(gv))) + ' نقطة مئوية.']);
+    var mx = Math.max.apply(null, share);
+    insight(box, mx < 45 ? ['القاعة ', B('منقسمة'), ': لا يتجاوز أي بديل ' + pc(mx) + '.'] : ['أغلب القاعة (' + pc(mx) + ') اختارت البديل ', B('أبج'[share.indexOf(mx)]), '.']);
+  };
+
+  var openIdeas = {};
+  RENDER.conflict = function (rows) {
+    var box = document.getElementById('cases'); box.innerHTML = '';
+    var data = rows.map(function (r) { return parse(r[2]); }).filter(Boolean);
+    CASES.forEach(function (title, ci) {
+      var ds = data.filter(function (d) { return d.c === ci + 1; });
+      var card = el('div', 'case');
+      card.appendChild(el('h3', null, ar(ci + 1) + ' · ' + title));
+      card.appendChild(el('span', 'meta', ar(ds.length) + ' إجابة'));
+      if (ds.length) {
+        var pairs = {};
+        ds.forEach(function (d) { var k = d.v.slice().sort().join('-'); pairs[k] = (pairs[k] || 0) + 1; });
+        var bestKey = Object.keys(pairs).sort(function (a, b) { return pairs[b] - pairs[a]; })[0], best = bestKey.split('-').map(Number);
+        var pr = el('p'); pr.style.margin = '0';
+        pr.appendChild(document.createTextNode('الصراع الأكثر ذكرًا: '));
+        pr.appendChild(B(VALUES[best[0]].name + ' و' + VALUES[best[1]].name));
+        pr.appendChild(document.createTextNode(' (' + pc(pairs[bestKey] / ds.length * 100) + ')'));
+        card.appendChild(pr);
+        var onPair = ds.filter(function (d) { return d.v.slice().sort().join('-') === bestKey; });
+        card.appendChild(el('span', 'meta', 'أيّهما قدّموا؟'));
+        var sp = el('div', 'split');
+        best.forEach(function (vi) {
+          var k = onPair.filter(function (d) { return d.p === vi; }).length;
+          var part = el('div', null, k ? VALUES[vi].name + ' ' + pc(k / onPair.length * 100) : '');
+          part.style.background = VALUES[vi].color; part.style.width = (k / onPair.length * 100) + '%';
+          sp.appendChild(part);
+        });
+        card.appendChild(sp);
+        var ideas = ds.map(function (d) { return d.t; }).filter(function (t) { return t; }).slice(-6);
+        if (ideas.length) {
+          var list = el('div', 'ideas');
+          ideas.forEach(function (t) { list.appendChild(el('p', null, t)); });
+          var btn = el('button', null, 'اعرض أفكار الطريق الثالث (' + ar(ideas.length) + ')');
+          btn.onclick = function () { list.classList.toggle('on'); openIdeas[ci] = list.classList.contains('on'); };
+          if (openIdeas[ci]) list.classList.add('on');
+          card.appendChild(btn); card.appendChild(list);
+        }
+      }
+      box.appendChild(card);
+    });
+  };
+
+  RENDER.share = function (rows) {
+    var c = [0, 0, 0, 0, 0, 0];
+    rows.forEach(function (r) { var d = parse(r[2]); if (d) c[d.v]++; });
+    var tot = rows.length;
+    tiles(document.getElementById('share-tiles'), c, tot);
+    var box = document.getElementById('share-read'); box.innerHTML = '';
+    if (!tot) { box.appendChild(el('p', 'empty', 'ننتظر الإجابات…')); return; }
+    var mi = c.indexOf(Math.max.apply(null, c));
+    insight(box, ['أكثر ما تعلّمناه من بيوتنا: القيمة ', B(VALUES[mi].name), ' (' + pc(c[mi] / tot * 100) + '). والأسرة أول مصادر اكتساب القيم.']);
+  };
+
+  RENDER.card = function (rows) {
+    var top = [0, 0, 0, 0, 0, 0], grow = [0, 0, 0, 0, 0, 0];
+    rows.forEach(function (r) { var d = parse(r[2]); if (!d) return; d.top.forEach(function (i) { top[i]++; }); grow[d.grow]++; });
+    var tot = rows.length;
+    var o1 = valueRows(document.getElementById('card-top'), top, tot);
+    var o2 = valueRows(document.getElementById('card-grow'), grow, tot);
+    var box = document.getElementById('card-read'); box.innerHTML = '';
+    if (!tot) { box.appendChild(el('p', 'empty', 'ننتظر البطاقات…')); return; }
+    insight(box, ['أكثر قيمة تعتز بها القاعة: ', B(VALUES[o1[0]].name), '، وأكثر قيمة تريد القاعة تنميتها: ', B(VALUES[o2[0]].name), '.']);
+  };
+
+  /* ---------- discover ---------- */
+  function score(ch) { return ch === 'a' ? 3 : ch === 'b' ? 2 : 1; }
+  function ranks(arr) { var order = arr.map(function (v, i) { return i; }).sort(function (x, y) { return arr[y] - arr[x]; }); var r = []; order.forEach(function (i, k) { r[i] = k + 1; }); return r; }
+  function spearman(a, b) { var ra = ranks(a), rb = ranks(b), d2 = 0; for (var i = 0; i < a.length; i++) d2 += Math.pow(ra[i] - rb[i], 2); return 1 - 6 * d2 / (a.length * (a.length * a.length - 1)); }
+
+  RENDER.discover = function (rows) {
+    rows = rows.filter(function (r) { return /^[abc]{12}$/.test(r[2]); });
+    var n = rows.length;
+    var profiles = rows.map(function (r) { var s = [0, 0, 0, 0, 0, 0]; for (var i = 0; i < 12; i++) s[i % 6] += score(r[2][i]); return s.map(function (x) { return x / 2; }); });
+    var means = [0, 1, 2, 3, 4, 5].map(function (v) { return n ? profiles.reduce(function (a, p) { return a + p[v]; }, 0) / n : 0; });
+    var top = [0, 0, 0, 0, 0, 0];
+    profiles.forEach(function (p) { var m = Math.max.apply(null, p), idx = []; p.forEach(function (x, i) { if (x === m) idx.push(i); }); idx.forEach(function (i) { top[i] += 1 / idx.length; }); });
+
+    var box = document.getElementById('rank'); box.innerHTML = '';
+    if (!n) box.appendChild(el('p', 'empty', 'ننتظر أول إجابة…'));
+    else {
+      var rr = ranks(means), sr = ranks(VALUES.map(function (v) { return v.tu; }));
+      means.map(function (v, i) { return i; }).sort(function (x, y) { return means[y] - means[x]; }).forEach(function (i) {
+        var v = VALUES[i], row = el('div', 'vrow');
+        var nm = el('div', 'vname'); var ch = el('span', 'chip', v.name); ch.style.background = v.color; nm.appendChild(ch);
+        var tr = el('div', 'track'), fi = el('div', 'fill'); fi.style.background = v.color; fi.style.width = ((means[i] - 1) / 2 * 100) + '%';
+        var mt = el('div', 'mark tu'); mt.style.right = ((v.tu - 1) / 2 * 100) + '%';
+        var ma = el('div', 'mark all'); ma.style.right = ((v.all - 1) / 2 * 100) + '%';
+        tr.appendChild(fi); tr.appendChild(mt); tr.appendChild(ma);
+        row.appendChild(nm); row.appendChild(tr); row.appendChild(el('div', 'vval', f2(means[i])));
+        row.appendChild(el('div', 'rank', 'القاعة ' + ar(rr[i]) + ' · الدراسة ' + ar(sr[i])));
+        box.appendChild(row);
+      });
+    }
+    tiles(document.getElementById('tiles'), top, n);
+
+    var ib = document.getElementById('items'); ib.innerHTML = '';
+    var itemCounts = [];
+    ITEMS.forEach(function (txt, i) {
+      var c = { a:0, b:0, c:0 }; rows.forEach(function (r) { c[r[2][i]]++; }); itemCounts.push(c);
+      var tot = c.a + c.b + c.c, row = el('div', 'irow');
+      row.appendChild(el('span', 'ino', ar(i + 1))); row.appendChild(el('span', 'itext', txt));
+      var st = el('div', 'stack');
+      ['a', 'b', 'c'].forEach(function (k) { var p = tot ? c[k] / tot * 100 : 0; var d = el('div', 's' + k, p >= 8 ? pc(p) : ''); d.style.width = p + '%'; st.appendChild(d); });
+      row.appendChild(st); ib.appendChild(row);
+    });
+
+    var gb = document.getElementById('groups'); gb.innerHTML = '';
+    [[0, COLLEGES, 'الكلية'], [1, GENDERS, 'الجنس']].forEach(function (g) {
+      var col = g[0], labels = g[1], title = g[2], shown = [];
+      Object.keys(labels).forEach(function (k) {
+        var idx = []; rows.forEach(function (r, j) { if (r[col] === k) idx.push(j); });
+        if (idx.length < MIN_GROUP) return;
+        var m = [0, 1, 2, 3, 4, 5].map(function (v) { return idx.reduce(function (a, j) { return a + profiles[j][v]; }, 0) / idx.length; });
+        shown.push({ label: labels[k], n: idx.length, means: m, total: m.reduce(function (a, b) { return a + b; }, 0) / 6 });
+      });
+      var wrap = el('div'); wrap.style.marginBottom = '1em';
+      if (!shown.length) { wrap.appendChild(el('p', 'empty', title + ': لا توجد بعدُ مجموعة فيها ' + ar(MIN_GROUP) + ' إجابات.')); gb.appendChild(wrap); return; }
+      var t = el('table'), h = el('tr');
+      h.appendChild(el('th', null, title)); h.appendChild(el('th', null, 'ن')); VALUES.forEach(function (v) { h.appendChild(el('th', null, v.name)); }); h.appendChild(el('th', null, 'الكلي'));
+      t.appendChild(h);
+      shown.forEach(function (s) {
+        var tr = el('tr'); tr.appendChild(el('td', null, s.label)); tr.appendChild(el('td', 'num', ar(s.n)));
+        var mx = Math.max.apply(null, s.means);
+        s.means.forEach(function (m) { tr.appendChild(el('td', 'num' + (m === mx ? ' hi' : ''), f2(m))); });
+        tr.appendChild(el('td', 'num', f2(s.total))); t.appendChild(tr);
+      });
+      wrap.appendChild(t); gb.appendChild(wrap);
+    });
+
+    var rb = document.getElementById('insights'); rb.innerHTML = '';
+    if (n < 3) { rb.appendChild(el('p', 'empty', 'تظهر القراءة بعد وصول ثلاث إجابات على الأقل.')); return; }
+    var order = means.map(function (v, i) { return i; }).sort(function (x, y) { return means[y] - means[x]; });
+    insight(rb, ['أجاب ', B(ar(n) + ' طالبًا وطالبة'), '. أعلى قيمة في القاعة ', B(VALUES[order[0]].name), ' (' + f2(means[order[0]]) + ')، وأدناها ', B(VALUES[order[5]].name), ' (' + f2(means[order[5]]) + ').']);
+    var rho = spearman(means, VALUES.map(function (v) { return v.tu; }));
+    insight(rb, ['ترتيب القاعة ', B(rho >= 0.8 ? 'يشبه كثيرًا' : rho >= 0.4 ? 'يتشابه جزئيًا مع' : 'يختلف عن'), ' ترتيب طلبة جامعتكم في الدراسة (معامل سبيرمان للرتب ' + rho.toFixed(2) + ').']);
+    insight(rb, ['مفارقة البداية: جاءت ', B('الاقتصادية'), ' في المرتبة ', B(ar(ranks(means)[1])), ' في القاعة، وكانت السادسة والأخيرة في الدراسة.']);
+    var gaps = means.map(function (m, i) { return m - VALUES[i].tu; }), gi = 0;
+    gaps.forEach(function (g, i) { if (Math.abs(g) > Math.abs(gaps[gi])) gi = i; });
+    insight(rb, ['أكبر فرق عن الدراسة في ', B(VALUES[gi].name), ': القاعة ' + (gaps[gi] >= 0 ? 'أعلى' : 'أقل') + ' بمقدار ' + Math.abs(gaps[gi]).toFixed(2) + ' درجة.']);
+    var split = 0, cons = 0, sv = -1, cv = -1;
+    itemCounts.forEach(function (c, i) { var t = c.a + c.b + c.c; if (!t) return; var mx = Math.max(c.a, c.b, c.c) / t; if (1 - mx > sv) { sv = 1 - mx; split = i; } if (mx > cv) { cv = mx; cons = i; } });
+    insight(rb, ['أكثر المواقف إجماعًا: ', B('«' + ITEMS[cons] + '»'), ' (' + pc(cv * 100) + ' اختاروا البديل نفسه). وأكثرها انقسامًا: ', B('«' + ITEMS[split] + '»'), '.']);
+    rb.appendChild(el('p', 'note', 'قراءة وصفية لقاعة واحدة و12 موقفًا مختصرًا، فلا تُعمَّم ولا تُعامل نتيجةً بحثية.'));
   };
 </script>
 </body>
